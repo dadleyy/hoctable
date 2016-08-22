@@ -1,25 +1,12 @@
-.env
-/env
-.ftppass
+lib
 npm-debug.log
-.grunt
 .DS_Store
 *.swp
 *.rdb
 *.tar.gz
-composer.lock
-Gemfile.lock
-.ruby-version
 test-results.xml
 
-/.bundle
-/.sass-cache
-/tmp
-/node_modules
-/bower_components
-/dist
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+tmp
+node_modules
+bower_components
+dist
