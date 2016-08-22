@@ -19,7 +19,7 @@ const helpers = {
 };
 
 module.exports = {
-  entry: ["./example/app.js"],
+  entry: ["./example/app.jsx"],
   output: {
     path: __dirname + "/example",
     filename: "[name].bundle.js"
@@ -31,7 +31,7 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.js|jsx$/,
       exclude: /node_modules/,
       loader: "babel",
       query: {

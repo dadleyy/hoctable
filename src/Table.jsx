@@ -1,7 +1,4 @@
-export function Factory(RowTransclusion) {
-
-  console.log("yay!");
-
+function Factory(RowTransclusion) {
   class Table extends React.Component {
 
     constructor(props) {
@@ -9,8 +6,20 @@ export function Factory(RowTransclusion) {
     }
 
     render() {
+      let {delegate} = this.props;
+      console.log(delegate);
+
+      return (
+        <table>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      );
     }
 
   }
 
-};
+  return Table;
+}
+
+export {Factory};

@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "A high order component table for react.",
   "scripts": {
-    "compile": "./node_modules/.bin/babel src --out-dir tmp",
-    "pack": "./node_modules/.bin/webpack --config webpack.umd.config.js",
+    "watch": "./node_modules/.bin/webpack --config webpack.umd.config.js --watch",
     "minify": "./node_modules/.bin/uglifyjs ./dist/hoctable-umd.js -o ./dist/hoctable-umd.min.js",
-    "build:debug": "npm run compile && npm run pack",
+    "build:debug": "./node_modules/.bin/webpack --config webpack.umd.config.js",
     "build:release": "npm run build:debug && npm run minify",
     "devserver": "./node_modules/.bin/webpack-dev-server --config webpack.examples.config.js"
   },
