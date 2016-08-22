@@ -1,5 +1,25 @@
+"use strict";
+
+const helpers = {
+
+  apply(compiler) {
+    let source = require("babel-core").buildExternalHelpers();
+
+    function inject(compilation, callback) {
+      compilation.assets["babel-helpers.js"] = {
+        source: function() { return source; },
+        size: function() { return source.length; }
+      };
+      callback(false);
+    }
+
+    compiler.plugin("emit", inject);
+  }
+
+};
+
 module.exports = {
-  entry: {app: "./example/app.js"},
+  entry: ["./example/app.js"],
   output: {
     path: __dirname + "/example",
     filename: "[name].bundle.js"
@@ -20,6 +40,7 @@ module.exports = {
       }
     }]
   },
+  plugins: [helpers],
   devServer: {
     contentBase: "./example"
   }
