@@ -1,6 +1,11 @@
 import {Factory} from "hoctable";
 import Delegate from "./delegate"
 
+function age(dob) {
+  let today = new Date().getFullYear();
+  return today - new Date(dob).getFullYear();
+}
+
 class Row extends React.Component {
 
   constructor(props) {
@@ -8,8 +13,17 @@ class Row extends React.Component {
   }
 
   render() {
+    let {row, delegate} = this.props;
+    let {person} = row;
+
     return (
-      <tr>
+      <tr className="usertable__row">
+        <td className="usertable__name-cell">
+          <span>{person.name.first} {person.name.last}</span>
+        </td>
+        <td className="usertable__age-cell">
+          <span>{age(person.dob)}</span>
+        </td>
       </tr>
     );
   }
@@ -17,6 +31,7 @@ class Row extends React.Component {
 }
 
 let Table = Factory(Row);
-let delegate = new Delegate();
+let sorting = {};
+let delegate = new Delegate(sorting);
 
-ReactDOM.render(<Table delegate={delegate} />, document.getElementById("main"));
+ReactDOM.render(<Table delegate={delegate} sorting={sorting} />, document.getElementById("main"));
