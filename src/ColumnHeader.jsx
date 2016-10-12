@@ -10,18 +10,18 @@ class ColumnHeader extends React.Component {
   render() {
     let {config} = this.props;
     let {column, delegate, events, sorting} = config;
-    let {name} = column;
+    let {name, rel} = column;
     let th_class = TH_CLASS;
 
     if("function" === typeof delegate.translate)
       name = delegate.translate(column);
 
     function select() {
-      events.trigger("sorted", {column});
+      events.trigger("sorted", {rel});
     }
 
-    if(sorting && sorting.column.rel === column.rel)
-      th_class += TH_CLASS_ACTIVE;
+    if(sorting && sorting.column && sorting.column.rel === column.rel)
+      th_class += ` ${TH_CLASS_ACTIVE}`;
 
     return (
       <th className={th_class} onClick={select}>

@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "A high order component table for react.",
   "scripts": {
-    "watch": "./node_modules/.bin/webpack --config webpack.umd.config.js --watch",
-    "minify": "./node_modules/.bin/uglifyjs ./dist/hoctable-umd.js -o ./dist/hoctable-umd.min.js",
-    "build:debug": "./node_modules/.bin/webpack --config webpack.umd.config.js",
+    "minify": "uglifyjs ./dist/hoctable-umd.js -o ./dist/hoctable-umd.min.js",
+    "build:watch": "webpack --config webpack.umd.config.js --watch",
+    "build:debug": "webpack --config webpack.umd.config.js",
     "build:release": "npm run build:debug && npm run minify",
-    "devserver": "./node_modules/.bin/webpack-dev-server --config webpack.examples.config.js"
+    "example": "webpack-dev-server --config webpack.examples.config.js"
   },
   "babel": {
     "presets": [

@@ -12,8 +12,11 @@ function Factory(RowTransclusion, ColumnTransclusion) {
       let update = this.forceUpdate.bind(this);
 
       function sorted(new_sorting) {
+        if(new_sorting.rel === sorting.rel)
+          new_sorting.order = !sorting.order;
+
         Object.assign(sorting, new_sorting);
-        delegate.refresh(update);
+        delegate.load(sorting, update);
       }
 
       this.events = new Events();
@@ -25,15 +28,14 @@ function Factory(RowTransclusion, ColumnTransclusion) {
     }
 
     componentDidMount() {
-      let {delegate} = this.props;
+      let {delegate, sorting} = this.props;
       let update = this.forceUpdate.bind(this);
-      delegate.refresh(update);
+      delegate.load(sorting, update);
     }
 
     render() {
       let {events}   = this;
-      let {delegate} = this.props;
-      let {sorting}  = this.state || {};
+      let {sorting, delegate} = this.props;
 
       let columns = delegate.columns();
       let rows    = delegate.rows();

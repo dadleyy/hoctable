@@ -1,7 +1,6 @@
-function replace(a1, a2) {
-  let args = [0, a1.length].concat(a2);
-  return a1.splice.apply(a1, args);
-}
+import {replace} from "./util";
+
+const DEFAULT_SORT = {rel: "id"};
 
 class Delegate {
 
@@ -11,16 +10,20 @@ class Delegate {
 
   columns() {
     return [{
+      rel: "id",
+      name: "ID"
+    }, {
       rel: "name",
-      name: "Full Name"
+      name: "Name"
     }, {
       rel: "age",
       name: "Age"
     }];
   }
 
-  refresh(callback) {
+  load(sorting, callback) {
     let {people} = this;
+    let {rel, order} = sorting;
 
     function success(_, response) {
       let {results} = response;
@@ -28,18 +31,19 @@ class Delegate {
       callback(false);
     }
 
-    function failed() {
+    function failed(e) {
+      console.error(e.stack);
       callback(true);
     }
 
-    qwest.get("http://api.randomuser.me/?format=json&results=10")
+    qwest.get("/api/people", {orderby: order ? rel : `-${rel}`})
       .then(success)
       .catch(failed);
   }
 
   rows() {
     let {people} = this;
-    return people.map(function(person) { return {person, $key: person.email}; });
+    return people.map(function(person) { return {person, $key: person.id}; });
   }
 
 }
