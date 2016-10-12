@@ -66,7 +66,6 @@ module.exports = {
     publicPath: "/js/",
     filename: "[name].bundle.js"
   },
-  historyApiFallback: true,
   resolve: {
     extensions: ["", ".js", ".jsx"],
     alias: {

@@ -1,5 +1,5 @@
-import ColumnHeader from "./ColumnHeader.jsx"
-import Events from "./Events.js"
+import ColumnHeader from "./ColumnHeader";
+import Events from "./Events";
 
 function Factory(RowTransclusion, ColumnTransclusion) {
   let Column = typeof ColumnTransclusion === "function" ? ColumnTransclusion : ColumnHeader;

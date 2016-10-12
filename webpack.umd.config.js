@@ -6,6 +6,9 @@ module.exports = {
     libraryTarget: "umd",
     filename: "./dist/hoctable-umd.js"
   },
+  resolve: {
+    extensions: ["", ".js", ".jsx"]
+  },
   module: {
     loaders: [{
       test: /\.js|jsx$/,
