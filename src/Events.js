@@ -20,6 +20,20 @@ class Events {
   }
 
   off(id) {
+    let {listeners} = this;
+    let index = null;
+
+    for(let i = 0, c = listeners.length; i < c; i++) {
+      let {id} = listeners[i];
+      if(id !== id) continue;
+      index = i;
+      break;
+    }
+
+    if(index === null) return -1;
+
+    listeners.splice(index, 1);
+    return id;
   }
 
   trigger(name, ...args) {

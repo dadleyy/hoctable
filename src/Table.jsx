@@ -20,11 +20,11 @@ function Factory(RowTransclusion, ColumnTransclusion) {
       }
 
       this.events = new Events();
-      this.events.on("sorted", sorted);
+      this.sort_listener = this.events.on("sorted", sorted);
     }
 
     componentWillUnmount() {
-      console.log("done!");
+      this.events.off(this.sort_listener);
     }
 
     componentDidMount() {

@@ -1,19 +1,20 @@
 import Delegate from "./services/delegate";
-import Table from "./components/table";
 
-let sorting = {rel: "id"};
-let delegate = new Delegate(sorting);
+import People from "./pages/people";
+import FourOhFour from "./pages/missing";
 
 function el(id) {
   return document.getElementById(id);
 }
 
 page("/people", function() {
-  ReactDOM.render(<Table delegate={delegate} sorting={sorting} />, el("main"));
+  let sorting = {rel: "id"};
+  let delegate = new Delegate(sorting);
+  ReactDOM.render(<People delegate={delegate} sorting={sorting} />, el("main"));
 });
 
 page("*", function() {
-  return page("/people");
+  ReactDOM.render(<FourOhFour />, el("main"));
 });
 
 page.start({popstate: true})
