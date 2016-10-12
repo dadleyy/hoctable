@@ -8,4 +8,12 @@ function el(id) {
   return document.getElementById(id);
 }
 
-ReactDOM.render(<Table delegate={delegate} sorting={sorting} />, el("main"));
+page("/people", function() {
+  ReactDOM.render(<Table delegate={delegate} sorting={sorting} />, el("main"));
+});
+
+page("*", function() {
+  return page("/people");
+});
+
+page.start({popstate: true})
