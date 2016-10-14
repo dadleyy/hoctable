@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A high order component table for react.",
   "scripts": {
+    "clean": "rimraf ./dist ./tmp",
     "minify": "uglifyjs ./dist/hoctable-umd.js -o ./dist/hoctable-umd.min.js",
     "build:watch": "webpack --config webpack.umd.config.js --watch",
     "build:debug": "webpack --config webpack.umd.config.js",
@@ -40,6 +41,7 @@
     "karma-requirejs": "^1.1.0",
     "react-tools": "^0.13.3",
     "requirejs": "^2.3.2",
+    "rimraf": "^2.5.4",
     "uglify-js": "^2.7.3",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.0"
