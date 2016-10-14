@@ -21,29 +21,29 @@ class Delegate {
     }];
   }
 
-  load(sorting, callback) {
+  rows(sorting, callback) {
     let {people} = this;
-    let {rel, order} = sorting;
+    let {rel, order} = sorting.getState();
 
     function success(_, response) {
       let {results} = response;
       replace(people, results);
-      callback(false);
+
+      if(people.length === 0)
+        return callback([{empty: true}]);
+
+      let rows = people.map(function(person) { return {person}; });
+      callback(rows);
     }
 
     function failed(e) {
       console.error(e.stack);
-      callback(true);
+      callback([{failed: true}]);
     }
 
     qwest.get("/api/people", {orderby: order ? rel : `-${rel}`})
       .then(success)
       .catch(failed);
-  }
-
-  rows() {
-    let {people} = this;
-    return people.map(function(person) { return {person, $key: person.id}; });
   }
 
 }
