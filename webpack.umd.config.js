@@ -1,6 +1,6 @@
 module.exports = {
   context: __dirname + "/src",
-  entry: ["./hoc_table.jsx"],
+  entry: ["./hoctable.js"],
   output: {
     library: "hoctable",
     libraryTarget: "umd",

@@ -1,4 +1,4 @@
-import {Factory} from "hoctable";
+import {Table} from "hoctable";
 
 function age(dob) {
   let today = new Date().getFullYear();
@@ -32,5 +32,5 @@ class Row extends React.Component {
 
 }
 
-export default Factory(Row);
+export default Table(Row);
 

@@ -21,9 +21,9 @@ class Delegate {
     }];
   }
 
-  rows(sorting, callback) {
+  rows(store, callback) {
     let {people} = this;
-    let {rel, order} = sorting.getState();
+    let {sorting: {rel, order}} = store.getState();
 
     function success(_, response) {
       let {results} = response;

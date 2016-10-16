@@ -1,12 +1,13 @@
 import ColumnHeader from "./column_header";
-import Events from "./event_engine";
+import * as dom from "../dom";
 
-function Factory(RowTransclusion, ColumnTransclusion) {
+function TableFactory(RowTransclusion, ColumnTransclusion) {
   // compose our column component from the column hoc
   let Column = ColumnHeader(ColumnTransclusion);
 
   function rows(table) {
-    let {delegate, sorting} = this.props;
+    let {delegate, store} = this.props;
+    let {bodies} = this;
 
     // no table ref?
     if(!table)
@@ -15,36 +16,41 @@ function Factory(RowTransclusion, ColumnTransclusion) {
     function render(row_data) {
       let {childNodes: children} = table;
 
-      for(let i = 0, c = children.length; i < c; i++) {
-        let child = children[i];
-
-        if("tbody" === child.nodeName.toLowerCase())
-          ReactDOM.unmountComponentAtNode(child);
+      // cleanup previous tbody elements
+      while(bodies.length) {
+        let [next] = bodies.splice(0, 1);
+        ReactDOM.unmountComponentAtNode(next);
+        dom.remove(next);
       }
 
+      // loop over row data, creating a tbody and a transclusion instance
+      // for each row, adding them into the tbody storage array to be cleaned
+      // up on the next iteration.
       for(let i = 0, c = row_data.length; i < c; i++) {
         let row  = row_data[i];
         let body = document.createElement("tbody");
 
         ReactDOM.render(<RowTransclusion row={row} />, body);
         table.appendChild(body);
+        bodies.push(body);
       }
     }
 
-    delegate.rows(sorting, render)
+    delegate.rows(store, render)
   }
 
   class Table extends React.Component {
 
     constructor(props) {
       super(props);
-      let {sorting, delegate} = props;
+      let {store, delegate} = props;
 
       function update() {
         this.forceUpdate();
       }
 
-      this.unsubscribe = sorting.subscribe(update.bind(this));
+      this.unsubscribe = store.subscribe(update.bind(this));
+      this.bodies      = [];
     }
 
     componentWillUnmount() {
@@ -53,7 +59,7 @@ function Factory(RowTransclusion, ColumnTransclusion) {
 
     render() {
       let {events}   = this;
-      let {sorting, delegate} = this.props;
+      let {store, delegate} = this.props;
 
       let columns = delegate.columns();
 
@@ -63,7 +69,7 @@ function Factory(RowTransclusion, ColumnTransclusion) {
 
       for(let i = 0, c = columns.length; i < c; i++) {
         let column = columns[i];
-        let config = {column, delegate, sorting};
+        let config = {column, delegate, store};
         th_list.push(<Column {...config} key={column.rel} />);
         col_list.push(<col className={column.rel} key={column.rel} />);
       }
@@ -81,4 +87,4 @@ function Factory(RowTransclusion, ColumnTransclusion) {
   return Table;
 }
 
-export {Factory};
+export default TableFactory;

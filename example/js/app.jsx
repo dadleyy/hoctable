@@ -1,21 +1,23 @@
+import {reducers} from "hoctable";
 import Delegate from "./services/delegate";
-
 import People from "./pages/people";
 import FourOhFour from "./pages/missing";
-
-import sortingReducer from "./reducers/sorting";
 
 function el(id) {
   return document.getElementById(id);
 }
 
 page("/people", function() {
+  let reducer = Redux.combineReducers({sorting: reducers.sorting});
+
   // prepare our sort store
-  let sorting  = Redux.createStore(sortingReducer, {rel: "name"});
+  let store  = Redux.createStore(reducer, {sorting: {rel: "name"}});
+
   // create an instance of the table delegate
-  let delegate = new Delegate(sorting);
+  let delegate = new Delegate(store);
+
   // render the people view onto the main view element
-  ReactDOM.render(<People delegate={delegate} sorting={sorting} />, el("main"));
+  ReactDOM.render(<People delegate={delegate} store={store} />, el("main"));
 });
 
 
