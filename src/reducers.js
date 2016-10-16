@@ -13,7 +13,15 @@ function sorting(state, action) {
 }
 
 function pagination(state, action) {
-  return {};
+  let result = Object.assign({}, state);
+
+  if(action.type === "PAGINATION_TOTAL")
+    result.total = action.total;
+
+  if(action.type === "PAGINATION_MOVEMENT")
+    result.current += action.amt;
+
+  return result;
 }
 
 export default {sorting, pagination};

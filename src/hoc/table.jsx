@@ -1,5 +1,7 @@
 import ColumnHeader from "./column_header";
-import * as dom from "../dom";
+import utils from "../utils";
+
+const compare = utils.compare.fields(["rel", "order"]);
 
 function TableFactory(RowTransclusion, ColumnTransclusion) {
   // compose our column component from the column hoc
@@ -20,7 +22,7 @@ function TableFactory(RowTransclusion, ColumnTransclusion) {
       while(bodies.length) {
         let [next] = bodies.splice(0, 1);
         ReactDOM.unmountComponentAtNode(next);
-        dom.remove(next);
+        utils.dom.remove(next);
       }
 
       // loop over row data, creating a tbody and a transclusion instance
@@ -43,10 +45,14 @@ function TableFactory(RowTransclusion, ColumnTransclusion) {
 
     constructor(props) {
       super(props);
-      let {store, delegate} = props;
+      let {store, delegate}   = props;
+      let {sorting: previous} = store.getState();
 
       function update() {
-        this.forceUpdate();
+        let {sorting}  = store.getState();
+        let same_state = compare(previous, sorting);
+        previous = Object.assign(previous, sorting);
+        return same_state === false ? this.forceUpdate() : null;
       }
 
       this.unsubscribe = store.subscribe(update.bind(this));
@@ -58,7 +64,6 @@ function TableFactory(RowTransclusion, ColumnTransclusion) {
     }
 
     render() {
-      let {events}   = this;
       let {store, delegate} = this.props;
 
       let columns = delegate.columns();
@@ -75,9 +80,9 @@ function TableFactory(RowTransclusion, ColumnTransclusion) {
       }
 
       return (
-        <table className="hoctable" ref={rows.bind(this)}>
+        <table className="hoctable-table" ref={rows.bind(this)}>
           <colgroup>{col_list}</colgroup>
-          <thead className="hoctable__table-head"><tr>{th_list}</tr></thead>
+          <thead className="hoctable-table__table-head"><tr>{th_list}</tr></thead>
         </table>
       );
     }

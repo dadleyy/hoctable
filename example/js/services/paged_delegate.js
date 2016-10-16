@@ -23,7 +23,7 @@ class Delegate {
 
   rows(store, callback) {
     let {people} = this;
-    let {sorting: {rel, order}} = store.getState();
+    let {sorting: {rel, order}, pagination: {size, current}} = store.getState();
 
     function success(_, response) {
       let {results, meta} = response;
@@ -31,10 +31,10 @@ class Delegate {
       replace(people, results);
 
       if(people.length === 0)
-        return callback([{empty: true}]);
+        return callback([{empty: true}], 0);
 
       let rows = people.map(function(person) { return {person}; });
-      callback(rows);
+      callback(rows, meta.total);
     }
 
     function failed(e) {
@@ -42,7 +42,13 @@ class Delegate {
       callback([{failed: true}]);
     }
 
-    qwest.get("/api/people", {orderby: order ? rel : `-${rel}`})
+    let params = {
+      orderby: order ? rel : `-${rel}`, 
+      max: size,
+      page: current
+    };
+
+    qwest.get("/api/people", params)
       .then(success)
       .catch(failed);
   }

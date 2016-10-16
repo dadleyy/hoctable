@@ -58,7 +58,7 @@ const PEOPLE = (function() {
 })();
 
 app.get("/people", function(req, res) {
-  let {orderby} = req.query;
+  let {orderby, max, page} = req.query;
   let prop = orderby && orderby.charAt(0) === '-' ? orderby.substr(1) : orderby;
 
   function sort(a, b) {
@@ -66,7 +66,16 @@ app.get("/people", function(req, res) {
     return orderby.charAt(0) === '-' ? -mod : mod;
   }
 
-  res.json({results: prop ? PEOPLE.sort(sort) : PEOPLE});
+  let results = (prop ? PEOPLE.sort(sort) : PEOPLE).slice(0);
+
+  max  = parseInt(max, 10) || 100;
+  page = parseInt(page, 10) || 0;
+
+  let start = max * page;
+  let end   = start + max;
+  results = results.slice(start, end);
+
+  res.json({meta: {total: PEOPLE.length}, results});
 });
 
 app.listen("4000");
