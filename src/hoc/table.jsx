@@ -1,8 +1,6 @@
 import ColumnHeader from "./column_header";
 import utils from "../utils";
 
-const compare = utils.compare.fields(["rel", "order"]);
-
 function TableFactory(RowTransclusion, ColumnTransclusion) {
   // compose our column component from the column hoc
   let Column = ColumnHeader(ColumnTransclusion);
@@ -49,10 +47,7 @@ function TableFactory(RowTransclusion, ColumnTransclusion) {
       let {sorting: previous} = store.getState();
 
       function update() {
-        let {sorting}  = store.getState();
-        let same_state = compare(previous, sorting);
-        previous = Object.assign(previous, sorting);
-        return same_state === false ? this.forceUpdate() : null;
+        this.forceUpdate();
       }
 
       this.unsubscribe = store.subscribe(update.bind(this));

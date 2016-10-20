@@ -23,7 +23,10 @@ class Delegate {
 
   rows(store, callback) {
     let {people} = this;
-    let {sorting: {rel, order}, pagination: {size, current}} = store.getState();
+    let {sorting, pagination, queries} = store.getState();
+    let {rel, order} = sorting;
+    let {size, current} = pagination;
+    let {name} = queries;
 
     function success(_, response) {
       let {results, meta} = response;
@@ -48,7 +51,10 @@ class Delegate {
       page: current
     };
 
-    qwest.get("/api/people", params)
+    if(name && name.length >= 1)
+      params.name = name;
+
+    qwest.get(`/api/people`, params)
       .then(success)
       .catch(failed);
   }

@@ -1,3 +1,15 @@
 .hoctable__column-header {
   cursor: pointer;
 }
+
+.hoctable-pagination {
+  display: block;
+}
+
+.hoctable-pagination__info,
+.hoctable-pagination__next,
+.hoctable-pagination__previous {
+  float: left;
+  display: block;
+  margin-right: 1rem;
+}

@@ -8,29 +8,15 @@ function PaginationFactory(PageTransclusion) {
 
     constructor(props) {
       super(props);
-      let {store}  = props;
-      let previous = {};
-
-      function update() {
-        let {pagination} = store.getState();
-        let same_state   = compare(pagination, previous);
-        previous = Object.assign(previous, pagination);
-        return same_state === false ? this.forceUpdate() : null;
-      }
-
-      let unsubscribe = store.subscribe(update.bind(this));
-      this.handles    = {unsubscribe};
     }
 
     componentWillUnmount() {
-      let {handles} = this;
-      handles.unsubscribe();
     }
 
     render() {
-      let {store} = this.props;
-      let {pagination} = store.getState();
-
+      let {store}    = this.props;
+      let pagination = store.getState();
+    
       if(!pagination)
         return (<div className="hoctable-pagination--empty"></div>);
 
@@ -49,10 +35,14 @@ function PaginationFactory(PageTransclusion) {
       }
 
       let previous = first > 0 ? <a onClick={move(-1)}>previous</a> : null;
-      let next     = end < total ? <a onClick={move(1)}>next</a> : null;
+      let next     = end && (end < total) ? <a onClick={move(1)}>next</a> : null;
+      let max_page = total >= 1 && size >= 1 ? Math.ceil(total / size) : 0;
 
       return (
-        <div className="hoctable-pagination">
+        <div className="hoctable-pagination clearfix">
+          <div className="hoctable-pagination__info">
+            <p>page {current + 1} of {max_page} <span className="hoctable-pagination__info__total">({total} results)</span></p>
+          </div>
           <div className="hoctable-pagination__previous">{previous}</div>
           <div className="hoctable-pagination__next">{next}</div>
         </div>

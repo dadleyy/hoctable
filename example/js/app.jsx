@@ -12,26 +12,32 @@ function el(id) {
 }
 
 page("/people/paged", function() {
+  function queryReducer(current, payload) {
+    let result = Object.assign({}, current);
+
+    if(payload.type === "NAME_SEARCH")
+      result.name = payload.value;
+
+    return result;
+  }
+
   let reducer = Redux.combineReducers({
     sorting: reducers.sorting,
-    pagination: reducers.pagination
+    pagination: reducers.pagination,
+    queries: queryReducer
   });
 
   // prepare our sort store
   let store  = Redux.createStore(reducer, {
     sorting: {rel: "name"},
-    pagination: {current: 0, size: 3}
+    pagination: {current: 0, size: 3},
+    queries: {name: null}
   });
 
   // create an instance of the table delegate
   let delegate = new PagedDelegate();
 
-  delegate.rows(store, function(rows, total) {
-    store.dispatch({type: "PAGINATION_TOTAL", total});
-    // render the people view onto the main view element
-    ReactDOM.render(<Paged delegate={delegate} store={store} />, el("main"));
-  });
-
+  ReactDOM.render(<Paged delegate={delegate} store={store} />, el("main"));
 });
 
 
