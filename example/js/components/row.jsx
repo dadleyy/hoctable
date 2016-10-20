@@ -13,6 +13,9 @@ class Row extends React.Component {
     let {row, delegate} = this.props;
     let {person} = row;
 
+    if(true == row.empty)
+      return (<tr className="person-row--empty"><td colSpan="3">No results</td></tr>);
+
     return (
       <tr className="person-row">
         <td className="person-row__id">

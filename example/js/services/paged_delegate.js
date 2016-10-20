@@ -6,6 +6,7 @@ class Delegate {
 
   constructor() {
     this.people = [];
+    this.query  = null;
   }
 
   columns() {
@@ -22,11 +23,10 @@ class Delegate {
   }
 
   rows(store, callback) {
-    let {people} = this;
-    let {sorting, pagination, queries} = store.getState();
+    let {people, query: name} = this;
+    let {sorting, pagination} = store.getState();
     let {rel, order} = sorting;
     let {size, current} = pagination;
-    let {name} = queries;
 
     function success(_, response) {
       let {results, meta} = response;

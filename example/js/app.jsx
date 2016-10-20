@@ -12,26 +12,15 @@ function el(id) {
 }
 
 page("/people/paged", function() {
-  function queryReducer(current, payload) {
-    let result = Object.assign({}, current);
-
-    if(payload.type === "NAME_SEARCH")
-      result.name = payload.value;
-
-    return result;
-  }
-
   let reducer = Redux.combineReducers({
     sorting: reducers.sorting,
-    pagination: reducers.pagination,
-    queries: queryReducer
+    pagination: reducers.pagination
   });
 
   // prepare our sort store
   let store  = Redux.createStore(reducer, {
     sorting: {rel: "name"},
-    pagination: {current: 0, size: 3},
-    queries: {name: null}
+    pagination: {current: 0, size: 3}
   });
 
   // create an instance of the table delegate

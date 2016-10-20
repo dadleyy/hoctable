@@ -3,7 +3,8 @@ import PagedTable from "../components/paged_table";
 export default function Paged({delegate, store}) {
   function search(event) {
     let {target: {value}} = event;
-    store.dispatch({type: "NAME_SEARCH", value});
+    delegate.query = value;
+    store.dispatch({type: "PAGINATION_GOTO", page: 0});
   }
 
   return (

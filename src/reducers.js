@@ -21,6 +21,9 @@ function pagination(state, action) {
   if(action.type === "PAGINATION_MOVEMENT")
     result.current += action.amt;
 
+  if(action.type === "PAGINATION_GOTO")
+    result.current = action.page;
+
   return result;
 }
 
