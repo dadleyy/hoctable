@@ -2,8 +2,6 @@ import TableFactory from "./table";
 import PaginationFactory from "./pagination";
 import utils from "../utils";
 
-let compare = utils.compare.fields(["total", "size", "current"]);
-
 class Proxy {
 
   constructor(delegate, store, actions) {
@@ -33,9 +31,9 @@ class Proxy {
     delegate.rows(store, loaded);
   }
 
-  columns() {
+  columns(store) {
     let {delegate} = this;
-    return delegate.columns();
+    return delegate.columns(store);
   }
 
 }

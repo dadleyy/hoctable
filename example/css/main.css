@@ -1,3 +1,19 @@
+#popups {
+  position: fixed;
+  width: 100%;
+  height: 0%;
+  z-index: 30;
+}
+
+main {
+  position: relative;
+  z-index: 10;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
 .hoctable__column-header {
   cursor: pointer;
 }
@@ -6,10 +22,34 @@
   display: block;
 }
 
+.option-list {
+  display: block;
+}
+
+.option-list__option {
+  display: block;
+}
+
+.option-list__option p {
+  margin-bottom: 0;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+
 .hoctable-pagination__info,
 .hoctable-pagination__next,
 .hoctable-pagination__previous {
   float: left;
   display: block;
   margin-right: 1rem;
+}
+
+.dropdown-pane.menu {
+  visibility: visible;
+}
+
+.products-view .products-view__controls .button {
+  margin-bottom: 0;
 }

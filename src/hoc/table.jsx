@@ -61,7 +61,7 @@ function TableFactory(RowTransclusion, ColumnTransclusion) {
     render() {
       let {store, delegate} = this.props;
 
-      let columns = delegate.columns();
+      let columns = delegate.columns(store);
 
       let th_list  = [];
       let col_list = [];

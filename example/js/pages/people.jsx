@@ -1,4 +1,4 @@
-import Table from "../components/table";
+import Table from "../components/person_table";
 
 export default function People({delegate, store}) {
   return (

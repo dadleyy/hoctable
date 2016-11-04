@@ -1,4 +1,4 @@
-import PagedTable from "../components/paged_table";
+import PagedTable from "../components/person_table_paged";
 
 export default function Paged({delegate, store}) {
   function search(event) {

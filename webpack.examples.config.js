@@ -2,6 +2,10 @@
 
 const express = require("express");
 
+const people     = require("./test/data/people");
+const products   = require("./test/data/products");
+const properties = require("./test/data/properties");
+
 const helpers = {
 
   apply(compiler) {
@@ -20,42 +24,7 @@ const helpers = {
 
 };
 
-function age() {
-  let top = (Math.random() * 50) % 100;
-  return Math.ceil(top + 20);
-}
-
 let app = express();
-
-const PEOPLE = (function() { 
-  let id = 0;
-  return [
-    {id: ++id, name: "Aaron", age: age()},
-    {id: ++id, name: "Carly", age: age()},
-    {id: ++id, name: "Danny", age: age()},
-    {id: ++id, name: "Emily", age: age()},
-    {id: ++id, name: "Freddy", age: age()},
-    {id: ++id, name: "Tiffany", age: age()},
-    {id: ++id, name: "Uman", age: age()},
-    {id: ++id, name: "Grace", age: age()},
-    {id: ++id, name: "Billy", age: age()},
-    {id: ++id, name: "Kristin", age: age()},
-    {id: ++id, name: "Hamlet", age: age()},
-    {id: ++id, name: "Ivan", age: age()},
-    {id: ++id, name: "David", age: age()},
-    {id: ++id, name: "Juliet", age: age()},
-    {id: ++id, name: "Lauren", age: age()},
-    {id: ++id, name: "Oscar", age: age()},
-    {id: ++id, name: "Michelle", age: age()},
-    {id: ++id, name: "Nancy", age: age()},
-    {id: ++id, name: "Stan", age: age()},
-    {id: ++id, name: "Pippin", age: age()},
-    {id: ++id, name: "Ralph", age: age()},
-    {id: ++id, name: "Janice", age: age()},
-    {id: ++id, name: "Xander", age: age()}
-  ];
-
-})();
 
 app.get("/people", function(req, res) {
   let {orderby, max, page, name} = req.query;
@@ -70,7 +39,7 @@ app.get("/people", function(req, res) {
     return person.toLowerCase().indexOf(name) >= 0;
   }
 
-  let filtered = name && name.length ? PEOPLE.filter(filter) : PEOPLE;
+  let filtered = name && name.length ? people.filter(filter) : people;
 
   let results = (prop ? filtered.sort(sort) : filtered).slice(0);
 
@@ -82,6 +51,19 @@ app.get("/people", function(req, res) {
   results = results.slice(start, end);
 
   res.json({meta: {total: filtered.length}, results});
+});
+
+app.get("/properties", function(req, res) {
+  return res.json({meta: {}, results: properties});
+});
+
+app.get("/products", function(req, res) {
+  let results = products.slice(0);
+  let {length: total} = results;
+  let {orderby, max, page, name, filter} = req.query;
+  console.log(filter);
+
+  return res.json({meta: {total}, results});
 });
 
 app.listen("4000");
