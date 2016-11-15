@@ -61,7 +61,9 @@ app.get("/products", function(req, res) {
   let results = products.slice(0);
   let {length: total} = results;
   let {orderby, max, page, name, filter} = req.query;
-  console.log(filter);
+
+  if(filter)
+    console.log(filter);
 
   return res.json({meta: {total}, results});
 });

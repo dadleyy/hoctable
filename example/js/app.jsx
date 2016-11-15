@@ -16,23 +16,35 @@ function el(id) {
 page("/products", function() {
   let {sorting, pagination} = reducers;
 
-  function filter(current_state, payload) {
-    let result = Object.assign({}, current_state);
-    let {type} = payload;
+  function filters(current_state, payload) {
+    let result = [];
 
-    if(type === "PROPERTY_SELECTION") {
-      let {property} = payload;
-      result = {property};
-    }
+    if(!current_state)
+      return result;
 
-    if(type === "OPERATOR_SELECTION") {
-      let {operator} = payload;
-      Object.assign(result, {operator});
-    }
+    if(!payload.filter)
+      return current_state;
 
-    if(type === "FILTER_SELECTION") {
-      let {filter_value} = payload;
-      Object.assign(result, {filter_value});
+    for(let i = 0, c = current_state.length; i < c; i++) {
+      let {id, property, operator, value} = current_state[i];
+
+      if(id !== payload.filter.id) {
+        result.push({id, property, operator, value});
+        continue;
+      }
+
+      let current = {id, property, operator, value};
+
+      if(payload.type === "PROPERTY_SELECTION")
+        current = {id, property: payload.property};
+
+      if(payload.type === "OPERATOR_SELECTION")
+        current = {id, property, operator: payload.operator}
+
+      if(payload.type === "VALUE_SELECTION")
+        current = {id, property, operator, value: payload.value};
+
+      result.push(current);
     }
 
     return result;
@@ -42,7 +54,7 @@ page("/products", function() {
     return current_state || [];
   }
 
-  let reducer = Redux.combineReducers({sorting, pagination, filter, properties: pass});
+  let reducer = Redux.combineReducers({sorting, pagination, filters, properties: pass});
 
   let delegate = new ProductDelegate();
 
@@ -51,10 +63,10 @@ page("/products", function() {
       properties: properties,
       sorting: {rel: "name"},
       pagination: {current: 0, size: 10},
-      filter: {property: null}
+      filters: [{key: 1, property: null}]
     });
 
-    ReactDOM.render(<Products table-delegate={delegate} store={store} />, el("main"));
+    ReactDOM.render(<Products table={delegate} store={store} />, el("main"));
   }
 
   function failed(error) {

@@ -1,15 +1,5 @@
 import i18n from "../i18n";
 
-const filters = {
-
-  equals(property, value) {
-    let result = {};
-    console.log(property);
-    return result;
-  }
-
-};
-
 class Delegate {
 
   constructor() {
@@ -27,9 +17,11 @@ class Delegate {
   }
 
   rows(store, callback) {
-    let {filter, sorting, pagination, properties} = store.getState();
-    let {rel, order} = sorting;
+    let {filters, sorting, pagination, properties} = store.getState();
+
+    let {rel, order}    = sorting;
     let {size, current} = pagination;
+
     let columns = this.columns(store);
 
     function normalize(product) {
@@ -46,17 +38,15 @@ class Delegate {
     }
 
     let params = {
-      orderby: order ? rel : `-${rel}`, 
-      max: size,
-      page: current
+      orderby : order ? rel : `-${rel}`, 
+      max     : size,
+      page    : current,
+      filter  : {}
     };
 
-    let {property, operator, filter_value} = filter || {};
-
-    console.log(operator);
-    if(property && operator && filters[operator.id])
-      params.filter = filters[operator.id](property, filter_value);
-
+    for(let i = 0, c = filters.length; i < c; i++) {
+      let {property, operator, value} = filters[i];
+    }
 
     qwest.get(`/api/products`, params)
       .then(success)

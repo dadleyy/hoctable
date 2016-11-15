@@ -1,27 +1,28 @@
 import {replace} from "../util";
 import i18n from "../i18n";
-import OPERATORS from "../../var/operators";
+import OPS from "../../var/operators";
 
 class MenuDelegate {
 
-  constructor(filter_store) {
-    this.filter_store = filter_store;
+  constructor(store, filter) {
+    this.store  = store;
+    this.filter = filter;
   }
 
   text() {
-    let {filter_store} = this;
-    let {filter: {operator}} = filter_store.getState();
+    let {store, filter} = this;
+    let {operator} = filter;
     return operator ? operator.text : i18n("select_operator");
   }
 
   options(callback) {
-    let {filter_store} = this;
-    let {filter: {property}} = filter_store.getState();
+    let {store, filter} = this;
+    let {property} = filter;
     let available_ops = [];
 
     switch(property.type) {
       case "enumerated":
-        available_ops = [OPERATORS.EQUALS, OPERATORS.HAS_VALUE, OPERATORS.HAS_NO_VALUE, OPERATORS.IS_ANY];
+        available_ops = [OPS.EQUALS, OPS.HAS_VALUE, OPS.HAS_NO_VALUE, OPS.IS_ANY];
         break;
       default:
         available_ops = [{text: i18n("unknown_property")}];
@@ -32,8 +33,8 @@ class MenuDelegate {
   }
 
   select(operator, callback) {
-    let {filter_store} = this;
-    filter_store.dispatch({type: "OPERATOR_SELECTION", operator});
+    let {store, filter} = this;
+    store.dispatch({type: "OPERATOR_SELECTION", filter, operator});
     callback(false);
   }
 
