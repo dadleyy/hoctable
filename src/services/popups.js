@@ -61,7 +61,7 @@ function close(popup_id) {
 }
 
 function closeOpen(event) {
-  let {currentTarget: target} = event;
+  let {target} = event;
 
   // loop over our open popups closing those that are not associated with this event
   for(let i = 0, count = open_popups.length; i < count; i++) {
@@ -69,10 +69,8 @@ function closeOpen(event) {
     let node = ReactDOM.findDOMNode(popup);
 
     // if this node is inside the target of the click - continue
-    if(util.dom.contains(node, target)) {
-      console.log("avoiding");
+    if(util.dom.contains(node, target))
       continue;
-    }
 
     // otherwise close it
     return close(id);

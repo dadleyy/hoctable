@@ -1,4 +1,9 @@
 import i18n from "../i18n";
+import OPS from "../../var/operators";
+
+const {HAS_VALUE: {id: HAS_VALUE}} = OPS;
+const {HAS_NO_VALUE: {id: HAS_NO_VALUE}} = OPS;
+const {IS_ANY: {id: IS_ANY}} = OPS;
 
 class Delegate {
 
@@ -41,11 +46,30 @@ class Delegate {
       orderby : order ? rel : `-${rel}`, 
       max     : size,
       page    : current,
-      filter  : {}
+      filters : []
     };
 
     for(let i = 0, c = filters.length; i < c; i++) {
       let {property, operator, value} = filters[i];
+
+      if(!property || !operator) 
+        continue;
+
+      let valueless_op = operator.id === HAS_VALUE || operator.id === HAS_NO_VALUE;
+
+      // if we don't need a value we can skip ahead here
+      if(valueless_op) {
+        params.filters.push({property: property.id, operator: operator.id});
+        continue;
+      }
+
+      if(!value)
+        continue;
+
+      if(operator.id === IS_ANY && property.type === "string" || property.type === "number")
+        value = value.split(",");
+
+      params.filters.push({property: property.id, operator: operator.id, value});
     }
 
     qwest.get(`/api/products`, params)

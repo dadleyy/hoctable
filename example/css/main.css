@@ -53,3 +53,9 @@ main {
 .products-view .products-view__controls .button {
   margin-bottom: 0;
 }
+
+.overflow-hidden { overflow: hidden; }
+.width-100 { width: 100%; }
+.height-auto { height: 100%; }
+.margin-right-1 { margin-right: 1rem; }
+.margin-bottom-0 { margin-bottom: 0 !important; }

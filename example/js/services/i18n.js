@@ -7,8 +7,13 @@
 
 let dictionary = {
   category: "Category",
+  clear_filters: "Clear Filters",
   color: "Color",
   id: "ID",
+  placeholders: {
+    comma_separated_values: "Enter values, separated by comma",
+    enter_value: "Enter value",
+  },
   operators: {
     equals: "Equals",
     greater_than: "Greater Than",

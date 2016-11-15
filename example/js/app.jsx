@@ -22,6 +22,9 @@ page("/products", function() {
     if(!current_state)
       return result;
 
+    if(payload.type === "CLEAR_FILTERS")
+      return [{property: null}];
+
     if(!payload.filter)
       return current_state;
 
@@ -35,14 +38,22 @@ page("/products", function() {
 
       let current = {id, property, operator, value};
 
-      if(payload.type === "PROPERTY_SELECTION")
-        current = {id, property: payload.property};
+      if(payload.type === "PROPERTY_SELECTION") {
+        result.push({id, property: payload.property});
+        continue;
+      }
 
-      if(payload.type === "OPERATOR_SELECTION")
-        current = {id, property, operator: payload.operator}
+      if(payload.type === "VALUE_SELECTION") {
+        result.push({id, property, operator, value: payload.value});
+        continue;
+      }
 
-      if(payload.type === "VALUE_SELECTION")
-        current = {id, property, operator, value: payload.value};
+      current = {id, property, operator: payload.operator};
+
+      // if we're enumerated, start w/ all selected
+      if(property.type === "enumerated" && payload.operator.id == "is_any") {
+        current.value = property.values.slice(0);
+      }
 
       result.push(current);
     }
@@ -63,7 +74,7 @@ page("/products", function() {
       properties: properties,
       sorting: {rel: "name"},
       pagination: {current: 0, size: 10},
-      filters: [{key: 1, property: null}]
+      filters: [{id: 1, property: null}]
     });
 
     ReactDOM.render(<Products table={delegate} store={store} />, el("main"));

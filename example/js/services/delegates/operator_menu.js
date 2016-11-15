@@ -24,6 +24,12 @@ class MenuDelegate {
       case "enumerated":
         available_ops = [OPS.EQUALS, OPS.HAS_VALUE, OPS.HAS_NO_VALUE, OPS.IS_ANY];
         break;
+      case "string":
+        available_ops = [OPS.EQUALS, OPS.HAS_VALUE, OPS.HAS_NO_VALUE, OPS.IS_ANY, OPS.CONTAINS];
+        break;
+      case "number":
+        available_ops = [OPS.EQUALS, OPS.GREATER_THAN, OPS.LESS_THAN, OPS.HAS_VALUE, OPS.HAS_NO_VALUE, OPS.IS_ANY];
+        break;
       default:
         available_ops = [{text: i18n("unknown_property")}];
         break;

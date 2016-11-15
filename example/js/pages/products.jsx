@@ -1,40 +1,9 @@
+
+import OPS from "../var/operators";
 import i18n from "../services/i18n";
 
-import Menu from "../components/menu";
-import ProductTable from "../components/product_table";
-
-import PropertyDelegate from "../services/delegates/property_menu";
-import OperatorDelegate from "../services/delegates/operator_menu";
-import EnumDelegate from "../services/delegates/enum_menu";
-
-
-function control(content, key) {
-  let style = {marginRight: "1rem"};
-  return (<div className="float-left" style={style} key={key}>{content}</div>);
-}
-
-function Controls({filter, store}) {
-  let property_delegate = new PropertyDelegate(store, filter);
-  let controls = [control(<Menu delegate={property_delegate} />, "property")];
-
-  let {property, operator, value} = filter;
-
-  if(!property)
-    return (<div className="control-group">{controls}</div>);
-
-  let operator_delegate = new OperatorDelegate(store, filter);
-  controls.push(control(<Menu delegate={operator_delegate} />, "operator"))
-
-  if(!operator)
-    return (<div className="control-group">{controls}</div>);
-
-  if(operator.id === "equals" && property.type === "enumerated") {
-    let enum_delegate = new EnumDelegate(store, filter);
-    controls.push(control(<Menu delegate={enum_delegate} />, "enum"));
-  }
-
-  return (<div className="control-group">{controls}</div>);
-}
+import Filter from "../components/products/filter";
+import ProductTable from "../components/products/table";
 
 class Products extends React.Component {
 
@@ -54,6 +23,12 @@ class Products extends React.Component {
     subscriptions.store();
   }
 
+  clearFilters() {
+    let {store} = this.props;
+    store.dispatch({type: "CLEAR_FILTERS"});
+    this.forceUpdate();
+  }
+
   render() {
     let {props} = this;
     let {store, table: table_delegate} = props;
@@ -64,13 +39,18 @@ class Products extends React.Component {
     let {filters} = store.getState();
 
     for(let i = 0, c = filters.length; i < c; i++) {
-      let control_group = <Controls filter={filters[i]} store={store} key={i} />;
-      controls.push(control_group);
+      let filter = <Filter filter={filters[i]} store={store} key={i} />;
+      controls.push(filter);
     }
 
     return (
       <div className="clearfix products-view">
-        <div className="products-view__controls clearfix">{controls}</div>
+        <div className="clearfix">
+          <div className="clearfix float-left margin-right-1">
+            <a className="button" onClick={this.clearFilters.bind(this)}>{i18n("clear_filters")}</a>
+          </div>
+          <div className="products-view__controls overflow-hidden clearfix">{controls}</div>
+        </div>
         <hr />
         <div className="products-view__table">{table}</div>
       </div>
