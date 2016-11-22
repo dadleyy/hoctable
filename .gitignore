@@ -5,6 +5,7 @@ npm-debug.log
 *.rdb
 *.tar.gz
 test-results.xml
+.env
 
 tmp
 node_modules

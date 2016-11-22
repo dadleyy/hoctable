@@ -1,4 +1,3 @@
-
 import OPS from "../var/operators";
 import i18n from "../services/i18n";
 

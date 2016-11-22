@@ -12,4 +12,26 @@ function uuid() {
   return `id-${++id}`;
 }
 
-export default {dom, compare, replace, uuid};
+function truncr(input, length) {
+  if("string" !== typeof input)
+    return input;
+
+  // easy - string is shorter
+  if(input.length < length)
+    return input;
+
+  let parts = input.split(" ");
+  let out   = [];
+  let count = 0;
+
+  for(let i = 0, c = parts.length; i < c; i++) {
+    let chunk = parts[i];
+    if(count + chunk.length > length) break;
+    count += chunk.length;
+    out.push(chunk);
+  }
+
+  return out.join(" ");
+}
+
+export default {dom, compare, replace, uuid, truncr};

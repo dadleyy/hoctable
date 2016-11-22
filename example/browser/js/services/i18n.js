@@ -9,11 +9,10 @@ let dictionary = {
   category: "Category",
   clear_filters: "Clear Filters",
   color: "Color",
+  comments: "Comments",
   id: "ID",
-  placeholders: {
-    comma_separated_values: "Enter values, separated by comma",
-    enter_value: "Enter value",
-  },
+  labels: "Labels",
+  no_results: "No Results",
   operators: {
     equals: "Equals",
     greater_than: "Greater Than",
@@ -23,10 +22,17 @@ let dictionary = {
     is_any: "Is Any",
     contains: "Contains"
   },
+  placeholders: {
+    comma_separated_values: "Enter values, separated by comma",
+    enter_value: "Enter value",
+  },
   product_name: "Product Name",
+  reporter: "Reporter",
   select_property: "Select a Property",
   select_operator: "Select an Operator",
   select_value: "Select Value",
+  status: "Status",
+  title: "Title",
   unknown_property: "Unkown Property",
   weight: "Weight",
   wireless: "Wireless"
