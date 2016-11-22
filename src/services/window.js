@@ -1,7 +1,6 @@
 import utils from "../utils";
 
-/* viewport service
- *
+/**
  * This service binds viewport-level events to the dom so that other
  * components/modules needing that information may and and remove these
  * listeners at will; the module binds all of its events at application
@@ -13,11 +12,12 @@ import utils from "../utils";
  * way as the popup/note/event engines - a unique identifier handler is 
  * create for each listener.
  *
+ * @module services/window
  */
 
 let listeners = [];
 let bound     = false;
-let mouse     = {};
+let mouse     = {start: {}, end: {}};
 
 function on(event_name, handler) {
   var id = utils.uuid();

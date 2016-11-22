@@ -1,22 +1,29 @@
-import utils from "../utils";
-
-let compare = utils.compare.fields(["total", "size", "current"]);
-
 function PaginationFactory(PageTransclusion) {
 
   class Pagination extends React.Component {
 
     constructor(props) {
       super(props);
+      let {store} = props;
+
+      this.subscriptions = [
+        store.subscribe(this.forceUpdate.bind(this))
+      ];
     }
 
     componentWillUnmount() {
+      let {subscriptions} = this;
+
+      while(subscriptions.length) {
+        let fn = subscriptions.shift();
+        fn();
+      }
     }
 
     render() {
       let {store}    = this.props;
-      let pagination = store.getState();
-    
+      let {pagination} = store.getState();
+
       if(!pagination)
         return (<div className="hoctable-pagination--empty"></div>);
 
@@ -40,7 +47,7 @@ function PaginationFactory(PageTransclusion) {
 
       return (
         <div className="hoctable-pagination clearfix">
-          <div className="hoctable-pagination__info">
+          <div className="hoctable-pagination__info" data-single-page={max_page === 1}>
             <p>page {current + 1} of {max_page} <span className="hoctable-pagination__info__total">({total} results)</span></p>
           </div>
           <div className="hoctable-pagination__previous">{previous}</div>
