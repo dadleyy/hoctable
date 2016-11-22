@@ -1,7 +1,7 @@
-const USERNAME_RE = /\s@([A-Za-z0-9_-]+)\s/i;
+const USERNAME_RE = /\B@([a-zA-Z0-9_]+)/i;
 
-function replace(___, group) {
-  return ` [@${group}](https://github.com/${group}) `;
+function replace(full, group) {
+  return `[@${group}](https://github.com/${group})`;
 }
 
 function linkify(body) {

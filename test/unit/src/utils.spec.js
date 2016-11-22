@@ -1,4 +1,4 @@
-const {default: {truncr}} = require("../../src/utils");
+const {default: {truncr}} = require("hoctable/utils");
 
 describe("utils test suite", function() {
 

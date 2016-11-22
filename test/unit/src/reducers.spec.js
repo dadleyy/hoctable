@@ -1,4 +1,4 @@
-const reducers = require("../../src/reducers");
+const reducers = require("hoctable/reducers");
 
 describe("reducer test suite", function() {
 
