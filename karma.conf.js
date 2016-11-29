@@ -5,6 +5,8 @@ module.exports = function(config) {
   let frameworks    = ["requirejs", "jasmine"];
 
   let preprocessors = {
+    "example/browser/**/*.js": ["babel"],
+    "example/browser/**/*.jsx": ["babel"],
     "src/**/*.js": ["babel"],
     "src/**/*.jsx": ["babel"],
     "test/unit/**/*.js": ["babel"],
@@ -16,6 +18,8 @@ module.exports = function(config) {
     {pattern: "./test/unit/**/*.spec.js", included: false},
     {pattern: "./src/**/*.js", included: false},
     {pattern: "./src/**/*.jsx", included: false},
+    {pattern: "./example/**/*.js", included: false},
+    {pattern: "./example/**/*.jsx", included: false},
     "./test/unit.js"
   ];
 

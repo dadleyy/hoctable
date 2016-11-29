@@ -7,14 +7,17 @@ function pathToModule(path) {
 };
 
 Object.keys(window.__karma__.files).forEach(function(file) {
-  if(TEST_REGEXP.test(file)) {
-    tests.push(pathToModule(file));
-  }
+  if(TEST_REGEXP.test(file)) tests.push(pathToModule(file));
 });
 
 require.config({
   baseUrl: '/base',
   shim: {},
   deps: tests,
+  paths: {
+    "example": "/base/example/browser/js",
+    "hoctable": "/base/src",
+    "fixtures": "/base/test/fixtures"
+  },
   callback: window.__karma__.start
 });
