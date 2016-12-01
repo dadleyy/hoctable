@@ -4,30 +4,16 @@ function PaginationFactory(PageTransclusion) {
 
     constructor(props) {
       super(props);
-      let {store} = props;
-
-      this.subscriptions = [
-        store.subscribe(this.forceUpdate.bind(this))
-      ];
     }
 
     componentWillUnmount() {
-      let {subscriptions} = this;
-
-      while(subscriptions.length) {
-        let fn = subscriptions.shift();
-        fn();
-      }
     }
 
     render() {
-      let {store}    = this.props;
-      let {pagination} = store.getState();
-
-      if(!pagination)
-        return (<div className="hoctable-pagination--empty"></div>);
-
-      let {size, total, current} = pagination;
+      let {delegate} = this.props;
+      let total   = delegate.total();
+      let current = delegate.current();
+      let size    = delegate.size();
 
       if(!total)
         return (<div className="hoctable-pagination--empty"></div>);
@@ -37,7 +23,7 @@ function PaginationFactory(PageTransclusion) {
 
       function move(amt) {
         return function go() {
-          store.dispatch({type: "PAGINATION_MOVEMENT", amt});
+          delegate.move(current + amt);
         }
       }
 

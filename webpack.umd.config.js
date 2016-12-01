@@ -1,23 +1,25 @@
+const path = require("path");
+
 module.exports = {
   context: __dirname + "/src",
-  entry: ["./hoctable.js"],
+  entry: ["./hoctable.ts"],
+  devtool: "source-map",
   output: {
     library: "hoctable",
     libraryTarget: "umd",
     filename: "./dist/hoctable-umd.js"
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"]
+    root: [
+      path.resolve("./src")
+    ],
+    extensions: ["", ".js", ".jsx", ".ts", ".tsx"]
   },
   module: {
     loaders: [{
-      test: /\.js|jsx$/,
+      test: /\.ts|tsx|jsx|js/i,
       exclude: /node_modules/,
-      loader: "babel",
-      query: {
-        presets: ["es2015", "react"],
-        plugins: ["transform-runtime"]
-      }
+      loader: "ts-loader"
     }]
   }
 };

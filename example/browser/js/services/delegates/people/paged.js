@@ -24,7 +24,7 @@ class Delegate {
 
   rows(store, callback) {
     let {people, query: name} = this;
-    let {sorting, pagination} = store.getState();
+    let {sorting, pagination} = store;
     let {rel, order} = sorting;
     let {size, current} = pagination;
 

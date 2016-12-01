@@ -1,19 +1,15 @@
-import util from "../utils";
-import Viewport from "./window"
+import util from "utils";
+import Viewport from "services/window"
 
-/* popups service
- *
- * Very similar to the Notes services, this module takes care of adding
- * components to the DOM as popups - fixed-position elements that must
- * have a higher z-index than the rest of the content.
- *
- * Additionally, this service is responsible for closing popups when the
- * user clicks outside them, making sure the popups remain bounded within
- * the viewport, etc..
- *
- * Like the Event class and the Notes service, addition and removal of popups
- * is handled through a unique identifier handle.
- */ 
+export declare interface PopupPlacement {
+  left: number;
+  right?: number;
+  top: number;
+}
+
+export declare interface PopupGlobalCloseEvent {
+  target : Node
+}
 
 let root         = null;
 let open_popups  = [];
@@ -21,10 +17,15 @@ let view_events  = [];
 
 const GUTTER_WIDTH = 100;
 
-function open(component, placement) {
-  let id    = util.uuid();
-  let style = Object.assign({position: "fixed"}, placement);
-  let popup = util.dom.create("div", {style});
+let uuid = (function() {
+  let pool = 0;
+  return function() : string { return `_${++pool}_`; };
+})();
+
+function open(component : React.ReactElement<any>, placement : PopupPlacement) : string {
+  let id    = uuid();
+  let style = {};
+  let popup = util.dom.create("div", style);
 
   // render the component into the container and add it to our popup root
   ReactDOM.render(component, popup);
@@ -35,33 +36,38 @@ function open(component, placement) {
   let ldist    = (bounding.left + bounding.width) - (window.innerWidth - GUTTER_WIDTH);
 
   if(ldist > 0)
-    popup.style.left = util.dom.px(placement.left - GUTTER_WIDTH);
+    popup.style.left = `${placement.left - GUTTER_WIDTH}px`;
 
   if(bounding.left < GUTTER_WIDTH)
-    popup.style.left = util.dom.px(placement.left + GUTTER_WIDTH);
+    popup.style.left = `${placement.left + GUTTER_WIDTH}px`;
 
   open_popups.push({id, popup});
   return id;
 }
 
-function close(popup_id) {
+function close(popup_id : string) : number {
   let count = open_popups.length;
 
   for(let i = 0; i < count; i++) {
     let p = open_popups[i];
-    if(p.id !== popup_id) continue;
+
+    if(p.id !== popup_id) 
+      continue;
+
     let node = ReactDOM.findDOMNode(p.popup)
+
     ReactDOM.unmountComponentAtNode(node);
     node.parentNode.removeChild(node);
     open_popups.splice(i, 1);
-    return popup_id;
+
+    return 0;
   }
 
   return -1;
 }
 
-function closeOpen(event) {
-  let {target} = event;
+function closeOpen(trigger : PopupGlobalCloseEvent) : number {
+  let {target} = trigger;
 
   // loop over our open popups closing those that are not associated with this event
   for(let i = 0, count = open_popups.length; i < count; i++) {
@@ -76,7 +82,7 @@ function closeOpen(event) {
     return close(id);
   }
 
-  return true;
+  return 0;
 }
 
 function mount(target) {

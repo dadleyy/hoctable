@@ -1,36 +1,57 @@
-import utils from "../utils";
+import utils from "utils";
 
-/**
- * This service binds viewport-level events to the dom so that other
- * components/modules needing that information may and and remove these
- * listeners at will; the module binds all of its events at application
- * startup to handlers that find matching events and call them as needed.
- * It is likely that there will be events fired that have no active 
- * listeners, but that is ok.
- *
- * The management (addition/removal) of the listeners is handled the same
- * way as the popup/note/event engines - a unique identifier handler is 
- * create for each listener.
- *
- * @module services/window
- */
+export declare interface Dimensions {
+  width : number;
+  height: number;
+}
 
-let listeners = [];
-let bound     = false;
-let mouse     = {start: {}, end: {}};
+export declare interface Position {
+  x: number;
+  y: number
+}
 
-function on(event_name, handler) {
-  var id = utils.uuid();
+class MouseState {
+  public start   : Position;
+  public end     : Position;
+  public current : Position;
+}
+
+export declare interface ListenterCallback {
+  (evt : any) : void;
+}
+
+export declare interface WindowListener {
+  handler    : ListenterCallback;
+  id         : string;
+  event_name : string;
+  context?   : any;
+}
+
+let listeners : Array<WindowListener> = [];
+let mouse = new MouseState();
+
+let bound = false;
+
+let uuid = (function() {
+  let pool = 0;
+  return function() : string { return `_${++pool}_`; };
+})();
+
+function on(event_name : string, handler : ListenterCallback) {
+  var id = uuid();
   listeners.push({event_name, id, handler});
   return id;
 }
 
-function off(id) {
+function off(id : string) : string | number {
   let count = listeners.length;
 
   for(let i = 0; i < count; i++) {
     let l = listeners[i];
-    if(l.id !== id) continue;
+
+    if(l.id !== id) 
+      continue;
+
     listeners.splice(i, 1);
     return id;
   }
@@ -38,17 +59,23 @@ function off(id) {
   return -1;
 }
 
-function trigger(event, fn) {
-  return function handler(e) {
-    if("function" === typeof fn) fn(e);
+function trigger(evt : string, fn? : ListenterCallback) : ListenterCallback {
+  let before = "function" === typeof fn ? fn : function() { };
+
+  function handler(e : any) {
+    before(e);
 
     for(let i = 0, c = listeners.length; i < c; i++) {
       let {event_name, handler, context} = listeners[i];
-      if(event_name === event) handler.call(context, e);
+
+      if(evt === event_name)
+        handler.call(context, e);
     }
 
     return true;
   };
+
+  return handler;
 }
 
 function move(e) {
@@ -93,4 +120,14 @@ function bind() {
   }
 }
 
-export default {on, off, bind};
+function dimensions() : Dimensions {
+  let {innerWidth: width, innerHeight: height} = window;
+  return {width, height};
+}
+
+function scroll() : Position {
+  let {scrollX: x, scrollY: y} = window;
+  return {x, y};
+}
+
+export default {on, off, bind, dimensions, scroll};

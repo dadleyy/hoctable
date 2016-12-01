@@ -6,6 +6,7 @@ npm-debug.log
 *.tar.gz
 test-results.xml
 .env
+/typings
 
 tmp
 node_modules

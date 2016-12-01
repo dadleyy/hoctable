@@ -40,6 +40,7 @@ app.listen("4000");
 
 module.exports = {
   entry: ["./example/browser/js/app"],
+  devtool: "source-map",
   output: {
     path: __dirname + "/example/browser/js",
     publicPath: "/js/",

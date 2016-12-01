@@ -49,5 +49,5 @@ class Row extends React.Component {
 
 }
 
-export default hoc.PagedTable(Row);
+export default hoc.Table(Row);
 
