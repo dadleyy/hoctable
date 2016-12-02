@@ -8,7 +8,7 @@ import OPS from "../../var/operators";
 import i18n from "../../services/i18n";
 
 // compose a menu using the default transclusion
-const SingleSelect = hoc.SingleSelect();
+const SingleSelect = hoc.Select();
 const MultiSelect  = hoc.MultiSelect();
 const {HAS_VALUE: {id: HAS_VALUE}, HAS_NO_VALUE: {id: HAS_NO_VALUE}} = OPS;
 

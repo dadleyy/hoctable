@@ -25,23 +25,26 @@ export declare interface SingleSelectProps {
   close    : PopupCloseCallback;
 }
 
-export declare interface ItemProps {
+export declare interface ItemProps<DelegateType> {
   option   : any;
-  delegate : SingleSelectDelegate;
+  delegate : DelegateType;
   signals  : ItemSignals;
 }
 
-type ComposedItem = React.StatelessComponent<ItemProps>;
+export type SingleSelectItemProps = ItemProps<SingleSelectDelegate>;
+export type ComposedItem          = React.StatelessComponent<SingleSelectItemProps>;
+export type ComposedSelect        = React.ComponentClass<SingleSelectProps>;
 
 function DefaultButton({delegate}) {
   return (<a className="button">{delegate.text()}</a>);
 }
 
 
-function ItemFactory(Transclusion : React.Component<ItemProps, any>) : ComposedItem {
+function ItemFactory(Inner : React.ComponentClass<SingleSelectItemProps>) : ComposedItem {
 
-  return function Item({delegate, option, signals}) {
-    let content = Transclusion ? null : (<p>{delegate.translate(option)}</p>);
+  function Item(props : SingleSelectItemProps) {
+    let {delegate, option, signals} = props;
+    let content = Inner ? <Inner {...props} /> : (<p>{delegate.translate(option)}</p>);
 
     function finished() {
       signals.selection();
@@ -54,13 +57,15 @@ function ItemFactory(Transclusion : React.Component<ItemProps, any>) : ComposedI
     return (<div className="pointer option-list__option" onClick={select}>{content}</div>);
   }
 
+  return Item;
+
 }
 
-function Factory(ItemTransclusion, ButtonComponent = DefaultButton) {
-  const Item = ItemFactory(ItemTransclusion);
+function Factory(ItemT : React.ComponentClass<SingleSelectItemProps>, ButtonComponent = DefaultButton) : ComposedSelect {
+  const Item = ItemFactory(ItemT);
 
   class Menu extends React.Component<SingleSelectProps, any> {
-    private options : Array<any>;
+    private options : Array<HTMLElement>;
 
     constructor(props) {
       super(props);
@@ -109,7 +114,7 @@ function Factory(ItemTransclusion, ButtonComponent = DefaultButton) {
 
   }
 
-  return ActionMenu(Menu, ButtonComponent);
+  return ActionMenu<SingleSelectProps>(Menu, ButtonComponent);
 
 }
 
