@@ -18,7 +18,7 @@ export declare interface PopupCloseCallback {
 }
 
 function bottom(box : ClientRect) : number {
-  return box.top + box.bottom;
+  return box.top + box.height;
 }
 
 function DefaultButton(props : any) : React.ReactElement<any> {

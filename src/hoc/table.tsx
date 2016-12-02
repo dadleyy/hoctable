@@ -30,18 +30,20 @@ export declare interface DataLoadedCallback {
 export declare interface TableDelegate {
   rows       : (callback : DataLoadedCallback) => void;
   columns    : () => Array<ColumnDefinition>;
-  sorting    : (column : ColumnDefinition) => boolean;
-  pagination : () => PaginationState;
-  goTo       : (new_page : number) => void;
-  sort       : (column : ColumnDefinition) => void;
+  paging     : PaginationDelegate;
+  sorting    : ColumnDelegate;
 }
 
 export declare interface TableProps {
   delegate : TableDelegate;
 }
 
+export declare interface PaginationProxy extends PaginationDelegate {
+  total : number;
+}
+
 export declare interface TableProxies {
-  pagination : PaginationDelegate;
+  pagination : PaginationProxy;
   sorting    : ColumnDelegate;
 }
 
@@ -120,15 +122,18 @@ function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTab
       let {delegate} = this.props;
       let update     = this.forceUpdate.bind(this);
 
-      // creaete the pagination proxy
+      // create the pagination proxy
       let pagination = {
+        total: 0,
 
         pagination() {
-          return delegate.pagination();
+          let {size, current} = delegate.paging.pagination();
+          let {total} = this;
+          return {size, total, current};
         },
 
         goTo(new_page) {
-          delegate.goTo(new_page);
+          delegate.paging.goTo(new_page);
           update();
         }
 
@@ -138,7 +143,7 @@ function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTab
       let sorting = {
 
         sort(column) {
-          props.delegate.sort(column);
+          props.delegate.sorting.sort(column);
           update();
         },
 
@@ -182,6 +187,7 @@ function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTab
           bodies.push(body);
         }
 
+        proxies.pagination.total = total;
         // render the pagination
         ReactDOM.render(<Pagination delegate={proxies.pagination} />, pager);
       }

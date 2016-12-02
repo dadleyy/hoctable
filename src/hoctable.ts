@@ -7,7 +7,11 @@ import Popups from "services/popups";
 import Viewport from "services/window";
 import utils from "utils";
 
+import Pagination from "stores/pagination";
+import Sorting from "stores/sorting";
+
 const hoc      = {MultiSelect, ActionMenu, Table, SingleSelect};
 const services = {Popups, Viewport};
+const stores   = {Pagination, Sorting};
 
-export {hoc, services, utils};
+export {hoc, services, utils, stores};

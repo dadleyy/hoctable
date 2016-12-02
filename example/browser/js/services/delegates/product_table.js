@@ -1,3 +1,4 @@
+import {stores} from "hoctable";
 import i18n from "../i18n";
 import OPS from "../../var/operators";
 
@@ -7,10 +8,14 @@ const {IS_ANY: {id: IS_ANY}} = OPS;
 
 class Delegate {
 
-  constructor() {
+  constructor(store) {
+    this.store   = store;
+    this.paging  = new stores.Pagination();
+    this.sorting = new stores.Sorting();
   }
 
-  columns(store) {
+  columns() {
+    let {store} = this;
     let {properties} = store.getState();
 
     function column({id, name}) {
@@ -21,11 +26,11 @@ class Delegate {
     return [{name: i18n("id"), rel: "id"}].concat(columns);
   }
 
-  rows(store, callback) {
-    let {filters, sorting, pagination, properties} = store.getState();
-
-    let {rel, order}    = sorting;
-    let {size, current} = pagination;
+  rows(callback) {
+    let {sorting, paging, properties, store} = this;
+    let {orderby, direction} = sorting;
+    let {size, current} = paging;
+    let {filters} = store.getState();
 
     let columns = this.columns(store);
 
@@ -43,7 +48,7 @@ class Delegate {
     }
 
     let params = {
-      orderby : order ? rel : `-${rel}`, 
+      orderby : orderby,
       max     : size,
       page    : current,
       filters : []

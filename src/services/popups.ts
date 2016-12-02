@@ -2,9 +2,9 @@ import util from "utils";
 import Viewport from "services/window"
 
 export declare interface PopupPlacement {
-  left: number;
-  right?: number;
-  top: number;
+  left   : number;
+  right? : number;
+  top    : number;
 }
 
 export declare interface PopupGlobalCloseEvent {
@@ -23,8 +23,12 @@ let uuid = (function() {
 })();
 
 function open(component : React.ReactElement<any>, placement : PopupPlacement) : string {
+  let style : React.CSSProperties = {top: `${placement.top}px`, right: placement.right, position: "absolute"};
   let id    = uuid();
-  let style = {};
+
+  if(placement.left && !placement.right) 
+    style.left = `${placement.left}px`;
+
   let popup = util.dom.create("div", style);
 
   // render the component into the container and add it to our popup root
