@@ -1,4 +1,5 @@
 import i18n from "../../i18n";
+import {stores} from "hoctable";
 
 const COLUMNS = [{
   rel: "id",
@@ -22,16 +23,17 @@ class Delegate {
   constructor(org, repo) {
     this.org  = org;
     this.repo = repo;
+    this.paging  = new stores.Pagination();
+    this.sorting = new stores.Sorting();
   }
 
   columns() {
     return COLUMNS;
   }
 
-  rows(store, callback) {
-    let {pagination, sorting} = store.getState();
-    let {org, repo} = this;
-    let {current: page} = pagination;
+  rows(callback) {
+    let {org, repo, paging, sorting} = this;
+    let {current: page} = paging;
 
     function loaded(__, {meta, status, results}) {
       if(status !== "SUCCESS")
@@ -46,6 +48,7 @@ class Delegate {
     }
 
     function failed(err) {
+      console.error(err);
       callback([{error: true}], 0);
     }
 

@@ -1,3 +1,4 @@
+import {stores} from "hoctable";
 import {replace} from "../../util";
 
 const DEFAULT_SORT = {rel: "id"};
@@ -5,8 +6,10 @@ const DEFAULT_SORT = {rel: "id"};
 class Delegate {
 
   constructor() {
-    this.people = [];
-    this.query  = null;
+    this.people  = [];
+    this.query   = null;
+    this.paging  = new stores.Pagination();
+    this.sorting = new stores.Sorting();
   }
 
   columns() {
@@ -22,16 +25,15 @@ class Delegate {
     }];
   }
 
-  rows(store, callback) {
-    let {people, query: name} = this;
-    let {sorting, pagination} = store.getState();
-    let {rel, order} = sorting;
-    let {size, current} = pagination;
+  rows(callback) {
+    let {people, query: name, sorting, paging} = this;
+    let {orderby, direction} = sorting;
+    let {size, current} = paging;
 
     function success(_, response) {
       let {results, meta} = response;
-
       replace(people, results);
+      people.total = meta.total;
 
       if(people.length === 0)
         return callback([{empty: true}], 0);
@@ -46,7 +48,7 @@ class Delegate {
     }
 
     let params = {
-      orderby: order ? rel : `-${rel}`, 
+      orderby: direction ? orderby : `-${orderby}`, 
       max: size,
       page: current
     };

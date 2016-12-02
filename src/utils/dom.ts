@@ -1,16 +1,8 @@
-/* remove
- *
- * removes the element from the dom by using it's parent.
- */
-export function remove(element) {
+export function remove(element : Node) : Node {
   return element.parentNode.removeChild(element);
 }
 
-/* contains
- *
- * returns true|false depending on wheather or not child is in target.
- */
-export function contains(target, child) {
+export function contains(target : Node, child : Node) : boolean {
   let head = child.parentNode;
 
   while(head != null) {
@@ -21,11 +13,7 @@ export function contains(target, child) {
   return false;
 }
 
-/* create
- *
- * creates an element and sets styles based on an option set provided
- */
-export function create(tag, {style} = {}) {
+export function create(tag : string, style : any) : HTMLElement {
   let element = document.createElement(tag);
 
   element.setAttribute("util-dom", "true");
@@ -42,9 +30,3 @@ export function create(tag, {style} = {}) {
 
   return element;
 }
-
-/* px
- *
- * adds `px` to the end of a string
- */
-export function px(amt) { return `${amt}px`; }

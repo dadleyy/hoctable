@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module"        : "commonjs",
+    "target"        : "es5",
+    "noImplicitAny" : false,
+    "sourceMap"     : false,
+    "allowJs"       : true,
+    "baseUrl"       : "./src",
+    "jsx"           : "react",
+    "typeRoots"     : [
+      "./typings/modules",
+      "./types"
+    ]
+  }
+}

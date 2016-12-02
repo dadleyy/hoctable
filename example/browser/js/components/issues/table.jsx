@@ -1,4 +1,4 @@
-import {services, hoc} from "hoctable";
+import {hoc} from "hoctable";
 import i18n from "../../services/i18n";
 import Thumb from "./user_thumb";
 import Labels from "./label_list";
@@ -32,7 +32,7 @@ class Row extends React.Component {
           <p><a href={issue_url}>{issue.number}</a> (<a href={issue.html_url}>{i18n("github")}</a>)</p>
         </td>
         <td className="issue-row__title">
-          <p>{services.utils.truncr(issue.title, 140)}</p>
+          <p>{issue.title}</p>
         </td>
         <td className="issue-row__labels">
           <Labels labels={issue.labels} />
@@ -49,5 +49,5 @@ class Row extends React.Component {
 
 }
 
-export default hoc.PagedTable(Row);
+export default hoc.Table(Row);
 
