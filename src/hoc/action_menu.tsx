@@ -13,17 +13,20 @@ export declare interface MenuState {
   popup: string;
 }
 
+export declare interface PopupCloseCallback {
+  () : void;
+}
+
 function bottom(box : ClientRect) : number {
   return box.top + box.bottom;
 }
 
-let DefaultButton : React.StatelessComponent<any> = function(props : any) {
+function DefaultButton(props : any) : React.ReactElement<any> {
   let {text} = props;
-
   return (<a className="action-menu__button">{text}</a>);
 };
 
-function ActionMenu<P>(PopupT : React.ComponentClass<any>, ButtonT = DefaultButton) : React.ComponentClass<P> {
+function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) : React.ComponentClass<P> {
 
   class Menu extends React.Component<P, MenuState> {
     private popup : string;
@@ -63,7 +66,7 @@ function ActionMenu<P>(PopupT : React.ComponentClass<any>, ButtonT = DefaultButt
       }
 
       // open the popup component with all of the props that were given to us
-      let popup = Popups.open(<PopupT {...this.props} close={close.bind(this)} />, placement);
+      let popup = Popups.open(<Popup {...this.props} close={close.bind(this)} />, placement);
 
       // update our state with the popup id so we may close it on unmount
       this.setState({popup});
@@ -73,7 +76,7 @@ function ActionMenu<P>(PopupT : React.ComponentClass<any>, ButtonT = DefaultButt
       return (
         <div className="action-menu clearfix display-inline-block">
           <div className="display-inline-block" onClick={this.open} ref="button">
-            <ButtonT {...this.props} />
+            <Button {...this.props} />
           </div>
         </div>
       )

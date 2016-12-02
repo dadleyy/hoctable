@@ -5,8 +5,10 @@ const DEFAULT_SORT = {rel: "id"};
 class Delegate {
 
   constructor() {
-    this.people = [];
-    this.query  = null;
+    this.people  = [];
+    this.query   = null;
+    this.paging  = {current: 0, size: 10};
+    this.sorting = {};
   }
 
   columns() {
@@ -22,16 +24,30 @@ class Delegate {
     }];
   }
 
-  rows(store, callback) {
-    let {people, query: name} = this;
-    let {sorting, pagination} = store;
-    let {rel, order} = sorting;
-    let {size, current} = pagination;
+  goTo(new_page) {
+    this.paging.current = new_page;
+  }
+
+  sort(column) {
+    this.sorting.orderby = column.rel;
+  }
+
+  pagination() {
+    let {people, paging} = this;
+    let total = people.total >= 1 ? people.total : 0;
+    let {current, size} = paging;
+    return {total, current, size};
+  }
+
+  rows(callback) {
+    let {people, query: name, sorting, paging} = this;
+    let {orderby, direction} = sorting;
+    let {size, current} = paging;
 
     function success(_, response) {
       let {results, meta} = response;
-
       replace(people, results);
+      people.total = meta.total;
 
       if(people.length === 0)
         return callback([{empty: true}], 0);
@@ -46,7 +62,7 @@ class Delegate {
     }
 
     let params = {
-      orderby: order ? rel : `-${rel}`, 
+      orderby: direction ? orderby : `-${orderby}`, 
       max: size,
       page: current
     };
