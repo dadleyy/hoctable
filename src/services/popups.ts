@@ -15,7 +15,7 @@ let root         = null;
 let open_popups  = [];
 let view_events  = [];
 
-const GUTTER_WIDTH = 100;
+const GUTTER_WIDTH = 10;
 
 let uuid = (function() {
   let pool = 0;
@@ -34,16 +34,6 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
   // render the component into the container and add it to our popup root
   ReactDOM.render(component, popup);
   root.appendChild(popup);
-
-  // now we need to make sure the popup remains inside the bounds
-  let bounding = popup.getBoundingClientRect();
-  let ldist    = (bounding.left + bounding.width) - (window.innerWidth - GUTTER_WIDTH);
-
-  if(ldist > 0)
-    popup.style.left = `${placement.left - GUTTER_WIDTH}px`;
-
-  if(bounding.left < GUTTER_WIDTH)
-    popup.style.left = `${placement.left + GUTTER_WIDTH}px`;
 
   open_popups.push({id, popup});
   return id;

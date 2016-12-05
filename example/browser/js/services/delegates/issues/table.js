@@ -20,11 +20,12 @@ const COLUMNS = [{
 
 class Delegate {
 
-  constructor(org, repo) {
+  constructor(org, repo, filters) {
     this.org  = org;
     this.repo = repo;
     this.paging  = new stores.Pagination();
     this.sorting = new stores.Sorting();
+    this.filters = filters;
   }
 
   columns() {
@@ -32,8 +33,9 @@ class Delegate {
   }
 
   rows(callback) {
-    let {org, repo, paging, sorting} = this;
+    let {org, repo, paging, filters, sorting} = this;
     let {current: page} = paging;
+    let {state: current_filters} = filters;
 
     function loaded(__, {meta, status, results}) {
       if(status !== "SUCCESS")
@@ -52,7 +54,12 @@ class Delegate {
       callback([{error: true}], 0);
     }
 
-    qwest.get(`/api/issues`, {org, repo, page: page + 1})
+    let params = {org, repo, page: page + 1};
+
+    if(current_filters.closed)
+      params.closed = true;
+
+    qwest.get(`/api/issues`, params)
       .then(loaded).catch(failed);
   }
 
