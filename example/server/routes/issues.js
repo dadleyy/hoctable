@@ -2,7 +2,7 @@ const github = require("../services/github");
 const defer  = require("../services/defer");
 
 module.exports.index = function find(req, res) {
-  let {org, repo, page, max, since, number} = req.query;
+  let {org, repo, page, max, since, number, closed} = req.query;
 
   function success([results, repo]) {
     let {open_issues: total} = repo;
@@ -14,7 +14,7 @@ module.exports.index = function find(req, res) {
   }
 
   let filtered = number && /^[0-9]+$/.test(number) === true;
-  let lookup   = filtered ? github.issue(org, repo, number) : github.issues(org, repo, page, max, since);
+  let lookup   = filtered ? github.issue(org, repo, number) : github.issues(org, repo, page, max, since, {closed});
 
   defer.all([lookup, github.repo(org, repo)]).then(success).catch(failed);
 };

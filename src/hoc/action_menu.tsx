@@ -33,12 +33,13 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
 
     constructor(props) {
       super(props);
-
-      this.open = this.open.bind(this);
+      this.open  = this.open.bind(this);
+      this.state = {popup: null};
     }
 
     componentWillUnmount() {
-      Popups.close(this.state.popup);
+      let {state} = this;
+      Popups.close(state.popup);
     }
 
     open(trigger : React.MouseEvent) {
@@ -55,6 +56,7 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
 
       // create our placement object using the calculated 
       let placement : PopupPlacement = {top, left: bounding.left};
+
 
       // if we're on the right side of the screen, move the menu to be right aligned
       if(bounding.left > window_width * 0.5)

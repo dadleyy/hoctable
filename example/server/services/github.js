@@ -48,12 +48,14 @@ module.exports.comments = function(issue, org, repo, page = 0, max = 25) {
   return fetch(url, query);
 }
 
-module.exports.issues = function(org, repo, page = 0, max = 25, since = null) {
+module.exports.issues = function(org, repo, page = 0, max = 25, since = null, filters = {}) {
   let url   = `${GITHUB}/repos/${org}/${repo}/issues`;
   let query = {page, per_page: max};
 
   if(since)
     query.since = since;
+
+  query.state = filters.closed ? "closed" : "open";
 
   return fetch(url, query);
 }
