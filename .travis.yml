@@ -10,5 +10,6 @@ install:
   - npm install
 
 script:
+  - npm run types:install
   - npm run build:release
   - npm run test

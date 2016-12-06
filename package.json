@@ -1,40 +1,24 @@
 {
   "name": "hoctable",
-  "version": "2.0.0",
-  "description": "A high order component table for react.",
+  "version": "3.0.0",
+  "description": "A library of high order components build with typescript and react.",
   "scripts": {
     "clean": "rimraf ./dist ./tmp",
-    "minify": "uglifyjs ./dist/hoctable-umd.js -o ./dist/hoctable-umd.min.js",
+    "minify": "uglifyjs ./dist/es5/hoctable-umd.js -o ./dist/es5/hoctable-umd.min.js",
     "build:watch": "webpack --config webpack.umd.config.js --watch",
-    "build:debug": "webpack --config webpack.umd.config.js",
-    "build:release": "npm run build:debug && npm run minify",
+    "build:browser": "webpack --config webpack.umd.config.js",
+    "build:browser:release": "npm run build:browser && npm run minify",
+    "build:typings": "tsc -p ./tsconfig.json -outFile ./dist/hoctable.js -declaration && rimraf ./dist/hoctable.js",
+    "build:es6": "tsc -p ./tsconfig.json -outDir ./dist/es6 -module es6 -target es6 && rimraf ./dist/hoctable.js",
+    "build:full": "npm run clean && npm run build:browser:release && npm run build:typings && npm run build:es6",
     "types:install": "typings i",
     "example": "webpack-dev-server --config webpack.examples.config.js",
     "test": "karma start ./karma.conf.js --single-run true",
     "test:watch": "karma start ./karma.conf.js --single-run false"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react"
-    ],
-    "plugins": [
-      "external-helpers"
-    ]
-  },
   "author": "Danny Hadley <dadleyy@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.11.4",
-    "babel-core": "^6.18.2",
-    "babel-loader": "^6.2.5",
-    "babel-plugin-external-helpers": "^6.8.0",
-    "babel-plugin-transform-es2015-modules-amd": "^6.8.0",
-    "babel-plugin-transform-runtime": "^6.12.0",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.13.2",
-    "babel-preset-react": "^6.11.1",
-    "babel-runtime": "^6.18.0",
     "bluebird": "^3.4.6",
     "dotenv": "^2.0.0",
     "express": "^4.14.0",

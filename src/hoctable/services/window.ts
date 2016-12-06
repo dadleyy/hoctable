@@ -1,11 +1,11 @@
 import utils from "hoctable/utils";
 
-export declare interface Dimensions {
+export interface Dimensions {
   width : number;
   height: number;
 }
 
-export declare interface Position {
+export interface Position {
   x: number;
   y: number
 }
@@ -16,12 +16,12 @@ class MouseState {
   public current : Position;
 }
 
-export declare interface ListenterCallback {
+export interface ListenerCallback {
   (evt : any) : void;
 }
 
-export declare interface WindowListener {
-  handler    : ListenterCallback;
+export interface WindowListener {
+  handler    : ListenerCallback;
   id         : string;
   event_name : string;
   context?   : any;
@@ -37,7 +37,7 @@ let uuid = (function() {
   return function() : string { return `_${++pool}_`; };
 })();
 
-function on(event_name : string, handler : ListenterCallback) {
+function on(event_name : string, handler : ListenerCallback) {
   var id = uuid();
   listeners.push({event_name, id, handler});
   return id;
@@ -59,7 +59,7 @@ function off(id : string) : string | number {
   return -1;
 }
 
-function trigger(evt : string, fn? : ListenterCallback) : ListenterCallback {
+function trigger(evt : string, fn? : ListenerCallback) : ListenerCallback {
   let before = "function" === typeof fn ? fn : function() { };
 
   function handler(e : any) {

@@ -1,24 +1,24 @@
-export declare interface PaginationState {
+export interface PaginationState {
   current : number;
   total   : number;
   size    : number;
 }
 
-export declare interface PaginationDelegate {
+export interface PaginationDelegate {
   goTo(new_page : number) : void;
   pagination              : () => PaginationState;
 }
 
-export declare interface PaginationProps {
+export interface PaginationProps {
   delegate : PaginationDelegate
 }
 
-export declare interface ButtonProps {
+export interface ButtonProps {
   label   : string;
   handler : () => void;
 }
 
-function DefaultButton(props : ButtonProps) {
+export function DefaultButton(props : ButtonProps) {
   let {label, handler} = props;
   let class_name = `hoctable-pagination__${label}`;
   return (<div className={class_name}><a onClick={handler}>{label}</a></div>);

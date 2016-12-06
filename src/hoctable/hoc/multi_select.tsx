@@ -3,21 +3,21 @@ import {PopupCloseCallback} from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
 
 
-export declare interface OptionsCallback {
+export interface OptionsCallback {
   (results : Array<any>) : void;
 }
 
-export declare interface ToggledCallback {
+export interface ToggledCallback {
   () : void;
 }
 
-export declare interface MultiSelectDelegate {
+export interface MultiSelectDelegate {
   options    : (callback : OptionsCallback) => void;
   toggle     : (item : any, callback : ToggledCallback) => void;
   translate? : (item : any) => string;
 }
 
-export declare interface MultiSelectProps {
+export interface MultiSelectProps {
   delegate : MultiSelectDelegate;
   close    : PopupCloseCallback;
 }

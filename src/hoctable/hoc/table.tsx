@@ -2,53 +2,53 @@ import PaginationFactory from "hoctable/hoc/pagination";
 import {PaginationDelegate, PaginationState} from "hoctable/hoc/pagination";
 import utils from "hoctable/utils";
 
-export declare interface ColumnDefinition {
+export interface ColumnDefinition {
   rel    : string;
   name   : string;
   style? : any;
 }
 
-export declare interface ColumnDelegate {
+export interface ColumnDelegate {
   sort     : (column : ColumnDefinition) => void;
   isActive : (column : ColumnDefinition) => boolean;
 }
 
-export declare interface ColumnContentProps {
+export interface ColumnContentProps {
   column: ColumnDefinition;
 }
 
-export declare interface ColumnProps {
+export interface ColumnProps {
   delegate : ColumnDelegate;
   column   : ColumnDefinition;
 }
 
-export declare interface DataLoadedCallback {
+export interface DataLoadedCallback {
   (row_data : Array<any>, total : number) : void;
 }
 
-export declare interface TableDelegate {
+export interface TableDelegate {
   rows       : (callback : DataLoadedCallback) => void;
   columns    : () => Array<ColumnDefinition>;
   paging     : PaginationDelegate;
   sorting    : ColumnDelegate;
 }
 
-export declare interface TableProps {
+export interface TableProps {
   delegate : TableDelegate;
 }
 
-export declare interface PaginationProxy extends PaginationDelegate {
+export interface PaginationProxy extends PaginationDelegate {
   total : number;
 }
 
-export declare interface TableProxies {
+export interface TableProxies {
   pagination : PaginationProxy;
   sorting    : ColumnDelegate;
 }
 
-type RowTransclusion = React.ComponentClass<any>;
-type ColTransclusion = React.StatelessComponent<any>;
-type ComposedTable   = React.ComponentClass<TableProps>;
+export type RowTransclusion = React.ComponentClass<any>;
+export type ColTransclusion = React.StatelessComponent<any>;
+export type ComposedTable   = React.ComponentClass<TableProps>;
 
 const TH_CLASS        = "hoctable__column-header";
 const TH_CLASS_ACTIVE = "hoctable__column-header--active";

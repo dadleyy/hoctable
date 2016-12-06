@@ -2,30 +2,30 @@ import ActionMenu from "hoctable/hoc/action_menu";
 import {PopupCloseCallback} from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
 
-export declare interface SelectCallback {
+export interface SelectCallback {
   () : void;
 }
 
-export declare interface OptionsCallback {
+export interface OptionsCallback {
   (options : Array<any>) : void;
 }
 
-export declare interface SingleSelectDelegate {
+export interface SingleSelectDelegate {
   translate : (item : any) => string;
   select    : (item : any, callback : SelectCallback) => void;
   options   : (callback : OptionsCallback) => void
 }
 
-export declare interface ItemSignals {
+export interface ItemSignals {
   selection : () => void;
 }
 
-export declare interface SingleSelectProps {
+export interface SingleSelectProps {
   delegate : SingleSelectDelegate;
   close    : PopupCloseCallback;
 }
 
-export declare interface ItemProps<DelegateType> {
+export interface ItemProps<DelegateType> {
   option   : any;
   delegate : DelegateType;
   signals  : ItemSignals;
@@ -35,7 +35,7 @@ export type SingleSelectItemProps = ItemProps<SingleSelectDelegate>;
 export type ComposedItem          = React.StatelessComponent<SingleSelectItemProps>;
 export type ComposedSelect        = React.ComponentClass<SingleSelectProps>;
 
-function DefaultButton({delegate}) {
+export function DefaultButton({delegate}) {
   return (<a className="button">{delegate.text()}</a>);
 }
 

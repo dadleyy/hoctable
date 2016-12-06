@@ -1,13 +1,13 @@
 import util from "hoctable/utils";
 import Viewport from "hoctable/services/window"
 
-export declare interface PopupPlacement {
+export interface PopupPlacement {
   left   : number;
   right? : number;
   top    : number;
 }
 
-export declare interface PopupGlobalCloseEvent {
+export interface PopupGlobalCloseEvent {
   target : Node
 }
 

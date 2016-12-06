@@ -7,7 +7,7 @@ module.exports = {
   output: {
     library: "hoctable",
     libraryTarget: "umd",
-    filename: "./dist/hoctable-umd.js"
+    filename: "./dist/es5/hoctable-umd.js"
   },
   resolve: {
     root: [

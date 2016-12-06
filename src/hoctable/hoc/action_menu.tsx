@@ -5,15 +5,15 @@ import Viewport from "hoctable/services/window";
 
 const TARGET_TOP_BUFFER = 3;
 
-export declare interface MenuOpenEvent {
+export interface MenuOpenEvent {
   currentTarget: HTMLElement
 }
 
-export declare interface MenuState {
+export interface MenuState {
   popup: string;
 }
 
-export declare interface PopupCloseCallback {
+export interface PopupCloseCallback {
   () : void;
 }
 
@@ -21,7 +21,7 @@ function bottom(box : ClientRect) : number {
   return box.top + box.height;
 }
 
-function DefaultButton(props : any) : React.ReactElement<any> {
+export function DefaultButton(props : any) : React.ReactElement<any> {
   let {text} = props;
   return (<a className="action-menu__button">{text}</a>);
 };
