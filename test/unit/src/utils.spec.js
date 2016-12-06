@@ -1,4 +1,4 @@
-const {default: {truncr}} = require("hoctable/utils/index");
+const utils = require("hoctable/utils");
 
 describe("utils test suite", function() {
 

@@ -25,9 +25,6 @@ module.exports = function(config) {
     {pattern: "./src/**/*.ts", included: false},
     {pattern: "./src/**/*.tsx", included: false},
 
-    {pattern: "./src/**/*.js", included: false},
-    {pattern: "./src/**/*.jsx", included: false},
-
     {pattern: "./example/**/*.js", included: false},
     {pattern: "./example/**/*.jsx", included: false},
 

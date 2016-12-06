@@ -11,5 +11,5 @@ install:
 
 script:
   - npm run types:install
-  - npm run build:release
+  - npm run build:full
   - npm run test
