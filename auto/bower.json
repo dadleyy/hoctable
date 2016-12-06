@@ -1,0 +1,17 @@
+{
+  "name": "hoctable",
+  "homepage": "https://github.com/dadleyy/hoctable",
+  "authors": [
+    "Danny Hadley <dadleyy@gmail.com>"
+  ],
+  "description": "high order components",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

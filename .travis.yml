@@ -10,6 +10,9 @@ script:
   - npm run types:install
   - npm run build:full
   - npm run test
+  - cp ./auto/bower.json ./dist/es5/hoctable
+  - cp ./auto/bower.json ./dist/es6/hoctable
+  - cp ./auto/bower.json ./dist/typings/hoctable
   - tar -cvzf dist/hoctable.es5.tar.gz -C ./dist/es5 .
   - tar -cvzf dist/hoctable.es6.tar.gz -C ./dist/es6 .
   - tar -cvzf dist/typings.tar.gz -C ./dist/typings .
