@@ -1,7 +1,6 @@
-import PaginationFactory from "hoc/pagination";
-import {PaginationDelegate, PaginationState} from "hoc/pagination";
-
-import utils from "utils";
+import PaginationFactory from "hoctable/hoc/pagination";
+import {PaginationDelegate, PaginationState} from "hoctable/hoc/pagination";
+import utils from "hoctable/utils";
 
 export declare interface ColumnDefinition {
   rel    : string;

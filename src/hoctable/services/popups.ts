@@ -1,5 +1,5 @@
-import util from "utils";
-import Viewport from "services/window"
+import util from "hoctable/utils";
+import Viewport from "hoctable/services/window"
 
 export declare interface PopupPlacement {
   left   : number;

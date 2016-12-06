@@ -1,7 +1,7 @@
-import util from "utils";
-import Popups from "services/popups";
-import {PopupPlacement} from "services/popups";
-import Viewport from "services/window";
+import util from "hoctable/utils";
+import Popups from "hoctable/services/popups";
+import {PopupPlacement} from "hoctable/services/popups";
+import Viewport from "hoctable/services/window";
 
 const TARGET_TOP_BUFFER = 3;
 

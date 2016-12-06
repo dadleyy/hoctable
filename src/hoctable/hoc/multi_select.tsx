@@ -1,6 +1,6 @@
-import {ItemSignals, ItemProps} from "hoc/select";
-import {PopupCloseCallback} from "hoc/action_menu";
-import utils from "utils";
+import {ItemSignals, ItemProps} from "hoctable/hoc/select";
+import {PopupCloseCallback} from "hoctable/hoc/action_menu";
+import utils from "hoctable/utils";
 
 
 export declare interface OptionsCallback {

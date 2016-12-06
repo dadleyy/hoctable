@@ -1,4 +1,4 @@
-import {ColumnDefinition, ColumnDelegate} from "hoc/table";
+import {ColumnDefinition, ColumnDelegate} from "hoctable/hoc/table";
 
 class Sorting implements ColumnDelegate {
   public orderby   : string;

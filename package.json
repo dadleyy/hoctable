@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A high order component table for react.",
   "scripts": {
     "clean": "rimraf ./dist ./tmp",

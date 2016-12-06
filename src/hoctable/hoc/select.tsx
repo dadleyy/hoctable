@@ -1,6 +1,6 @@
-import ActionMenu from "hoc/action_menu";
-import {PopupCloseCallback} from "hoc/action_menu";
-import utils from "utils";
+import ActionMenu from "hoctable/hoc/action_menu";
+import {PopupCloseCallback} from "hoctable/hoc/action_menu";
+import utils from "hoctable/utils";
 
 export declare interface SelectCallback {
   () : void;

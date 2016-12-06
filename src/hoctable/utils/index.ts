@@ -1,4 +1,4 @@
-import * as dom from "utils/dom";
+import * as dom from "hoctable/utils/dom";
 
 function replace<T>(target : Array<T>, source : Array<T>) : Array<T> {
   target.length = 0;
