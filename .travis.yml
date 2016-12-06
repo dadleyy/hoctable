@@ -13,18 +13,21 @@ script:
   - cp ./auto/bower.json ./dist/es5/hoctable
   - cp ./auto/bower.json ./dist/es6/hoctable
   - cp ./auto/bower.json ./dist/typings/hoctable
-  - tar -cvzf dist/hoctable.es5.tar.gz -C ./dist/es5 .
-  - tar -cvzf dist/hoctable.es6.tar.gz -C ./dist/es6 .
-  - tar -cvzf dist/typings.tar.gz -C ./dist/typings .
+  - mkdir -p ./artifacts
+  - tar -cvzf ./artifacts/hoctable.es5.tar.gz -C ./dist/es5 .
+  - tar -cvzf ./artifacts/hoctable.es6.tar.gz -C ./dist/es6 .
+  - tar -cvzf ./artifacts/hoctable.typings.tar.gz -C ./dist/typings .
+  - tar -cvzf ./artifacts/hoctable.all.tar.gz -C ./dist .
 deploy:
   provider: releases
   skip_cleanup: true
   api_key:
     secure: bCphH7w4LIiH2qF5sXxaNAzjRwJl43O37AyWGRihJh28kyy0s0E0skH6N++WyG/O6s2Ayv0Vej+IYycTI/gEF9Vc9iRf2mvsDIGKPsWwYyN6PxNYpkGdJcphJvPc84hI36/UwpH0SfiExVMpyK84LQvO9n5UoKNMCwaDePa2D/4Dtdz4rMn3TRNoLiJZGdYwmek29Tw8/EXgfNH2Zjd9cmy3XoYCCS/UoXgOQ4/aTqxffW17EPf8P+WvyEHbx6286629GA2hL133sEZmb2RFr4Bng+W0fKeK46b2yibPm5oyCpEyWGzIkkpg8AJSKdrCBZLutnkuTPQFrsin580CBwKEOK6yngZnMDjBbonvypWjjuBRs339SyrR7OqiUUVwMnfVaNMw1DfNAPMru0Lm6UmIPcBj0BRS1iFOgHOwr6sVsh5Vt7+P8W2AhgR7LYhXLvrzRKdDKx0l5woiyok5N1squMLhlzEcQ24BexEraPEkiZ5iKuEldnsgVt2tS8uTvYSfQKgXuqXX59+TtBbf/tA3tPIlV6Q4Q2E+rKEzhLDukIBwAYG6eg3bx+mgcUxyoMaJ+WQo+2n038diEn0XQ9RY+KjbQ+R+/+fOgsH+6Ncj/Act5DIrtrfwsRHl1UCuGlyzR3AYgTYIDrK213mumvnfZ85Hv7K7gHotpHoH2XQ=
   file:
-    - "./dist/hoctable.es6.tar.gz"
-    - "./dist/hoctable.es5.tar.gz"
-    - "./dist/typings.tar.gz"
+    - "./artifacts/hoctable.es6.tar.gz"
+    - "./artifacts/hoctable.es5.tar.gz"
+    - "./artifacts/hoctable.typings.tar.gz"
+    - "./artifacts/hoctable.all.tar.gz"
   on:
     repo: dadleyy/hoctable
     tags: true
