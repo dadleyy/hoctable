@@ -12,7 +12,7 @@ script:
   - npm run test
   - cp ./auto/bower.json ./dist/es5/hoctable
   - cp ./auto/bower.json ./dist/es6/hoctable
-  - cp ./auto/bower.json ./dist/typings/hoctable
+  - cp ./auto/bower.typings.json ./dist/typings/hoctable/bower.json
   - mkdir -p ./artifacts
   - tar -cvzf ./artifacts/hoctable.es5.tar.gz -C ./dist/es5 .
   - tar -cvzf ./artifacts/hoctable.es6.tar.gz -C ./dist/es6 .
