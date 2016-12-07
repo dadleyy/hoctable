@@ -10,13 +10,17 @@ script:
   - npm run types:install
   - npm run build:full
   - npm run test
-  - cp ./auto/bower.json ./dist/es5/hoctable
-  - cp ./auto/bower.json ./dist/es6/hoctable
-  - cp ./auto/bower.typings.json ./dist/typings/hoctable/bower.json
   - mkdir -p ./artifacts
+  - cp ./auto/bower.json ./dist/es5/hoctable
   - tar -cvzf ./artifacts/hoctable.es5.tar.gz -C ./dist/es5 .
+  - rm ./dist/es5/bower.json
+  - cp ./auto/bower.json ./dist/es6/hoctable
   - tar -cvzf ./artifacts/hoctable.es6.tar.gz -C ./dist/es6 .
+  - rm ./dist/es6/bower.json
+  - cp ./auto/bower.typings.json ./dist/typings/hoctable/bower.json
   - tar -cvzf ./artifacts/hoctable.typings.tar.gz -C ./dist/typings .
+  - rm ./dist/typings/hoctable/bower.json
+  - cp ./auto/bower.json ./dist/bower.json
   - tar -cvzf ./artifacts/hoctable.all.tar.gz -C ./dist .
 deploy:
   provider: releases
