@@ -7,8 +7,9 @@ before_install:
 install:
   - npm install
 script:
+  - npm run clean
   - npm run types:install
-  - npm run build:full
+  - npm run build:all
   - npm run test
   - mkdir -p ./artifacts
   - cp ./auto/bower.json ./dist/umd/hoctable/bower.json
