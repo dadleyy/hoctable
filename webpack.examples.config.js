@@ -49,7 +49,7 @@ module.exports = {
   resolve: {
     extensions: ["", ".js", ".jsx"],
     alias: {
-      hoctable: __dirname + "/dist/hoctable-umd"
+      hoctable: __dirname + "/dist/umd/hoctable/hoctable-umd.js"
     }
   },
   module: {

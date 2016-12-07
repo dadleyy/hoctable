@@ -11,6 +11,9 @@ script:
   - npm run build:full
   - npm run test
   - mkdir -p ./artifacts
+  - cp ./auto/bower.json ./dist/umd/hoctable/bower.json
+  - tar -cvzf ./artifacts/hoctable.umd.tar.gz -C ./dist/umd .
+  - rm ./dist/umd/hoctable/bower.json
   - cp ./auto/bower.json ./dist/es5/hoctable/bower.json
   - tar -cvzf ./artifacts/hoctable.es5.tar.gz -C ./dist/es5 .
   - rm ./dist/es5/hoctable/bower.json
@@ -30,6 +33,7 @@ deploy:
   file:
     - "./artifacts/hoctable.es6.tar.gz"
     - "./artifacts/hoctable.es5.tar.gz"
+    - "./artifacts/hoctable.umd.tar.gz"
     - "./artifacts/hoctable.typings.tar.gz"
     - "./artifacts/hoctable.all.tar.gz"
   on:
