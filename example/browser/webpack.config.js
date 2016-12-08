@@ -3,10 +3,10 @@
 const express = require("express");
 const dotenv  = require("dotenv");
 
-const people     = require("./example/server/routes/people");
-const properties = require("./example/server/routes/properties");
-const products   = require("./example/server/routes/products");
-const issues     = require("./example/server/routes/issues");
+const people     = require("../server/routes/people");
+const properties = require("../server/routes/properties");
+const products   = require("../server/routes/products");
+const issues     = require("../server/routes/issues");
 
 const babel_external = {
 
@@ -39,17 +39,17 @@ app.get("/issues/comments", issues.comments);
 app.listen("4000");
 
 module.exports = {
-  entry: ["./example/browser/js/app"],
+  entry: [__dirname + "/js/app"],
   devtool: "source-map",
   output: {
-    path: __dirname + "/example/browser/js",
+    path: __dirname + "/js",
     publicPath: "/js/",
     filename: "[name].bundle.js"
   },
   resolve: {
     extensions: ["", ".js", ".jsx"],
     alias: {
-      hoctable: __dirname + "/dist/hoctable-umd"
+      hoctable: __dirname + "/../../dist/umd/hoctable/hoctable-umd.js"
     }
   },
   module: {
@@ -65,7 +65,7 @@ module.exports = {
   },
   plugins: [babel_external],
   devServer: {
-    contentBase: "./example/browser",
+    contentBase: __dirname,
     historyApiFallback: true,
     proxy: {
       "/api": {

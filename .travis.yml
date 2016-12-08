@@ -1,15 +1,54 @@
 language: node_js
 sudo: false
 node_js:
-  - "6.5.0"
-
+  - 6.5.0
 before_install:
   - npm i -g npm@3.9.0
-
 install:
   - npm install
-
 script:
+  - npm run clean
   - npm run types:install
-  - npm run build:full
+  - npm run build:all
   - npm run test
+  - mkdir -p ./artifacts
+    # universal module definition artifact
+  - cp ./auto/bower.json ./dist/umd/hoctable/bower.json
+  - tar -cvzf ./artifacts/hoctable.umd.tar.gz -C ./dist/umd .
+  - rm ./dist/umd/hoctable/bower.json
+    # es5 (un-bundled) artifact
+  - cp ./auto/bower.json ./dist/es5/hoctable/bower.json
+  - tar -cvzf ./artifacts/hoctable.es5.tar.gz -C ./dist/es5 .
+  - rm ./dist/es5/hoctable/bower.json
+    # es5 (bundled) artifact
+  - cp ./auto/bower.typings.json ./dist/es5-bundle/hoctable/bower.json
+  - tar -cvzf ./artifacts/hoctable.es5-bundle.tar.gz -C ./dist/es5-bundle .
+  - rm ./dist/es5-bundle/hoctable/bower.json
+    # es6 (un-bundled) artifact
+  - cp ./auto/bower.json ./dist/es6/hoctable/bower.json
+  - tar -cvzf ./artifacts/hoctable.es6.tar.gz -C ./dist/es6 .
+  - rm ./dist/es6/hoctable/bower.json
+    # typescript typings artifact
+  - cp ./auto/bower.typings.json ./dist/typings/hoctable/bower.json
+  - tar -cvzf ./artifacts/hoctable.typings.tar.gz -C ./dist/typings .
+  - rm ./dist/typings/hoctable/bower.json
+    # all targets artifact
+  - cp ./auto/bower.json ./dist/bower.json
+  - tar -cvzf ./artifacts/hoctable.all.tar.gz -C ./dist .
+  - npm run build:gh-pages
+  - ./auto/gh-pages.sh ./dist/ghp-clone
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: bCphH7w4LIiH2qF5sXxaNAzjRwJl43O37AyWGRihJh28kyy0s0E0skH6N++WyG/O6s2Ayv0Vej+IYycTI/gEF9Vc9iRf2mvsDIGKPsWwYyN6PxNYpkGdJcphJvPc84hI36/UwpH0SfiExVMpyK84LQvO9n5UoKNMCwaDePa2D/4Dtdz4rMn3TRNoLiJZGdYwmek29Tw8/EXgfNH2Zjd9cmy3XoYCCS/UoXgOQ4/aTqxffW17EPf8P+WvyEHbx6286629GA2hL133sEZmb2RFr4Bng+W0fKeK46b2yibPm5oyCpEyWGzIkkpg8AJSKdrCBZLutnkuTPQFrsin580CBwKEOK6yngZnMDjBbonvypWjjuBRs339SyrR7OqiUUVwMnfVaNMw1DfNAPMru0Lm6UmIPcBj0BRS1iFOgHOwr6sVsh5Vt7+P8W2AhgR7LYhXLvrzRKdDKx0l5woiyok5N1squMLhlzEcQ24BexEraPEkiZ5iKuEldnsgVt2tS8uTvYSfQKgXuqXX59+TtBbf/tA3tPIlV6Q4Q2E+rKEzhLDukIBwAYG6eg3bx+mgcUxyoMaJ+WQo+2n038diEn0XQ9RY+KjbQ+R+/+fOgsH+6Ncj/Act5DIrtrfwsRHl1UCuGlyzR3AYgTYIDrK213mumvnfZ85Hv7K7gHotpHoH2XQ=
+  file:
+    - "./artifacts/hoctable.es6.tar.gz"
+    - "./artifacts/hoctable.es5.tar.gz"
+    - "./artifacts/hoctable.es5-bundle.tar.gz"
+    - "./artifacts/hoctable.umd.tar.gz"
+    - "./artifacts/hoctable.typings.tar.gz"
+    - "./artifacts/hoctable.all.tar.gz"
+  on:
+    repo: dadleyy/hoctable
+    tags: true

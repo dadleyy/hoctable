@@ -24,4 +24,4 @@ const hoc      = {MultiSelect, ActionMenu, Table, Select};
 const services = {Popups, Viewport};
 const stores   = {Pagination, Sorting};
 
-export default {hoc, services, stores};
+export {hoc, services, stores};

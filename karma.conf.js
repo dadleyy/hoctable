@@ -1,8 +1,9 @@
 const babel = require("babel-core");
+const path  = require("path");
 
 module.exports = function(config) {
   let browsers      = ["PhantomJS"];
-  let frameworks    = ["requirejs", "jasmine"];
+  let frameworks    = ["requirejs", "jasmine", "jasmine-ajax"];
 
   let preprocessors = {
     "example/browser/**/*.js"  : ["babel"],
@@ -15,18 +16,23 @@ module.exports = function(config) {
     "src/**/*.jsx"             : ["babel"],
 
     "test/unit/**/*.js"        : ["babel"],
+    "test/unit/**/*.jsx"       : ["babel"],
     "test/unit.js"             : ["babelexternal"]
   };
 
   let files = [
-    "node_modules/babel-polyfill/dist/polyfill.js",
+    "./node_modules/babel-polyfill/dist/polyfill.js",
+    {pattern: "./node_modules/react/dist/react.js", included: false},
+    {pattern: "./node_modules/react-dom/dist/react-dom.js", included: false},
+
     {pattern: "./test/unit/**/*.spec.js", included: false},
+    {pattern: "./test/unit/**/*.spec.jsx", included: false},
 
     {pattern: "./src/**/*.ts", included: false},
     {pattern: "./src/**/*.tsx", included: false},
 
-    {pattern: "./example/**/*.js", included: false},
-    {pattern: "./example/**/*.jsx", included: false},
+    {pattern: "./example/browser/js/**/*.js", included: false},
+    {pattern: "./example/browser/js/**/*.jsx", included: false},
 
     "./test/unit.js"
   ];
@@ -40,6 +46,13 @@ module.exports = function(config) {
     return inject;
   }
 
+  function jasmineAjax() {
+    let pattern = path.resolve(require.resolve("jasmine-ajax"));
+    files.unshift({pattern, included: true, served: true, watched: false});
+  }
+
+  jasmineAjax.$inject = ["config.files"]
+
   let plugins = [
     "karma-jasmine",
     "karma-requirejs",
@@ -48,6 +61,7 @@ module.exports = function(config) {
     "karma-phantomjs-launcher",
     "karma-chrome-launcher",
     {"preprocessor:babelexternal": ["factory", external]},
+    {"framework:jasmine-ajax": ["factory", jasmineAjax]}
   ];
 
   let options = {preprocessors, browsers, plugins, frameworks, files};
@@ -56,6 +70,9 @@ module.exports = function(config) {
     options: {
       presets: ["es2015", "react"],
       plugins: ["transform-es2015-modules-amd"]
+    },
+    filename: function (file) {
+      return file.originalPath.replace(/\.jsx$/, ".js");
     }
   };
 
@@ -67,10 +84,11 @@ module.exports = function(config) {
       noImplicitAny     : false,
       noResolve         : true,
       removeComments    : true,
-      concatenateOutput : false
+      concatenateOutput : false,
+      jsx               : "React"
     },
     transformPath: function(path) {
-      return path.replace(/\.ts$/, ".js");
+      return path.replace(/\.(ts|tsx)$/, ".js");
     }
   };
 
