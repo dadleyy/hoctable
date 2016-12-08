@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "A library of high order components build with typescript and react.",
   "config": {
     "umd_out": "./dist/umd/hoctable",
@@ -9,12 +9,13 @@
     "es5_bundle_min_out": "./dist/es5-bundle/hoctable/hoctable.min.js",
     "es6_out": "./dist/es6/hoctable",
     "umd_min_out": "./dist/umd/hoctable/hoctable-umd.min.js",
-    "td_out": "./dist/typings/hoctable"
+    "td_out": "./dist/typings/hoctable",
+    "ghp_out": "./dist/gh-pages"
   },
   "scripts": {
     "clean": "rimraf ./dist ./tmp",
     "build:watch": "webpack --config webpack.umd.config.js --watch",
-    "build:umd:debug": "webpack --config webpack.umd.config.js",
+    "build:umd:debug": "webpack --config webpack.config.js",
     "build:umd:minify": "uglifyjs $npm_package_config_umd_out/hoctable-umd.js -o $npm_package_config_umd_min_out",
     "build:umd": "npm run build:umd:debug && npm run build:umd:minify",
     "build:es5:b:make": "tsc -p ./tsconfig.json -outFile $npm_package_config_es5_bundle_out -module amd -target es5",
@@ -26,8 +27,11 @@
     "build:es6": "tsc -p ./tsconfig.json -outDir $npm_package_config_es6_out -module es6 -target es6",
     "build:browser": "npm run build:umd && npm run build:es5 && npm run build:es6 && npm run build:es5:bundle",
     "build:all": "npm run build:typings && npm run build:browser",
+    "build:gh-pages:js": "tsc -p ./example/gh-pages/tsconfig.json -outFile $npm_package_config_ghp_out/js/app.js",
+    "build:gh-pages:html": "pug -o $npm_package_config_ghp_out ./example/gh-pages/index.pug",
+    "build:gh-pages": "npm run build:gh-pages:js && npm run build:gh-pages:html",
     "types:install": "typings i",
-    "example": "webpack-dev-server --config webpack.examples.config.js",
+    "example:server": "webpack-dev-server --config example/browser/webpack.config.js",
     "test": "karma start ./karma.conf.js --single-run true",
     "test:watch": "karma start ./karma.conf.js --single-run false"
   },
@@ -55,6 +59,8 @@
     "karma-phantomjs-launcher": "1.0.2",
     "karma-requirejs": "1.1.0",
     "karma-typescript-preprocessor": "0.3.0",
+    "pug": "^2.0.0-beta6",
+    "pug-cli": "^1.0.0-alpha6",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-tools": "0.13.3",

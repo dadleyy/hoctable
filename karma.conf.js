@@ -31,8 +31,8 @@ module.exports = function(config) {
     {pattern: "./src/**/*.ts", included: false},
     {pattern: "./src/**/*.tsx", included: false},
 
-    {pattern: "./example/**/*.js", included: false},
-    {pattern: "./example/**/*.jsx", included: false},
+    {pattern: "./example/browser/js/**/*.js", included: false},
+    {pattern: "./example/browser/js/**/*.jsx", included: false},
 
     "./test/unit.js"
   ];
