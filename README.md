@@ -1,6 +1,6 @@
 ## hoctable - delegate-driven high order components
 
-[![Build Status](https://travis-ci.org/dadleyy/hoctable.svg?branch=master)](https://travis-ci.org/dadleyy/hoctable)
+[![travis](https://travis-ci.org/dadleyy/hoctable.svg?branch=master)](https://travis-ci.org/dadleyy/hoctable) [![release](https://img.shields.io/github/release/dadleyy/hoctable.svg)](https://github.com/dadleyy/hoctable) [![npm version](https://badge.fury.io/js/hoctable.svg)](https://badge.fury.io/js/hoctable)
 
 ----
 
