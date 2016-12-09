@@ -22,12 +22,16 @@ let uuid = (function() {
   return function() : string { return `_${++pool}_`; };
 })();
 
-function open(component : React.ReactElement<any>, placement : PopupPlacement) : string {
+function open(component : React.ReactElement<any>, placement : PopupPlacement) : string | number {
+  if(root === null)
+    return -1;
+
   let style : React.CSSProperties = {top: `${placement.top}px`, right: placement.right, position: "absolute"};
-  let id    = uuid();
 
   if(placement.left && !placement.right) 
     style.left = `${placement.left}px`;
+
+  let id = uuid();
 
   let popup = util.dom.create("div", style);
 
@@ -39,7 +43,7 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
   return id;
 }
 
-function close(popup_id : string) : number {
+function close(popup_id : string | number) : number {
   let count = open_popups.length;
 
   for(let i = 0; i < count; i++) {
@@ -89,4 +93,11 @@ function mount(target) {
   view_events = [Viewport.on("isoclick", closeOpen)];
 }
 
-export default {open, close, mount};
+function unmount() {
+  root = null;
+
+  while(open_popups.length)
+    close(open_popups[0].id);
+}
+
+export default {open, close, mount, unmount};

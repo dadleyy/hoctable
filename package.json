@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "7.1.0",
+  "version": "8.0.0",
   "description": "A library of high order components build with typescript and react.",
   "config": {
     "umd_out": "./dist/umd/hoctable",
@@ -56,6 +56,7 @@
     "karma": "1.3.0",
     "karma-babel-preprocessor": "6.0.1",
     "karma-chrome-launcher": "2.0.0",
+    "karma-effroi": "0.0.0",
     "karma-jasmine": "1.0.2",
     "karma-narrow-reporter": "^2.0.1",
     "karma-phantomjs-launcher": "1.0.2",

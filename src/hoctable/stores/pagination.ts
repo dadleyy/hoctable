@@ -1,4 +1,4 @@
-import {PaginationDelegate} from "hoctable/hoc/pagination";
+import {PaginationDelegate} from "hoctable/hoc/table";
 
 class Pagination implements PaginationDelegate {
   private size : number;

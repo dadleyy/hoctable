@@ -1,4 +1,5 @@
-import {ItemSignals, ItemProps} from "hoctable/hoc/select";
+import ActionMenu from "hoctable/hoc/action_menu";
+import {ItemSignals, ItemProps, DefaultButton} from "hoctable/hoc/select";
 import {PopupCloseCallback} from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
 
@@ -23,10 +24,10 @@ export interface MultiSelectProps {
 }
 
 export type MultiSelectItemProps = ItemProps<MultiSelectDelegate>;
-export type ComposedItem = React.ComponentClass<MultiSelectItemProps>;
-export type ComposedSelect = React.ComponentClass<MultiSelectProps>;
+export type ItemTransclusion     = React.ComponentClass<MultiSelectItemProps>;
+export type ComposedSelect       = React.ComponentClass<MultiSelectProps>;
 
-function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ComposedItem {
+function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemTransclusion {
 
   class Item extends React.Component<MultiSelectItemProps, any> {
 
@@ -52,8 +53,8 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : Compo
 
 }
 
-function Factory(ItemT : React.ComponentClass<MultiSelectItemProps>) : ComposedSelect {
-  const Item = ItemFactory(ItemT);
+function Factory(ItemType : ItemTransclusion, ButtonComponent = DefaultButton) : ComposedSelect {
+  const Item = ItemFactory(ItemType);
 
   class MultiSelect extends React.Component<MultiSelectProps, any> {
     private options : Array<HTMLElement>;
@@ -105,7 +106,7 @@ function Factory(ItemT : React.ComponentClass<MultiSelectItemProps>) : ComposedS
 
   }
 
-  return MultiSelect;
+  return ActionMenu<MultiSelectProps>(MultiSelect, ButtonComponent);
 
 }
 

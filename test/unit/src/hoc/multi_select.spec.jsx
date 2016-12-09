@@ -1,9 +1,9 @@
 const {default: Viewport}      = require("hoctable/services/window");
 const {default: Popups}        = require("hoctable/services/popups");
-const {default: SelectFactory} = require("hoctable/hoc/select");
+const {default: SelectFactory} = require("hoctable/hoc/multi_select");
 const React                    = require("react");
 
-describe("hoc/Select test suite", function() {
+describe("hoc/MultiSelect test suite", function() {
 
   let bag = {};
 
