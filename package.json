@@ -31,7 +31,7 @@
     "build:gh-pages:html": "pug -o $npm_package_config_ghp_out ./example/gh-pages/index.pug",
     "build:gh-pages": "npm run build:gh-pages:js && npm run build:gh-pages:html",
     "types:install": "typings i",
-    "prepublish": "npm run clean && npm run build:all",
+    "prepublish": "npm run clean && npm run types:install && npm run build:all",
     "example:server": "webpack-dev-server --config example/browser/webpack.config.js",
     "test": "karma start ./karma.conf.js --single-run true",
     "test:watch": "karma start ./karma.conf.js --single-run false"
