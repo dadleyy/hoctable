@@ -1,0 +1,15 @@
+.env
+auto/
+test/
+tmp/
+example/
+typings/
+webpack.config.js
+karma.conf.js
+.travis.yml
+typings.json
+tsconfig.json
+bower_components/
+node_modules/
+!src/
+!dist/
