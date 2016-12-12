@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    title hoctable | redirect
+    script(type="text/javascript").
+      var path     = window.location.pathname;
+      var parts    = path.split("/");
+      var relative = parts.slice(2);
+      var base     = parts[1];
+      window.location.replace("/" + base + "/#!" + relative);
+  body

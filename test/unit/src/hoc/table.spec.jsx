@@ -1,6 +1,4 @@
 const {default: TableFactory} = require("hoctable/hoc/table");
-const {default: Pagination}   = require("hoctable/stores/pagination");
-const {default: Sorting}      = require("hoctable/stores/sorting");
 
 describe("hoc/Table component test suite", function() {
 
@@ -55,8 +53,14 @@ describe("hoc/Table component test suite", function() {
     class Delegate {
 
       constructor() {
-        this.paging  = new Pagination();
-        this.sorting = new Sorting();
+      }
+
+      pagination() {
+        return {};
+      }
+
+      sorting() {
+        return {};
       }
 
       columns() {

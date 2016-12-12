@@ -11,16 +11,30 @@ class Delegate {
     this.org    = org;
     this.repo   = repo;
     this.number = number;
+    this.state  = {pagination: {size: 10}};
+  }
+
+  sorting() {
+    return {};
+  }
+
+  goTo(new_page, callback) {
+    this.state.pagination.current = new_page;
+    callback();
+  }
+
+  pagination() {
+    let {state} = this;
+    return state.pagination;
   }
 
   columns() {
     return COLUMNS;
   }
 
-  rows(store, callback) {
-    let {pagination, sorting} = store.getState();
-    let {org, repo, number} = this;
-    let {current: page} = pagination;
+  rows(callback) {
+    let {org, repo, number, state} = this;
+    let {current: page} = state.pagination;
 
     function loaded(__, {meta, status, results}) {
       if(status !== "SUCCESS")

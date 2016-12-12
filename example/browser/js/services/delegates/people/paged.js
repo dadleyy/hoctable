@@ -1,4 +1,3 @@
-import {stores} from "hoctable";
 import {replace} from "../../util";
 
 const DEFAULT_SORT = {rel: "id"};
@@ -8,8 +7,28 @@ class Delegate {
   constructor() {
     this.people  = [];
     this.query   = null;
-    this.paging  = new stores.Pagination();
-    this.sorting = new stores.Sorting();
+    this.state   = {
+      pagination : {current: 0, size: 10},
+      sorting    : {},
+    };
+  }
+
+  pagination() {
+    return this.state.pagination;
+  }
+
+  sorting() {
+    return this.state.sorting;
+  }
+
+  sortBy(column, callback) {
+    let {sorting} = this.state;
+
+    if(column.rel === sorting.orderby)
+      sorting.direction = !sorting.direction;
+
+    sorting.orderby = column.rel;
+    callback();
   }
 
   columns() {
@@ -25,18 +44,24 @@ class Delegate {
     }];
   }
 
+  goTo(new_page, callback) {
+    this.state.pagination.current = new_page;
+    callback();
+  }
+
   rows(callback) {
-    let {people, query: name, sorting, paging} = this;
-    let {orderby, direction} = sorting;
-    let {size, current} = paging;
+    let {people, query: name, state} = this;
+    let {orderby, direction} = state.sorting;
+    let {size, current} = state.pagination;
 
     function success(_, response) {
       let {results, meta} = response;
       replace(people, results);
       people.total = meta.total;
+      state.pagination.total = meta.total;
 
       if(people.length === 0)
-        return callback([{empty: true}], 0);
+        return callback([{empty: true}]);
 
       let rows = people.map(function(person) { return {person}; });
       callback(rows, meta.total);

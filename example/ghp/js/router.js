@@ -30,7 +30,8 @@ function register(route) {
 function start() {
   hoctable.services.Popups.mount(el("popups"));
   hoctable.services.Viewport.bind();
-  page.start({popstate: true});
+  page.base("/hoctable/");
+  page.start({hashbang: true});
 }
 
 export default {register, start};

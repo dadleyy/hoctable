@@ -49,11 +49,11 @@ module.exports = function findProducts(req, res) {
   results = filters && filters.length ? results.filter(applyFilters) : results;
 
   // to.do sort the results...
+  let {length: total} = results;
 
   // slice/paginate the results
   let start = toi(max) * toi(page);
   results   = results.slice(start, start + toi(max));
 
-  let {length: total} = results;
   return res.json({meta: {total}, results});
 }
