@@ -11,6 +11,11 @@ GIT_REPO="https://${GITHUB_ACCESS_TOKEN}@github.com/dadleyy/hoctable.git"
 CLONE_DIR="$CURRENT_DIR/$WORKING_DIR"
 SHA=$(git rev-parse --verify HEAD)
 
+if [ "$TRAVIS_BRANCH" != "master" ]; then
+  echo "skipping gh-pages, not building master branch"
+  exit 0
+fi
+
 if [ "${WORKING_DIR:0:1}" = "/" ]; then
   CLONE_DIR=$WORKING_DIR
 fi
@@ -19,7 +24,6 @@ if [ -z "$WORKING_DIR" ]; then
   echo "must provide working dir: \"./auto/gh-pages.sh ./work\""
   exit 1
 fi
-
 
 if [ -d $CLONE_DIR ]; then
   echo "clone destination exists"
