@@ -35,7 +35,7 @@ script:
     # all targets artifact
   - cp ./auto/bower.json ./dist/bower.json
   - tar -cvzf ./artifacts/hoctable.all.tar.gz -C ./dist .
-  - npm run build:gh-pages
+  - npm run build:ghp
   - ./auto/gh-pages.sh ./dist/ghp-clone
 deploy:
   provider: releases
