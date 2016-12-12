@@ -9,9 +9,31 @@ const {IS_ANY: {id: IS_ANY}} = OPS;
 class Delegate {
 
   constructor(store) {
-    this.store   = store;
-    this.paging  = new stores.Pagination();
-    this.sorting = new stores.Sorting();
+    this.store = store;
+    this.state = {sorting: {}, pagination: {current: 0, size: 10}};
+  }
+
+  goTo(new_page, callback) {
+    this.state.pagination.current = new_page;
+    callback();
+  }
+
+  sortBy(column, callback) {
+    let {sorting} = this.state;
+
+    if(sorting.rel === column.rel)
+      sorting.direction = !sorting.direction;
+
+    sorting.rel = column.rel;
+    callback();
+  }
+
+  pagination() {
+    return this.state.pagination;
+  }
+
+  sorting() {
+    return this.state.sorting;
   }
 
   columns() {
@@ -27,9 +49,10 @@ class Delegate {
   }
 
   rows(callback) {
-    let {sorting, paging, properties, store} = this;
-    let {orderby, direction} = sorting;
-    let {size, current} = paging;
+    let {properties, state, store} = this;
+    let {sorting, pagination} = state;
+    let {rel: orderby, direction} = sorting;
+    let {size, current} = pagination;
     let {filters} = store.getState();
 
     let columns = this.columns(store);
@@ -40,7 +63,8 @@ class Delegate {
 
     function success(__, {results, meta}) {
       let rows = results.map(normalize);
-      callback(rows, meta.total);
+      pagination.total = meta.total;
+      callback(rows);
     }
 
     function failed(error) {

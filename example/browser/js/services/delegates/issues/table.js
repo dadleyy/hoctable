@@ -23,9 +23,21 @@ class Delegate {
   constructor(org, repo, filters) {
     this.org  = org;
     this.repo = repo;
-    this.paging  = new stores.Pagination();
-    this.sorting = new stores.Sorting();
     this.filters = filters;
+    this.state = {
+      pagination : {current: 0, size: 10},
+      sorting    : {}
+    };
+  }
+
+  pagination() {
+    let {state} = this;
+    return state.pagination;
+  }
+
+  sorting() {
+    let {state} = this;
+    return state.sorting;
   }
 
   columns() {
@@ -33,8 +45,8 @@ class Delegate {
   }
 
   rows(callback) {
-    let {org, repo, paging, filters, sorting} = this;
-    let {current: page} = paging;
+    let {org, repo, state, filters} = this;
+    let {current: page} = state.pagination
     let {state: current_filters} = filters;
 
     function loaded(__, {meta, status, results}) {

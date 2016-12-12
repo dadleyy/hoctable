@@ -1,6 +1,26 @@
-import PaginationFactory from "hoctable/hoc/pagination";
-import {PaginationDelegate, PaginationState} from "hoctable/hoc/pagination";
 import utils from "hoctable/utils";
+
+/* types */
+
+export interface PaginationState {
+  current : number;
+  total   : number;
+  size    : number;
+}
+
+export interface UpdateCallback {
+  () : void;
+}
+
+export interface PaginationProps {
+  move       : (new_page : number, callback : UpdateCallback) => void;
+  pagination : PaginationState;
+}
+
+export interface ButtonProps {
+  label   : string;
+  handler : () => void;
+}
 
 export interface ColumnDefinition {
   rel    : string;
@@ -8,62 +28,116 @@ export interface ColumnDefinition {
   style? : any;
 }
 
-export interface ColumnDelegate {
-  sort     : (column : ColumnDefinition) => void;
-  isActive : (column : ColumnDefinition) => boolean;
-}
-
-export interface ColumnContentProps {
-  column: ColumnDefinition;
-}
-
 export interface ColumnProps {
-  delegate : ColumnDelegate;
-  column   : ColumnDefinition;
+  sort   : (column : ColumnDefinition, callback : UpdateCallback) => void;
+  column : ColumnDefinition;
+  active : boolean;
 }
 
 export interface DataLoadedCallback {
-  (row_data : Array<any>, total : number) : void;
+  (row_data : Array<any>) : void;
 }
 
 export interface TableDelegate {
   rows       : (callback : DataLoadedCallback) => void;
   columns    : () => Array<ColumnDefinition>;
-  paging     : PaginationDelegate;
-  sorting    : ColumnDelegate;
+  pagination : () => PaginationState;
+  goTo       : (new_page : number, callback : UpdateCallback) => void;
+  sortBy     : (column : ColumnDefinition, callback : UpdateCallback) => void;
+  sorting    : () => ColumnDefinition;
 }
 
 export interface TableProps {
   delegate : TableDelegate;
 }
 
-export interface PaginationProxy extends PaginationDelegate {
-  total : number;
-}
+export type RowTransclusion    = React.ComponentClass<any>;
+export type ColumnTransclusion = React.ComponentClass<ColumnProps>;
+export type ComposedTable      = React.ComponentClass<TableProps>;
+export type ComposedPager      = React.ComponentClass<PaginationProps>;
 
-export interface TableProxies {
-  pagination : PaginationProxy;
-  sorting    : ColumnDelegate;
-}
-
-export type RowTransclusion = React.ComponentClass<any>;
-export type ColTransclusion = React.StatelessComponent<any>;
-export type ComposedTable   = React.ComponentClass<TableProps>;
+/* constants */
 
 const TH_CLASS        = "hoctable__column-header";
 const TH_CLASS_ACTIVE = "hoctable__column-header--active";
 
-function DefaultColumnContent(props : ColumnContentProps) : React.ReactElement<any> {
-  let {column} = props;
-
-  return (
-    <div className="hoctable__column-content">
-      <span>{column.name}</span>
-    </div>
-  );
+function merge(callbacks : Array<UpdateCallback>) {
+  return function exec() {
+    for(let i = 0, c = callbacks.length; i < c; i++) callbacks[i]();
+  }
 }
 
-function ColumnFactory(Transclusion = DefaultColumnContent) {
+/* components */
+
+/* DefaultPageButton
+ */
+export function DefaultPageButton(props : ButtonProps) {
+  let {label, handler} = props;
+  let class_name = `hoctable-pagination__${label}`;
+  return (<div className={class_name}><a onClick={handler}>{label}</a></div>);
+}
+
+/* PaginationFactory
+ */
+export function PaginationFactory(Next = DefaultPageButton, Previous = DefaultPageButton) : ComposedPager {
+
+  class Pagination extends React.Component<PaginationProps, any> {
+
+    constructor(props) {
+      super(props);
+    }
+
+    render() {
+      let {move, pagination} = this.props;
+      let {total, size, current} = pagination;
+      let update = this.forceUpdate.bind(this);
+
+      if(!total)
+        return (<div className="hoctable-pagination--empty"></div>);
+
+      let first = current * size;
+      let end   = first + size;
+
+      function go(amt : number) {
+        move(current + amt, update);
+      }
+
+      function previous() {
+        return go(-1);
+      }
+
+      function next() {
+        return go(1);
+      }
+
+      let buttons = [];
+
+      if(first > 0)
+        buttons.push(<Previous label={"previous"} handler={previous} key="previous"/>);
+
+      if(end && end < total)
+        buttons.push(<Next label={"next"} handler={next} key="next" />);
+
+      let max_page = total >= 1 && size >= 1 ? Math.ceil(total / size) : 0;
+
+      return (
+        <div className="hoctable-pagination clearfix">
+          <div className="hoctable-pagination__info" data-single-page={max_page === 1}>
+            <p>page {current + 1} of {max_page} <span className="hoctable-pagination__info__total">({total} results)</span></p>
+          </div>
+          <div className="hoctable-pagination__controls">{buttons}</div>
+        </div>
+      );
+    }
+  }
+
+  return Pagination;
+
+}
+
+/* ColumnFactory
+ */
+function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion {
 
   class ColumnHeader extends React.Component<ColumnProps, any> {
 
@@ -74,26 +148,24 @@ function ColumnFactory(Transclusion = DefaultColumnContent) {
 
     sort() {
       let update = this.forceUpdate.bind(this);
-      let {delegate, column} = this.props;
-      delegate.sort(column);
-      update();
+      let {sort, column} = this.props;
+      sort(column, update);
     }
 
     render() {
-      let {column, delegate} = this.props;
+      let {column, active} = this.props;
       let {name, rel} = column;
       let th_class = TH_CLASS;
 
-      if(delegate.isActive(column))
+      if(active === true)
         th_class += ` ${TH_CLASS_ACTIVE}`;
 
-      let body = Transclusion ? <Transclusion column={column} /> : <span>{name}</span>;
+      let content = <div className="hoctable__cell-inner"><span>{name}</span></div>;
 
-      return (
-        <th className={th_class} onClick={this.sort}>
-          <div className="hoctable__cell-inner">{body}</div>
-        </th>
-      )
+      if(Transclusion)
+        content = <Transclusion sort={this.sort} column={column} active={active} />;
+
+      return <th className={th_class} onClick={this.sort}>{content}</th>;
     }
 
   }
@@ -101,67 +173,38 @@ function ColumnFactory(Transclusion = DefaultColumnContent) {
   return ColumnHeader;
 }
 
-function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTable {
+/* TableFactory
+ */
+function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : ComposedTable {
   // compose our column component from the column hoc
   let ComposedColumn = ColumnFactory(Column);
-  let Pagination = PaginationFactory();
+  let Pagination     = PaginationFactory();
 
   class PagedTable extends React.Component<TableProps, any> {
     private bodies  : Array<HTMLElement>;
-    private proxies : TableProxies;
 
     constructor(props : TableProps) {
       super(props);
       // prepare an array to hold of the html nodes that we create during our renders
       // so that we can delete them and unmount components later.
       this.bodies = [];
-
-      // get references to the delegate and bind an updater function that will be used
-      // in the proxies we create to wrap our delegate's functionality.
-      let {delegate} = this.props;
-      let update     = this.forceUpdate.bind(this);
-
-      // create the pagination proxy
-      let pagination = {
-        total: 0,
-
-        pagination() {
-          let {size, current} = delegate.paging.pagination();
-          let {total} = this;
-          return {size, total, current};
-        },
-
-        goTo(new_page) {
-          delegate.paging.goTo(new_page);
-          update();
-        }
-
-      };
-
-      // create the sorting proxy
-      let sorting = {
-
-        sort(column) {
-          props.delegate.sorting.sort(column);
-          update();
-        },
-
-        isActive(column) {
-          return false;
-        }
-
-      };
-
-      this.proxies = {pagination, sorting};
     }
 
     transclude(table : HTMLElement) {
-      let {props, bodies, proxies, refs} = this;
+      let {props, bodies, refs} = this;
       let {delegate} = props;
 
-      if(!table) return;
+      if(!table) 
+        return;
 
-      function render(row_data : Array<any>, total : number) {
+      let update = this.forceUpdate.bind(this);
+
+      function move(new_page : number, callback : UpdateCallback) {
+        let finish = merge([callback, update]);
+        delegate.goTo(new_page, finish);
+      }
+
+      function render(row_data : Array<any>) : void {
         let {childNodes: children} = table;
         let pager = refs["pager"] as HTMLElement;
 
@@ -186,9 +229,9 @@ function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTab
           bodies.push(body);
         }
 
-        proxies.pagination.total = total;
+        let pagination = delegate.pagination();
         // render the pagination
-        ReactDOM.render(<Pagination delegate={proxies.pagination} />, pager);
+        ReactDOM.render(<Pagination move={move} pagination={pagination} />, pager);
       }
 
       delegate.rows(render.bind(this));
@@ -196,15 +239,28 @@ function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTab
 
     render() {
       // reference the props, proxy and state (which has the total)
-      let {props, proxies} = this;
-      let {delegate} = props;
+      let {delegate} = this.props;
 
+      let sorting  = delegate.sorting();
       let th_list  = [];
       let col_list = [];
+      let update   = this.forceUpdate.bind(this);
 
+      function sort(column : ColumnDefinition, callback : UpdateCallback) {
+        let finish = merge([callback, update]);
+        delegate.sortBy(column, finish);
+      }
+
+      // ask the delegate for it's columns looping over and appending both elements to be rendered
+      // inside the <thead> as well as <col> elements to place inside the <colgroup> element.
       for(let i = 0, columns = delegate.columns(), c = columns.length; i < c; i++) {
         let column = columns[i];
-        th_list.push(<ComposedColumn column={column} key={column.rel} delegate={proxies.sorting} />);
+        let active = column.rel === sorting.rel;
+
+        // add an instance of the composed column component to our cells to render in the <thead>
+        th_list.push(<ComposedColumn column={column} key={column.rel} sort={sort} active={active} />);
+
+        // add an instance of a <col> element which we are using to do the styling of the table
         col_list.push(<col className={column.rel} key={column.rel} style={column.style} />);
       }
 
@@ -226,4 +282,4 @@ function Factory(Row : RowTransclusion, Column? : ColTransclusion) : ComposedTab
   return PagedTable;
 }
 
-export default Factory;
+export default TableFactory;

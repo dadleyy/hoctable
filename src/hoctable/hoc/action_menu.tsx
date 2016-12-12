@@ -10,7 +10,7 @@ export interface MenuOpenEvent {
 }
 
 export interface MenuState {
-  popup: string;
+  popup: string | number;
 }
 
 export interface PopupCloseCallback {
@@ -57,7 +57,6 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
       // create our placement object using the calculated 
       let placement : PopupPlacement = {top, left: bounding.left};
 
-
       // if we're on the right side of the screen, move the menu to be right aligned
       if(bounding.left > window_width * 0.5)
         placement.right = window_width - (bounding.left + bounding.width);
@@ -70,6 +69,9 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
       // open the popup component with all of the props that were given to us
       let popup = Popups.open(<Popup {...this.props} close={close.bind(this)} />, placement);
 
+      if(popup === -1)
+        return;
+
       // update our state with the popup id so we may close it on unmount
       this.setState({popup});
     }
@@ -77,7 +79,7 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
     render() {
       return (
         <div className="action-menu clearfix display-inline-block">
-          <div className="display-inline-block" onClick={this.open} ref="button">
+          <div className="display-inline-block action-menu__trigger" onClick={this.open} ref="button">
             <Button {...this.props} />
           </div>
         </div>

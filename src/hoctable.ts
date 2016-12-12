@@ -1,5 +1,5 @@
 import Table from "./hoctable/hoc/table";
-import {TableProps} from "./hoctable/hoc/table";
+import {ColumnProps, TableProps} from "./hoctable/hoc/table";
 
 import ActionMenu from "./hoctable/hoc/action_menu";
 
@@ -17,11 +17,7 @@ import {ListenerCallback, Position, Dimensions} from "./hoctable/services/window
 
 import utils from "./hoctable/utils";
 
-import Pagination from "./hoctable/stores/pagination";
-import Sorting from "./hoctable/stores/sorting";
-
 const hoc      = {MultiSelect, ActionMenu, Table, Select};
 const services = {Popups, Viewport};
-const stores   = {Pagination, Sorting};
 
-export {hoc, services, stores};
+export {hoc, services};

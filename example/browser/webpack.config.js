@@ -1,12 +1,7 @@
 "use strict";
 
-const express = require("express");
 const dotenv  = require("dotenv");
-
-const people     = require("../server/routes/people");
-const properties = require("../server/routes/properties");
-const products   = require("../server/routes/products");
-const issues     = require("../server/routes/issues");
+const server  = require("../server");
 
 const babel_external = {
 
@@ -28,15 +23,7 @@ const babel_external = {
 
 dotenv.load();
 
-let app = express();
-
-app.get("/people", people);
-app.get("/properties", properties);
-app.get("/products", products);
-app.get("/issues", issues.index);
-app.get("/issues/comments", issues.comments);
-
-app.listen("4000");
+server.start();
 
 module.exports = {
   entry: [__dirname + "/js/app"],

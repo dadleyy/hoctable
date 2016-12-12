@@ -1,0 +1,80 @@
+$table-border: #ededed
+
+@import "bulma"
+
+#popups
+  z-index: 10
+  position: absolute
+  left: 0
+  top: 0
+  width: 100%
+  height: 0
+
+#main
+  z-index: 1
+
+.option-list
+  @extend .box
+
+.float-left
+  float: left
+
+.option-list
+  padding: 0 0.5rem
+  max-height: 240px
+  overflow-y: auto
+
+.option-list .option-list__option 
+  padding: 0.2rem 0
+
+.pointer
+  cursor: pointer
+
+body, html
+  position: relative
+  min-width: 100%
+  min-height: 100%
+
+.clearfix
+  @extend .is-clearfix
+
+.hoctable-paged-table
+  position: relative
+  padding-bottom: 2rem
+
+table
+  @extend .table
+
+input[type="text"]
+  @extend .input
+
+.hoctable-paged-table .hoctable-table
+  @extend .is-bordered
+  @extend .is-striped
+
+.hoctable-paged-table .hoctable-paged-table__pagination
+  position: absolute
+  bottom: 0
+  right: 0
+
+.hoctable-paged-table .hoctable-paged-table__pagination .hoctable-pagination
+  @extend .level
+
+.hoctable-paged-table .hoctable-pagination__info,
+.hoctable-paged-table .hoctable-pagination__controls
+  float: left
+
+.hoctable-paged-table .hoctable-pagination__controls
+  @extend .clearfix
+  margin-left: 1rem
+
+.hoctable-paged-table .hoctable-pagination__controls .hoctable-pagination__next,
+.hoctable-paged-table .hoctable-pagination__controls .hoctable-pagination__previous
+  float: left
+
+.hoctable-pagination__previous + .hoctable-pagination__next,
+.hoctable-pagination__next + .hoctable-pagination__previous
+  margin-left: 1rem
+
+.hoctable-paged-table .hoctable-pagination__controls a
+  @extend .button

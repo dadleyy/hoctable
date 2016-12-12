@@ -3,7 +3,7 @@ const path  = require("path");
 
 module.exports = function(config) {
   let browsers   = ["PhantomJS"];
-  let frameworks = ["requirejs", "jasmine", "jasmine-ajax"];
+  let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "effroi"];
   let reporters  = ["narrow"];
 
   let preprocessors = {
@@ -55,6 +55,7 @@ module.exports = function(config) {
   jasmineAjax.$inject = ["config.files"]
 
   let plugins = [
+    "karma-effroi",
     "karma-jasmine",
     "karma-requirejs",
     "karma-babel-preprocessor",
