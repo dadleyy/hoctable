@@ -8,9 +8,6 @@ before_install:
 install:
   - npm install
 script:
-  - npm run clean
-  - npm run types:install
-  - npm run build:all
   - npm run test
   - mkdir -p ./artifacts
     # universal module definition artifact
