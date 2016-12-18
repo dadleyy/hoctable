@@ -2,14 +2,12 @@ language: node_js
 sudo: false
 node_js:
   - 6.5.0
+  - 6.9.0
 before_install:
   - npm i -g npm@3.9.0
 install:
   - npm install
 script:
-  - npm run clean
-  - npm run types:install
-  - npm run build:all
   - npm run test
   - mkdir -p ./artifacts
     # universal module definition artifact
