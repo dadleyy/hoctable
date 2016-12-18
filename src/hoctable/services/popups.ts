@@ -26,7 +26,7 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
   if(root === null)
     return -1;
 
-  let style : React.CSSProperties = {top: `${placement.top}px`, right: placement.right, position: "absolute"};
+  let style : React.CSSProperties = {top: `${placement.top}px`, right: `${placement.right}px`, position: "absolute"};
 
   if(placement.left && !placement.right) 
     style.left = `${placement.left}px`;
