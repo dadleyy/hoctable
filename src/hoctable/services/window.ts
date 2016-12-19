@@ -134,7 +134,7 @@ function scroll() : Position {
 
 let fullscreen = {
   
-  open(el : Node) {
+  open(el : Node) : boolean {
     let fn      = null;
     let vendors = (el === null ? EXIT_FULLSCREEN : ENTER_FULLSCREEN).slice(0);
 
@@ -148,10 +148,10 @@ let fullscreen = {
 
     // fullscreen not supported
     if("function" !== typeof fn) {
-      return;
+      return false;
     }
 
-    fn.call(el);
+    return fn.call(el) || true;
   },
 
   get current() : Node {
