@@ -1,5 +1,3 @@
-import utils from "hoctable/utils";
-
 export interface Dimensions {
   width : number;
   height: number;
@@ -26,6 +24,10 @@ export interface WindowListener {
   event_name : string;
   context?   : any;
 }
+
+const ENTER_FULLSCREEN   = ["requestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"];
+const EXIT_FULLSCREEN    = ["exitFullscreen", "webkitExitFullscreen", "mozExitFullscreen"];
+const FULLSCREEN_ELEMENT = ["fullscreenElement", "webkitFullscreenElement", "msFullscreenElement", "mozFullScreenElement"];
 
 let listeners : Array<WindowListener> = [];
 let mouse = new MouseState();
@@ -130,4 +132,39 @@ function scroll() : Position {
   return {x, y};
 }
 
-export default {on, off, bind, dimensions, scroll};
+let fullscreen = {
+  
+  open(el : Node) {
+    let fn      = null;
+    let vendors = (el === null ? EXIT_FULLSCREEN : ENTER_FULLSCREEN).slice(0);
+
+    if(el === null)
+      el = document;
+
+    while(!fn && vendors.length) {
+      let name = vendors.shift();
+      fn = el[name];
+    }
+
+    // fullscreen not supported
+    if("function" !== typeof fn) {
+      return;
+    }
+
+    fn.call(el);
+  },
+
+  get current() : Node {
+    let result  = null;
+    let vendors = FULLSCREEN_ELEMENT.slice(0);
+
+    while(!result && vendors.length) {
+      result = document[vendors.shift()];
+    }
+
+    return result;
+  }
+
+};
+
+export default {on, off, bind, dimensions, scroll, fullscreen};
