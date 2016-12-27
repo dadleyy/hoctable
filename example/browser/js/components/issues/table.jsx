@@ -2,6 +2,7 @@ import {hoc} from "hoctable";
 import i18n from "../../services/i18n";
 import Thumb from "./user_thumb";
 import Labels from "./label_list";
+import * as React from "react";
 
 function Error() {
   return (

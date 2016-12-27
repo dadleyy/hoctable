@@ -1,6 +1,8 @@
 import ActionMenu from "hoctable/hoc/action_menu";
 import {PopupCloseCallback} from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 export interface SelectCallback {
   () : void;
@@ -35,10 +37,14 @@ export type SingleSelectItemProps = ItemProps<SingleSelectDelegate>;
 export type ComposedItem          = React.StatelessComponent<SingleSelectItemProps>;
 export type ComposedSelect        = React.ComponentClass<SingleSelectProps>;
 
+export const CLASSES = {
+  SELECT        : "hoctable__select",
+  SELECT_OPTION : "hoctable__select-option"
+};
+
 export function DefaultButton({delegate}) {
   return (<a className="button">{delegate.text()}</a>);
 }
-
 
 function ItemFactory(Inner : React.ComponentClass<SingleSelectItemProps>) : ComposedItem {
 
@@ -54,7 +60,7 @@ function ItemFactory(Inner : React.ComponentClass<SingleSelectItemProps>) : Comp
       return delegate.select(option, finished);
     }
 
-    return (<div className="pointer option-list__option" onClick={select}>{content}</div>);
+    return (<div className={CLASSES["SELECT_OPTION"]} onClick={select}>{content}</div>);
   }
 
   return Item;
@@ -109,7 +115,7 @@ function Factory(ItemT : React.ComponentClass<SingleSelectItemProps>, ButtonComp
     }
 
     render() {
-      return (<div className="option-list dropdown-pane menu" ref={this.transclude}></div>);
+      return (<div className={CLASSES["SELECT"]} ref={this.transclude}></div>);
     }
 
   }

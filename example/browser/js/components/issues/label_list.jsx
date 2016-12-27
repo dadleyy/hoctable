@@ -1,3 +1,5 @@
+import * as React from "react";
+
 function Label({label}) {
   return (
     <div className="float-left secondary label margin-right-1 margin-bottom-1">

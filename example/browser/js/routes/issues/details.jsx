@@ -1,3 +1,6 @@
+import * as ReactDOM from "react-dom";
+import * as React from "react";
+
 import DetailsPage from "../../pages/issues/details";
 import Delegate from "../../services/delegates/issues/comments_table";
 

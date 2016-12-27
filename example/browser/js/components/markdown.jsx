@@ -1,3 +1,5 @@
+import * as React from "react";
+
 function Markdown({text}) {
   let body = {__html: marked(text)};
 

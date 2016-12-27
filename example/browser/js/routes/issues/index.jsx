@@ -1,3 +1,6 @@
+import * as ReactDOM from "react-dom";
+import * as React from "react";
+
 import IndexPage from "../../pages/issues/index";
 import Delegate from "../../services/delegates/issues/table";
 import FilterDelegate from "../../services/delegates/issues/filters";

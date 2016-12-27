@@ -39,9 +39,9 @@ let uuid = (function() {
   return function() : string { return `_${++pool}_`; };
 })();
 
-function on(event_name : string, handler : ListenerCallback) {
+function on(event_name : string, handler : ListenerCallback, context? : any) : string {
   var id = uuid();
-  listeners.push({event_name, id, handler});
+  listeners.push({event_name, id, handler, context});
   return id;
 }
 

@@ -1,5 +1,11 @@
 import * as dom from "./utils/dom";
 
+let id_pool = 0;
+
+function uuid() : string {
+  return btoa(`id-${++id_pool}`);
+}
+
 function replace<T>(target : Array<T>, source : Array<T>) : Array<T> {
   target.length = 0;
 
@@ -10,4 +16,4 @@ function replace<T>(target : Array<T>, source : Array<T>) : Array<T> {
   return target;
 }
 
-export default {dom, replace};
+export default {dom, replace, uuid};

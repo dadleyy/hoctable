@@ -1,5 +1,6 @@
 import i18n from "../../services/i18n";
 import Display from "../../components/issues/issue_display";
+import * as React from "react";
 
 class Details extends React.Component {
 

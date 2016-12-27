@@ -1,8 +1,12 @@
+import * as ReactDOM from "react-dom";
+import * as React from "react";
+
 import {services} from "hoctable";
 
 import Products from "./routes/products/index";
 import Paged from "./routes/people/index";
 import Issues from "./routes/issues";
+import Wall from "./routes/wall";
 import FourOhFour from "./pages/missing";
 
 function el(id) {
@@ -28,6 +32,7 @@ page("/issues/:org/:repo/:number", route(Issues.Details));
 
 page("/products", route(Products));
 page("/people", route(Paged));
+page("/wall", route(Wall));
 
 
 page("*", function() {

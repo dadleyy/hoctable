@@ -3,6 +3,7 @@ import i18n from "../services/i18n";
 
 import Filter from "../components/products/filter";
 import ProductTable from "../components/products/table";
+import * as React from "react";
 
 class Products extends React.Component {
 

@@ -1,3 +1,5 @@
+import * as React from "react";
+
 function Thumb({user}) {
   let image_style = {backgroundImage: `url(${user.avatar_url})`};
 

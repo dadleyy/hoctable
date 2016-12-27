@@ -5,6 +5,7 @@ import Thumb from "./user_thumb";
 import StateLabel from "./state_label";
 import Table from "./comment_table";
 import linkify from "../../services/github/linkify";
+import * as React from "react";
 
 function IssueDisplay({issue, delegate, store}) {
   return (
