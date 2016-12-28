@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "8.0.1",
+  "version": "9.0.0",
   "description": "A library of high order components build with typescript and react.",
   "config": {
     "umd_out": "./dist/umd/hoctable",
@@ -79,9 +79,7 @@
     "uglify-js": "2.7.5",
     "watch": "^1.0.1",
     "webpack": "1.14.0",
-    "webpack-dev-server": "1.16.2"
-  },
-  "dependencies": {
+    "webpack-dev-server": "1.16.2",
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.19",
     "dotenv": "^2.0.0"
