@@ -4,6 +4,7 @@ import linkify from "../../services/github/linkify";
 import Thumb from "./user_thumb";
 import Markdown from "../markdown";
 import Labels from "./label_list";
+import * as React from "react";
 
 function Empty() {
   return (

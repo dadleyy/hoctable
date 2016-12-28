@@ -6,6 +6,7 @@ import EnumDelegate from "../../services/delegates/enum_menu";
 
 import OPS from "../../var/operators";
 import i18n from "../../services/i18n";
+import * as React from "react";
 
 // compose a menu using the default transclusion
 const SingleSelect = hoc.Select();

@@ -1,5 +1,6 @@
 import util from "hoctable/utils";
 import Viewport from "hoctable/services/window"
+import * as ReactDOM from "react-dom";
 
 export interface PopupPlacement {
   left   : number;

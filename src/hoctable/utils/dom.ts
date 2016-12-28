@@ -1,8 +1,25 @@
-export function remove(element : Node) : Node {
+export function addClass(element : HTMLElement, class_name : string) {
+  let {className: current_value} = element;
+  let current_list = current_value.split(" ").filter(function(v) { return v.length >= 1; });
+
+  if(current_list.indexOf(class_name) !== -1)
+    return;
+
+  current_list.push(class_name);
+  element.className = current_list.join(" ");
+}
+
+export function removeClass(element : HTMLElement, class_name : string) {
+  let {className: current_value} = element;
+  let current_list = current_value.split(" ").filter(function(v) { return v.length >= 1 && v !== class_name; });
+  element.className = current_list.join(" ");
+}
+
+function remove(element : Node) : Node {
   return element.parentNode.removeChild(element);
 }
 
-export function contains(target : Node, child : Node) : boolean {
+function contains(target : Node, child : Node) : boolean {
   let head = child.parentNode;
 
   while(head != null) {
@@ -13,20 +30,25 @@ export function contains(target : Node, child : Node) : boolean {
   return false;
 }
 
-export function create(tag : string, style : any) : HTMLElement {
+function create(tag : string, style? : any, classes? : Array<string>) : HTMLElement {
   let element = document.createElement(tag);
 
   element.setAttribute("util-dom", "true");
 
-  if(!style)
-    return element;
-
-  let rules = Object.keys(style);
+  let rules = style ? Object.keys(style) : [];
 
   for(let i = 0, c = rules.length; i < c; i++) {
     let rule  = rules[i];
     element.style[rule] = style[rule];
   }
 
+  for(let i = 0, l = classes || [], c = l.length; i < c; i++) {
+    let class_name = l[i];
+    element.classList.add(class_name);
+  }
+
   return element;
 }
+
+const classes = {add: addClass, remove: removeClass};
+export default {create, remove, contains, classes};

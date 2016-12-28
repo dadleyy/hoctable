@@ -1,4 +1,5 @@
 import {hoc} from "hoctable";
+import * as React from "react";
 
 class Row extends React.Component {
 

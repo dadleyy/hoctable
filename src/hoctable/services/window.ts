@@ -25,9 +25,9 @@ export interface WindowListener {
   context?   : any;
 }
 
-const ENTER_FULLSCREEN   = ["requestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"];
-const EXIT_FULLSCREEN    = ["exitFullscreen", "webkitExitFullscreen", "mozExitFullscreen"];
-const FULLSCREEN_ELEMENT = ["fullscreenElement", "webkitFullscreenElement", "msFullscreenElement", "mozFullScreenElement"];
+const ENTER_FULLSCREEN   = ["requestFullScreen", "webkitRequestFullScreen", "mozRequestFullScreen"];
+const EXIT_FULLSCREEN    = ["exitFullScreen", "webkitExitFullScreen", "mozExitFullScreen"];
+const FULLSCREEN_ELEMENT = ["fullscreenElement", "webkitFullScreenElement", "msFullScreenElement", "mozFullScreenElement"];
 
 let listeners : Array<WindowListener> = [];
 let mouse = new MouseState();
@@ -39,9 +39,9 @@ let uuid = (function() {
   return function() : string { return `_${++pool}_`; };
 })();
 
-function on(event_name : string, handler : ListenerCallback) {
+function on(event_name : string, handler : ListenerCallback, context? : any) : string {
   var id = uuid();
-  listeners.push({event_name, id, handler});
+  listeners.push({event_name, id, handler, context});
   return id;
 }
 

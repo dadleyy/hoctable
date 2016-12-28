@@ -1,6 +1,7 @@
 import i18n from "../../services/i18n";
 import IssueTable from "../../components/issues/table";
 import OpenFilter from "../../components/issues/open_filter";
+import * as React from "react";
 
 class Index extends React.Component {
 

@@ -1,3 +1,4 @@
+import * as React from "react";
 import Table from "../components/person_table";
 
 class Paged extends React.Component {

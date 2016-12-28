@@ -2,6 +2,7 @@ import util from "hoctable/utils";
 import Popups from "hoctable/services/popups";
 import {PopupPlacement} from "hoctable/services/popups";
 import Viewport from "hoctable/services/window";
+import * as React from "react";
 
 const TARGET_TOP_BUFFER = 3;
 
@@ -23,7 +24,7 @@ function bottom(box : ClientRect) : number {
 
 export function DefaultButton(props : any) : React.ReactElement<any> {
   let {text} = props;
-  return (<a className="action-menu__button">{text}</a>);
+  return (<a className="hoctable__button">{text}</a>);
 };
 
 function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) : React.ComponentClass<P> {
@@ -42,7 +43,7 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
       Popups.close(state.popup);
     }
 
-    open(trigger : React.MouseEvent) {
+    open(trigger : React.MouseEvent<any>) {
       let button = this.refs["button"] as HTMLElement;
       let bounding  = button.getBoundingClientRect();
 
@@ -78,8 +79,8 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
 
     render() {
       return (
-        <div className="action-menu clearfix display-inline-block">
-          <div className="display-inline-block action-menu__trigger" onClick={this.open} ref="button">
+        <div className="hoctable__action-menu">
+          <div className="hoctable__action-menu-trigger" onClick={this.open} ref="button">
             <Button {...this.props} />
           </div>
         </div>

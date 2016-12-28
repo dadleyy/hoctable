@@ -23,5 +23,10 @@ html(style="background-color: white; min-height: 100%; position: relative;")
         function start(app) {
           app.start();
         }
+
+
+        define("react", [], function() { return window.React; });
+        define("react-dom", [], function() { return window.ReactDOM; });
+
         require(["example/ghp/js/app"], start);
       })();

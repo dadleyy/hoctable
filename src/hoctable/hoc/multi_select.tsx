@@ -2,7 +2,8 @@ import ActionMenu from "hoctable/hoc/action_menu";
 import {ItemSignals, ItemProps, DefaultButton} from "hoctable/hoc/select";
 import {PopupCloseCallback} from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
-
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 export interface OptionsCallback {
   (results : Array<any>) : void;
@@ -44,7 +45,7 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
         return delegate.toggle(option, finished);
       }
 
-      return (<div className="pointer option-list__option" onClick={select}>{content}</div>);
+      return (<div className="hoctable__select_item" onClick={select}>{content}</div>);
     }
 
   }
@@ -101,7 +102,7 @@ function Factory(ItemType : ItemTransclusion, ButtonComponent = DefaultButton) :
     }
 
     render() {
-      return (<div className="option-list dropdown-pane menu" ref={this.transclude}></div>);
+      return (<div className="hoctable__multi-select" ref={this.transclude}></div>);
     }
 
   }

@@ -1,4 +1,4 @@
-const {default: TableFactory} = require("hoctable/hoc/table");
+const {default: TableFactory, CLASSES} = require("hoctable/hoc/table");
 
 describe("hoc/Table component test suite", function() {
 
@@ -83,25 +83,25 @@ describe("hoc/Table component test suite", function() {
   let dom = {
 
     get pagination() {
-      let [pagination] = bag.container.getElementsByClassName("hoctable-paged-table__pagination");
+      let [pagination] = bag.container.getElementsByClassName(CLASSES.PAGINATION_CONTAINER);
       return pagination;
     },
 
     get pagination_empty() {
-      return dom.pagination.getElementsByClassName("hoctable-pagination--empty");
+      return dom.pagination.getElementsByClassName(CLASSES.PAGINATION_EMPTY);
     },
 
     get pagination_previous() {
-      return dom.pagination.getElementsByClassName("hoctable-pagination__previous");
+      return dom.pagination.getElementsByClassName(CLASSES.PAGINATION_PREVIOUS);
     },
 
     get pagination_next() {
-      return dom.pagination.getElementsByClassName("hoctable-pagination__next");
+      return dom.pagination.getElementsByClassName(CLASSES.PAGINATION_NEXT);
     },
 
     get active_th() {
       let [thead]  = bag.container.getElementsByTagName("thead");
-      let [active] = thead.getElementsByClassName("hoctable__column-header--active");
+      let [active] = thead.getElementsByClassName(CLASSES.TH_CLASS_ACTIVE);
       return active;
     },
 
@@ -131,7 +131,6 @@ describe("hoc/Table component test suite", function() {
 
       bag.sorting    = {};
       bag.pagination = {total: 0, size: 10, current: 0};
-
     });
 
     it("should throw an exception when used without a delegate", function() {

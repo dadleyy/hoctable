@@ -8,13 +8,11 @@
     "baseUrl"       : "./src",
     "jsx"           : "react",
     "declaration"   : false,
-    "typeRoots"     : [
-      "./typings/modules"
-    ]
+    "typeRoots"     : []
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "typings/**/*.d.ts"
+    "node_modules/@types/**/*.d.ts"
   ]
 }

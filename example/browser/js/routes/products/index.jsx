@@ -1,3 +1,6 @@
+import * as ReactDOM from "react-dom";
+import * as React from "react";
+
 import {services} from "hoctable";
 import ProductDelegate from "../../services/delegates/product_table";
 import Products from "../../pages/products";
