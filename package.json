@@ -10,7 +10,8 @@
     "es6_out": "./dist/es6/hoctable",
     "umd_min_out": "./dist/umd/hoctable/hoctable-umd.min.js",
     "td_out": "./dist/typings/hoctable",
-    "ghp_out": "./dist/gh-pages"
+    "ghp_out": "./dist/gh-pages",
+    "ghp_css_flags": "-o ./dist/gh-pages/css --include-path ./node_modules/bulma"
   },
   "scripts": {
     "clean": "rimraf ./dist ./tmp",
@@ -30,7 +31,7 @@
     "build:all": "npm run build:typings && npm run build:browser",
     "build:ghp:js": "tsc -p ./example/ghp/tsconfig.json -outFile $npm_package_config_ghp_out/js/app.js",
     "build:ghp:html": "pug -o $npm_package_config_ghp_out ./example/ghp/*.pug",
-    "build:ghp:css": "node-sass ./example/ghp/css/main.sass -o $npm_package_config_ghp_out/css --include-path ./node_modules/bulma",
+    "build:ghp:css": "node-sass ./example/ghp/css/main.sass $npm_package_config_ghp_css_flags",
     "build:ghp:watch": "watch \"npm run build:ghp\" ./example/ghp",
     "build:ghp": "npm run build:ghp:js && npm run build:ghp:html && npm run build:ghp:css",
     "prepublish": "npm run clean && npm run build:all",

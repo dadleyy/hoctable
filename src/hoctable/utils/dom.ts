@@ -1,3 +1,20 @@
+export function addClass(element : HTMLElement, class_name : string) {
+  let {className: current_value} = element;
+  let current_list = current_value.split(" ").filter(function(v) { return v.length >= 1; });
+
+  if(current_list.indexOf(class_name) !== -1)
+    return;
+
+  current_list.push(class_name);
+  element.className = current_list.join(" ");
+}
+
+export function removeClass(element : HTMLElement, class_name : string) {
+  let {className: current_value} = element;
+  let current_list = current_value.split(" ").filter(function(v) { return v.length >= 1 && v !== class_name; });
+  element.className = current_list.join(" ");
+}
+
 function remove(element : Node) : Node {
   return element.parentNode.removeChild(element);
 }
@@ -33,4 +50,5 @@ function create(tag : string, style? : any, classes? : Array<string>) : HTMLElem
   return element;
 }
 
-export {create, remove, contains};
+const classes = {add: addClass, remove: removeClass};
+export default {create, remove, contains, classes};

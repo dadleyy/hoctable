@@ -38,7 +38,7 @@ body, html
 .clearfix
   @extend .is-clearfix
 
-.hoctable-paged-table
+.hoctable__table
   position: relative
   padding-bottom: 2rem
 
@@ -48,33 +48,27 @@ table
 input[type="text"]
   @extend .input
 
-.hoctable-paged-table .hoctable-table
+.hoctable__table table
   @extend .is-bordered
   @extend .is-striped
 
-.hoctable-paged-table .hoctable-paged-table__pagination
+.hoctable__table-pagination
   position: absolute
   bottom: 0
   right: 0
 
-.hoctable-paged-table .hoctable-paged-table__pagination .hoctable-pagination
+.hoctable__table-pagination .hoctable__pagination
   @extend .level
 
-.hoctable-paged-table .hoctable-pagination__info,
-.hoctable-paged-table .hoctable-pagination__controls
-  float: left
-
-.hoctable-paged-table .hoctable-pagination__controls
+.hoctable__table .hoctable__pagination-controls
   @extend .clearfix
   margin-left: 1rem
-
-.hoctable-paged-table .hoctable-pagination__controls .hoctable-pagination__next,
-.hoctable-paged-table .hoctable-pagination__controls .hoctable-pagination__previous
+  
+.hoctable__table .hoctable__pagination-next,
+.hoctable__table .hoctable__pagination-previous
+  @extend .button
   float: left
 
-.hoctable-pagination__previous + .hoctable-pagination__next,
-.hoctable-pagination__next + .hoctable-pagination__previous
+.hoctable__table .hoctable__pagination-next + .hoctable__pagination-previous,
+.hoctable__table .hoctable__pagination-previous + .hoctable__pagination-next
   margin-left: 1rem
-
-.hoctable-paged-table .hoctable-pagination__controls a
-  @extend .button

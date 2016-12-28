@@ -1,4 +1,4 @@
-import * as dom from "./utils/dom";
+import dom from "hoctable/utils/dom";
 
 let id_pool = 0;
 

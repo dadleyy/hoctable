@@ -131,7 +131,6 @@ describe("hoc/Table component test suite", function() {
 
       bag.sorting    = {};
       bag.pagination = {total: 0, size: 10, current: 0};
-
     });
 
     it("should throw an exception when used without a delegate", function() {

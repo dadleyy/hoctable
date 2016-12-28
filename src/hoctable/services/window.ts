@@ -25,9 +25,9 @@ export interface WindowListener {
   context?   : any;
 }
 
-const ENTER_FULLSCREEN   = ["requestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"];
-const EXIT_FULLSCREEN    = ["exitFullscreen", "webkitExitFullscreen", "mozExitFullscreen"];
-const FULLSCREEN_ELEMENT = ["fullscreenElement", "webkitFullscreenElement", "msFullscreenElement", "mozFullScreenElement"];
+const ENTER_FULLSCREEN   = ["requestFullScreen", "webkitRequestFullScreen", "mozRequestFullScreen"];
+const EXIT_FULLSCREEN    = ["exitFullScreen", "webkitExitFullScreen", "mozExitFullScreen"];
+const FULLSCREEN_ELEMENT = ["fullscreenElement", "webkitFullScreenElement", "msFullScreenElement", "mozFullScreenElement"];
 
 let listeners : Array<WindowListener> = [];
 let mouse = new MouseState();

@@ -38,13 +38,21 @@ describe("hoc/Select test suite", function() {
 
   beforeEach(function() {
     bag = {spies: {}, options: []};
+
     bag.container = document.createElement("div");
     bag.popups    = document.createElement("div");
+
+    document.body.appendChild(bag.popups);
+    document.body.appendChild(bag.container);
+
     Popups.mount(bag.popups);
     Viewport.bind();
   });
 
   afterEach(function() {
+    document.body.removeChild(bag.popups);
+    document.body.removeChild(bag.container);
+    Popups.unmount();
   });
 
   describe("default button transclusion", function() {
