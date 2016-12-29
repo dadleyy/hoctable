@@ -547,10 +547,15 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
         Viewport.fullscreen.open(null);
       }
 
-      function open() {
-        if(!refs["wall"]) return;
+      let open = () => {
+        let {refs, state} = this;
+        let wall_element = refs["wall"];
+
+        if(!wall_element)
+          return;
+
         state.opening = true;
-        Viewport.fullscreen.open(refs["wall"] as Node);
+        Viewport.fullscreen.open(wall_element as Node);
       }
 
       if(state.fullscreen !== true)
