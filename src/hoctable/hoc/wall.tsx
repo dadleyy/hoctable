@@ -282,8 +282,6 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
         style["right"]  = `${vw - (right - width)}px`;
       }
 
-      style["backgroundColor"] = "red";
-
       // create container & render into
       let container = utils.dom.create("div", style, [CLASSES["WALL_HIGHLIGHT_ITEM"]]);
       ReactDOM.render(<Card item={delegate.item} />, container);
