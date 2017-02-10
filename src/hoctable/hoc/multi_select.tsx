@@ -17,6 +17,7 @@ export interface MultiSelectDelegate {
   options    : (callback : OptionsCallback) => void;
   toggle     : (item : any, callback : ToggledCallback) => void;
   translate? : (item : any) => string;
+  isSelected : (item : any) => boolean;
 }
 
 export interface MultiSelectProps {
@@ -28,14 +29,21 @@ export type MultiSelectItemProps = ItemProps<MultiSelectDelegate>;
 export type ItemTransclusion     = React.ComponentClass<MultiSelectItemProps>;
 export type ComposedSelect       = React.ComponentClass<MultiSelectProps>;
 
+export const CLASSES : { [key:string]:string; } = {
+  MULTISELECT_ITEM           : "hoctable__multiselect-item",
+  MULTISELECT_ITEM_TOGGLE    : "hoctable__multiselect-item-toggle",
+  MULTISELECT_ITEM_TEXT      : "hoctable__multiselect-item-text",
+  MULTISELECT                : "hoctable__multiselect"
+}
+
 function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemTransclusion {
 
   class Item extends React.Component<MultiSelectItemProps, any> {
 
     render() {
-      let {props} = this;
-      let {delegate, option, signals} = props;
-      let content = Inner ? <Inner {...props} /> : (<p>{delegate.translate(option)}</p>);
+      let { props } = this;
+      let { delegate, option, signals } = props;
+      let selected = delegate.isSelected(option);
 
       function finished() {
         signals.selection();
@@ -45,7 +53,21 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
         return delegate.toggle(option, finished);
       }
 
-      return (<div className="hoctable__select_item" onClick={select}>{content}</div>);
+      if(Inner) {
+        let content = <Inner {...props} />
+        return (<div className={CLASSES["MULTISELECT_ITEM"]} onClick={select}>{content}</div>);
+      }
+
+      return (
+        <div className={CLASSES["MULTISELECT_ITEM"]}>
+          <div className={CLASSES["MULTISELECT_ITEM_TOGGLE"]}>
+            <input type="checkbox" onChange={select} checked={selected} />
+          </div>
+          <div className={CLASSES["MULTISELECT_ITEM_TEXT"]}>
+            <p>{delegate.translate(option)}</p>
+          </div>
+        </div>
+      );
     }
 
   }
@@ -102,7 +124,7 @@ function Factory(ItemType : ItemTransclusion, ButtonComponent = DefaultButton) :
     }
 
     render() {
-      return (<div className="hoctable__multi-select" ref={this.transclude}></div>);
+      return (<div className={CLASSES["MULTISELECT"]} ref={this.transclude}></div>);
     }
 
   }

@@ -122,6 +122,49 @@ pre.hljs code {
 .issue-display__sub-info h6 { margin-bottom: 0; }
 .issue-display__labels .label { margin-bottom: 0 !important; }
 
+.hoctable__action-menu {
+  display: inline-block;
+}
+
+.hoctable__select-option,
+.hoctable__multiselect-item {
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  display: block;
+}
+
+.hoctable__select-option:hover,
+.hoctable__multiselect-item:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.hoctable__multiselect-item:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.hoctable__multiselect-item-text,
+.hoctable__multiselect-item-toggle {
+  float: left;
+}
+
+.hoctable__multiselect-item-toggle {
+  margin-right: 0.5rem;
+}
+
+.hoctable__select-option p,
+.hoctable__multiselect-item p,
+.hoctable__multiselect-item input {
+  margin: 0;
+}
+
+.hoctable__select,
+.hoctable__multiselect {
+  background-color: white;
+  border: 1px solid #a1a1a1;
+}
+
 .hoctable__wall-item .wall-item {
   position: absolute;
   width: 100%;

@@ -38,6 +38,8 @@ class Products extends React.Component {
     let controls  = [];
     let {filters} = store.getState();
 
+    // loop over the filters that have been added, creating a new filter component that will
+    // render out all of the necessary dropdowns, etc...
     for(let i = 0, c = filters.length; i < c; i++) {
       let filter = <Filter filter={filters[i]} store={store} key={i} />;
       controls.push(filter);

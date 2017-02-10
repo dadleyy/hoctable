@@ -1,6 +1,7 @@
 "use strict";
 
 const dotenv  = require("dotenv");
+const path    = require("path");
 const server  = require("../server");
 
 const babel_external = {
@@ -34,7 +35,11 @@ module.exports = {
     filename: "[name].bundle.js"
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"],
+    modules: [
+      path.join(__dirname, "js"),
+      path.join(__dirname, "../../node_modules")
+    ],
+    extensions: [".js", ".jsx"],
     alias: {
       hoctable : __dirname + "/../../dist/es5/hoctable/hoctable"
     }
@@ -43,7 +48,7 @@ module.exports = {
     loaders: [{
       test: /\.js|jsx$/,
       exclude: /node_modules/,
-      loader: "babel",
+      loader: "babel-loader",
       query: {
         presets: ["es2015", "react"],
         plugins: ["transform-runtime"]

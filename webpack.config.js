@@ -10,10 +10,11 @@ module.exports = {
     filename: "./dist/umd/hoctable/hoctable-umd.js"
   },
   resolve: {
-    root: [
-      path.resolve("./src")
+    modules: [
+      path.resolve("./src"),
+      'node_modules'
     ],
-    extensions: ["", ".js", ".jsx", ".ts", ".tsx"]
+    extensions: [".js", ".jsx", ".ts", ".tsx"]
   },
   module: {
     loaders: [{
