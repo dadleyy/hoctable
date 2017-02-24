@@ -73,7 +73,7 @@
     "react-tools": "0.13.3",
     "request": "2.79.0",
     "requirejs": "2.3.3",
-    "rimraf": "2.6.0",
+    "rimraf": "2.6.1",
     "ts-loader": "2.0.0",
     "typescript": "2.2.1",
     "uglify-js": "2.7.5",
