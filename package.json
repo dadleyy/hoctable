@@ -71,7 +71,7 @@
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-tools": "0.13.3",
-    "request": "2.79.0",
+    "request": "2.80.0",
     "requirejs": "2.3.3",
     "rimraf": "2.6.1",
     "ts-loader": "2.0.0",
