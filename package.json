@@ -53,7 +53,7 @@
     "babel-runtime": "6.23.0",
     "bluebird": "3.5.0",
     "bulma": "^0.3.0",
-    "express": "5.0.0-alpha.4",
+    "express": "5.0.0-alpha.5",
     "jasmine-ajax": "^3.2.0",
     "jasmine-core": "2.5.2",
     "karma": "1.5.0",
