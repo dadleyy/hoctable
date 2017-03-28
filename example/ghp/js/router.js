@@ -27,10 +27,10 @@ function register(route) {
   page(path, begin);
 }
 
-function start() {
+function start(base) {
   hoctable.services.Popups.mount(el("popups"));
   hoctable.services.Viewport.bind();
-  page.base("/hoctable/");
+  page.base(base);
   page.start({hashbang: true});
 }
 

@@ -5,7 +5,7 @@
     "module"        : "amd",
     "target"        : "es5",
     "noImplicitAny" : false,
-    "sourceMap"     : false,
+    "sourceMap"     : true,
     "declaration"   : false,
     "baseUrl"       : "./js",
     "rootDirs"      : ["./js"]
