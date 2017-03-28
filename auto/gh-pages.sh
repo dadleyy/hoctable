@@ -35,7 +35,13 @@ git clone $GIT_REPO $CLONE_DIR
 
 # move to the target branch
 cd $CLONE_DIR
-git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+
+if [ ! -z "$(git show-ref refs/heads/gh-pages)" ]; then
+  git branch -D $TARGET_BRANCH
+fi
+
+git checkout -b $TARGET_BRANCH
+git rebase origin/master
 
 # delete the current contents
 rm -rf $CLONE_DIR/*
@@ -43,7 +49,6 @@ rm -rf $CLONE_DIR/*
 # copy the new compiled project into the clone dir
 cp -r $CURRENT_DIR/dist/gh-pages/* $CLONE_DIR
 
-git status
 DIFF=$(git diff)
 
 if [ -z "$DIFF" ]; then
@@ -55,10 +60,10 @@ fi
 git config --global user.name "auto gh-pages"
 git config --global user.email "dadleyy@gmail.com"
 
-git add .
+git add --all
 git commit -m "auto(${SHA}) [ci skip]"
 git log -n 1 --oneline
-git push $GIT_REPO $TARGET_BRANCH
+git push -f $GIT_REPO $TARGET_BRANCH
 
 cd $CURRENT_DIR
 rm -rf $CLONE_DIR
