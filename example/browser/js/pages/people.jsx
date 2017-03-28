@@ -5,17 +5,18 @@ class Paged extends React.Component {
 
   constructor(props) {
     super(props);
-    this.search = this.search.bind(this);
   }
 
-  search(event) {
-    let {target: {value}} = event;
+  search({ target = { } }) {
+    let { delegate } = this.props;
+    let { value } = target;
     delegate.query = value;
+    this.setState({ updated: Date.now() });
   }
 
   render() {
-    let {props} = this;
-    let {delegate} = props;
+    let { props } = this;
+    let { delegate } = props;
 
     return (
       <div className="clearfix">
@@ -23,7 +24,7 @@ class Paged extends React.Component {
           <h6>Paged Example <a href="/unmounted">Unmount</a></h6>
         </div>
         <div className="clearfix">
-          <input type="text" onInput={this.search} placeholder="Search Names" />
+          <input type="text" onInput={this.search.bind(this)} placeholder="Search Names" />
         </div>
         <Table delegate={delegate} />
       </div>

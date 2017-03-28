@@ -24,52 +24,42 @@ class Delegate {
     this.org  = org;
     this.repo = repo;
     this.filters = filters;
-    this.state = {
-      pagination : {current: 0, size: 10},
-      sorting    : {}
-    };
-  }
-
-  pagination() {
-    let {state} = this;
-    return state.pagination;
-  }
-
-  sorting() {
-    let {state} = this;
-    return state.sorting;
   }
 
   columns() {
     return COLUMNS;
   }
 
-  rows(callback) {
-    let {org, repo, state, filters} = this;
-    let {current: page} = state.pagination
-    let {state: current_filters} = filters;
+  rows(pagination, sorting, callback) {
+    let { org, repo, state, filters } = this;
+    let { current: page } = pagination;
+    let { state: current_filters } = filters;
 
-    function loaded(__, {meta, status, results}) {
-      if(status !== "SUCCESS")
-        return callback([{error: true}], 0);
-
-      if(results.length === 0)
-        return callback([{empty: true}], 0);
-
-      let {total} = meta;
-      let rows = results.map(function(issue) { return {org, repo, issue}; });
-      callback(rows, total);
+    function failed() {
+      let rows = [{ errored: true }];
+      return callback({ rows });
     }
 
-    function failed(err) {
-      console.error(err);
-      callback([{error: true}], 0);
+    function loaded(__, { meta, status, results }) {
+      if(status !== "SUCCESS") {
+        return failed();
+      }
+
+      if(results.length === 0) {
+        let rows = [{ empty: true }];
+        return callback({ rows });
+      }
+
+      let { total } = meta;
+      let rows = results.map(function(issue) { return {org, repo, issue}; });
+      callback({ rows, total });
     }
 
     let params = {org, repo, page: page + 1};
 
-    if(current_filters.closed)
+    if(current_filters.closed) {
       params.closed = true;
+    }
 
     qwest.get(`/api/issues`, params)
       .then(loaded).catch(failed);

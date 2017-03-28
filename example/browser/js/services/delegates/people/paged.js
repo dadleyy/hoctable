@@ -7,28 +7,6 @@ class Delegate {
   constructor() {
     this.people  = [];
     this.query   = null;
-    this.state   = {
-      pagination : {current: 0, size: 10},
-      sorting    : {},
-    };
-  }
-
-  pagination() {
-    return this.state.pagination;
-  }
-
-  sorting() {
-    return this.state.sorting;
-  }
-
-  sortBy(column, callback) {
-    let {sorting} = this.state;
-
-    if(column.rel === sorting.orderby)
-      sorting.direction = !sorting.direction;
-
-    sorting.orderby = column.rel;
-    callback();
   }
 
   columns() {
@@ -44,27 +22,24 @@ class Delegate {
     }];
   }
 
-  goTo(new_page, callback) {
-    this.state.pagination.current = new_page;
-    callback();
-  }
-
-  rows(callback) {
-    let {people, query: name, state} = this;
-    let {orderby, direction} = state.sorting;
-    let {size, current} = state.pagination;
+  rows(pagination, sorting, callback) {
+    let { people, query: name, state } = this;
+    let { size, current } = pagination;
+    let { direction, rel: orderby } = sorting || { };
 
     function success(_, response) {
-      let {results, meta} = response;
+      let { results, meta } = response;
+
       replace(people, results);
       people.total = meta.total;
-      state.pagination.total = meta.total;
 
-      if(people.length === 0)
-        return callback([{empty: true}]);
+      if(people.length === 0) {
+        let rows = [{ empty: true }];
+        return callback({ rows, total: 1 });
+      }
 
       let rows = people.map(function(person) { return {person}; });
-      callback(rows, meta.total);
+      callback({ rows, total: meta.total });
     }
 
     function failed(e) {

@@ -22,7 +22,7 @@ main {
   cursor: pointer;
 }
 
-.hoctable-pagination {
+.hoctable__pagination {
   display: block;
 }
 
@@ -42,9 +42,10 @@ main {
   display: inline-block;
 }
 
-.hoctable-pagination__info,
-.hoctable-pagination__next,
-.hoctable-pagination__previous {
+.hoctable__pagination-next,
+.hoctable__pagination-info,
+.hoctable__pagination-previous,
+.hoctable__pagination-controls {
   float: left;
   display: block;
   margin-right: 1rem;

@@ -28,61 +28,35 @@ const COLUMNS = [{
 class TableDelegate {
 
   constructor(filters) {
-    let pagination = {current: 0, size: 10, total: 0};
-    let sorting    = {rel: "id"};
-    this.state   = {pagination, sorting};
     this.filters = filters;
-  }
-
-  sorting() {
-    let {sorting} = this.state;
-    return {rel: sorting.rel, direction: sorting.direction};
-  }
-
-  sortBy(column, callback) {
-    let {sorting} = this.state;
-
-    if(column.rel === sorting.rel)
-      sorting.direction = !sorting.direction;
-
-    sorting.rel = column.rel;
-    callback();
-  }
-
-  goTo(new_page, callback) {
-    this.state.pagination.current = new_page;
-    callback();
-  }
-
-  pagination() {
-    let {pagination} = this.state;
-    let {current, size, total} = pagination;
-    return {current, size, total};
   }
 
   columns() {
     return COLUMNS.slice(0);
   }
 
-  rows(callback) {
-    let {state, filters} = this;
-    let {pagination, sorting} = state;
-    let {size: max, current: page} = pagination;
+  rows(pagination, sorting, callback) {
+    let { filters } = this;
+    let { size: max, current: page } = pagination;
+    let orderby = "yaer";
 
-    let orderby = sorting.direction ? sorting.rel : `-${sorting.rel}`;
+    if(sorting && sorting.rel) {
+      orderby = sorting.direction ? sorting.rel : `-${sorting.rel}`;
+    }
 
-    function success({results, total}) {
+    function success({ results, total }) {
       let rows = [];
 
-      if(total === 0)
-        return callback([{empty: true}]);
+      if(total === 0) {
+        rows = [{ empty: true }];
+        return callback({ rows });
+      }
 
       for(let i = 0, c = results.length; i < c; i++) {
         rows.push({movie: results[i]});
       }
 
-      pagination.total = total;
-      callback(rows);
+      callback({ rows, total });
     }
 
     function failed(error) {

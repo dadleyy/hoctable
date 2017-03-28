@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A library of high order components build with typescript and react.",
   "config": {
     "umd_out": "./dist/umd/hoctable",
@@ -43,7 +43,7 @@
   },
   "author": {
     "name": "Danny Hadley",
-    "email": "dadleyy@gmail.com>"
+    "email": "dadleyy@gmail.com"
   },
   "license": "MIT",
   "devDependencies": {

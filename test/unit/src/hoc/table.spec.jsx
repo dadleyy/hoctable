@@ -41,24 +41,15 @@ describe("hoc/Table component test suite", function() {
     constructor() {
     }
 
-    pagination() {
-      bag.spies.pagination = true;
-      return bag.pagination;
-    }
-
-    sorting() {
-      bag.spies.sorting = true;
-      return bag.sorting;
-    }
-
     columns() {
       bag.spies.columns = true;
       return bag.columns;
     }
 
-    rows(callback) {
+    rows(pagination, sorting, callback) {
+      let { rows, total } = bag;
       bag.spies.rows = true;
-      bag.rows(callback);
+      callback({ rows, total });
     }
 
   }
@@ -71,7 +62,7 @@ describe("hoc/Table component test suite", function() {
     }
 
     render() {
-      return (<div><bag.Table delegate={bag.delegate} /></div>);
+      return (<div><bag.Table sorting={bag.sorting} pagination={bag.pagination} delegate={bag.delegate} /></div>);
     }
 
   }
@@ -124,13 +115,11 @@ describe("hoc/Table component test suite", function() {
       bag = {spies: {}, rows: [], rendered};
 
       bag.container = document.createElement("div");
-      bag.Table     = TableFactory(Row);
-      bag.delegate  = new Delegate();
-      bag.columns   = TEST_COLUMNS.slice(0);
-      bag.rows      = function(callback) { callback([{name: "danny"}]); }
+      bag.Table = TableFactory(Row);
+      bag.delegate = new Delegate();
 
-      bag.sorting    = {};
-      bag.pagination = {total: 0, size: 10, current: 0};
+      bag.columns = TEST_COLUMNS.slice(0);
+      bag.rows = [{ name: "danny" }];
     });
 
     it("should throw an exception when used without a delegate", function() {
@@ -157,18 +146,6 @@ describe("hoc/Table component test suite", function() {
       expect(bag.spies.rows).toBe(true);
     });
 
-    it("should have called the delegate\'s \"sorting\" function after rendering", function() {
-      expect(bag.spies.sorting).toBe(undefined);
-      render();
-      expect(bag.spies.sorting).toBe(true);
-    });
-
-    it("should have called the delegate\'s \"pagination\" function after rendering", function() {
-      expect(bag.spies.pagination).toBe(undefined);
-      render();
-      expect(bag.spies.pagination).toBe(true);
-    });
-
     it("should render out a colgroup w/ cols to match the returned columns", function() {
       render();
       let [colgroup] = bag.container.getElementsByTagName("colgroup");
@@ -190,67 +167,41 @@ describe("hoc/Table component test suite", function() {
       }
     });
 
-    it("should render out a th element with an active class based on \"sorting\"", function() {
-      bag.sorting = {rel: TEST_COLUMNS[1].rel};
+    it("should render out a th element with an active class based on initial \"sorting\"", function() {
+      bag.sorting = { rel: TEST_COLUMNS[1].rel };
       render();
-
       expect(dom.active_th_html).toBe(TEST_COLUMNS[1].name);
-
-      bag.sorting = {rel: TEST_COLUMNS[0].rel};
-      bag.update();
-
-      expect(dom.active_th_html).toBe(TEST_COLUMNS[0].name);
     });
 
     it("should render out an empty pagination when total is 0", function() {
       let cb = null;
-      bag.rows = function(callback) { cb = callback; }
-      bag.pagination = {total: 0};
+      bag.rows = [ ];
+      bag.total = 0;
       render();
-      expect(dom.pagination_empty.length).toBe(0);
-      cb([]);
       expect(dom.pagination_empty.length).toBe(1);
     });
 
     it("should render a \"next\" but not \"previous\" button when on first page", function() {
-      bag.pagination = {total: 50, size: 10, current: 0};
+      bag.total = 50;
       render();
       expect(dom.pagination_next.length).toBe(1);
       expect(dom.pagination_previous.length).toBe(0);
     });
 
-    it("should render out both \"next\" and \"previous\" button when not on first or last page", function() {
-      bag.pagination = {total: 50, size: 10, current: 1};
-      render();
-      expect(dom.pagination_next.length).toBe(1);
-      expect(dom.pagination_previous.length).toBe(1);
-    });
-
     it("should render out \"previous\" but not \"next\" button when on last page", function() {
-      bag.pagination = {total: 50, size: 10, current: 4};
+      bag.total = 50;
+      bag.pagination = { current: 5, size: 10 };
       render();
       expect(dom.pagination_next.length).toBe(0);
       expect(dom.pagination_previous.length).toBe(1);
     });
 
-    it("should render out the transcluded for every row data object sent into the callback", function() {
-      let called = 0;
-      let items  = [{}];
-
-      bag.rows = function(cb) { 
-        called++;
-        cb(items);
-      }
-
+    it("should render out both \"next\" and \"previous\" button when not on first or last page", function() {
+      bag.total = 50;
+      bag.pagination = { current: 2, size: 10 };
       render();
-      expect(dom.rows.length).toBe(1);
-      expect(called).toBe(1);
-
-      items.push({});
-
-      bag.update();
-      expect(dom.rows.length).toBe(2);
-      expect(called).toBe(2);
+      expect(dom.pagination_next.length).toBe(1);
+      expect(dom.pagination_previous.length).toBe(1);
     });
 
   });
