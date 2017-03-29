@@ -7,8 +7,8 @@ module.exports = function(config) {
   let reporters  = ["narrow"];
 
   let preprocessors = {
-    "example/browser/**/*.js"  : ["babel"],
-    "example/browser/**/*.jsx" : ["babel"],
+    "example/fullstack/browser/**/*.js"  : ["babel"],
+    "example/fullstack/browser/**/*.jsx" : ["babel"],
 
     "src/**/*.ts"              : ["typescript"],
     "src/**/*.tsx"             : ["typescript"],
@@ -32,8 +32,8 @@ module.exports = function(config) {
     {pattern: "./src/**/*.ts", included: false},
     {pattern: "./src/**/*.tsx", included: false},
 
-    {pattern: "./example/browser/js/**/*.js", included: false},
-    {pattern: "./example/browser/js/**/*.jsx", included: false},
+    {pattern: "./example/fullstack/browser/js/**/*.js", included: false},
+    {pattern: "./example/fullstack/browser/js/**/*.jsx", included: false},
 
     "./test/unit.js"
   ];

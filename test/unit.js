@@ -34,7 +34,7 @@ require.config({
   callback : expose, 
 
   paths    : {
-    "example"   : "/base/example/browser/js",
+    "example"   : "/base/example/fullstack/browser/js",
     "fixtures"  : "/base/test/fixtures",
     "react"     : "/base/node_modules/react/dist/react",
     "react-dom" : "/base/node_modules/react-dom/dist/react-dom",
