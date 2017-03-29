@@ -1,4 +1,6 @@
 const dictionary = {
+  about: "About",
+  about_hoctable: "About Hoctable",
   action: "Action",
   adventure: "Adventure",
   all: "All",
@@ -39,6 +41,7 @@ const dictionary = {
   sci_fi: "Science Fiction",
   search_titles: "Search Titles",
   select_genre: "All Genres (Select One)",
+  something_went_wrong: "Something went wrong.",
   sport: "Sport",
 
   thriller: "Thriller",

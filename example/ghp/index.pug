@@ -1,5 +1,8 @@
 doctype html
 - var base = process.env['ROUTING_BASE'] || "/hoctable/"
+- var contentful_space_id = process.env['CONTENTFUL_SPACE_ID'] || "mfoj0muvznsj"
+- var default_contentful_access_token = "7b9ebf14eeb0eabafd5e5face074f9897264bbf010f0620400fcac036d405e93"
+- var contentful_access_token = process.env['CONTENTFUL_ACCESS_TOKEN'] || default_contentful_access_token
 html(style="background-color: white; min-height: 100%; position: relative;")
   head
     meta(charset="utf-8")
@@ -11,17 +14,19 @@ html(style="background-color: white; min-height: 100%; position: relative;")
     meta(name="author" content=author.name)
   body(style="background-color: white; min-height: 100%; position: relative;")
     #popups
+    header#application-header
     #main
     hr
     footer#application-footer
-    script(src="https://unpkg.com/react@15.3.1/dist/react.min.js")
-    script(src="https://unpkg.com/react-dom@15.3.1/dist/react-dom.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/qwest/4.4.5/qwest.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/q.js/0.9.2/q.min.js")
-    script(src="https://cdn.rawgit.com/visionmedia/page.js/master/page.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js" type="text/javascript")
+    script(src="//unpkg.com/react@15.3.1/dist/react.js")
+    script(src="//unpkg.com/react-dom@15.3.1/dist/react-dom.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/qwest/4.4.5/qwest.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/q.js/0.9.2/q.min.js")
+    script(src="//cdn.rawgit.com/visionmedia/page.js/master/page.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js" type="text/javascript")
     script(src="./js/app.min.js" type="text/javascript")
     script(type="text/javascript").
       (function() {
@@ -29,12 +34,23 @@ html(style="background-color: white; min-height: 100%; position: relative;")
           app.start();
         }
 
-        window.ENV = {
+
+        var ENV = {
+          author: "#{author.name}",
           routing: {
             baseUrl: "#{base}",
+          },
+          contentful: {
+            "api_base_url": "https://cdn.contentful.com",
+            "space_id": "#{contentful_space_id}",
+            "access_token": "#{contentful_access_token}",
+          },
+          externalUrls: {
+            githubProject: "#{homepage}",
           }
         };
 
+        define("config/environment", [], function() { return ENV; });
         define("react", [], function() { return window.React; });
         define("react-dom", [], function() { return window.ReactDOM; });
 

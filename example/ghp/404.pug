@@ -1,12 +1,10 @@
 doctype html
+- var base = process.env['ROUTING_BASE'] || "/hoctable/"
 html
   head
     meta(charset="utf-8")
     title hoctable | redirect
     script(type="text/javascript").
-      var path     = window.location.pathname;
-      var parts    = path.split("/");
-      var relative = parts.slice(2);
-      var base     = parts[1];
-      window.location.replace("/" + base + "/#!" + relative);
+      var path = window.location.pathname.substr("#{base}".length);
+      window.location.replace("#{base}#!" + path);
   body

@@ -1,3 +1,5 @@
+import uuid from "./uuid";
+
 function lower(s) {
   return s.toLowerCase();
 }
@@ -14,15 +16,22 @@ class Filters {
   } 
 
   subscribe(update) {
-    this.listeners.push(update);
+    let id = uuid();
+    this.listeners.push({ id, update });
+    return id;
+  }
+
+  unsubscribe(target) {
+    let { listeners } = this;
+    this.listeners = listeners.filter(function({ id }) { return id !== target; });
   }
 
   get latest() {
-    let {filters} = this;
-    let result = {};
+    let { filters } = this;
+    let result = { };
 
     for(let i = 0, c = filters.length; i < c; i++) {
-      let {field, value} = filters[i];
+      let { field, value } = filters[i];
       result[field] = value;
     }
 
@@ -30,7 +39,7 @@ class Filters {
   }
 
   test(movie) {
-    let {filters, latest} = this;
+    let { filters, latest } = this;
 
     if(filters.length === 0)
       return true;
@@ -47,13 +56,13 @@ class Filters {
   }
 
   dispatch(payload) {
-    let {filters, listeners} = this;
-    this.filters = filters.filter(function({field}) { return field !== payload.field; });
+    let { filters, listeners } = this;
+    this.filters = filters.filter(function({ field }) { return field !== payload.field; });
     this.filters.push(payload);
 
     for(let i = 0, c = listeners.length; i < c; i++) {
-      let fn = listeners[i];
-      fn();
+      let { update, id } = listeners[i];
+      update();
     }
   }
 

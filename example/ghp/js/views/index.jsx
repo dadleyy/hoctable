@@ -1,46 +1,50 @@
 import * as hoctable from "hoctable";
-
-import Filters from "../services/filters";
 import i18n from "../services/i18n";
-import HeroTitle from "../components/bulma/hero_title";
-
 import DemoTable from "../components/demos/table";
-import TableDelegate from "../delegates/table";
-
-import GenreDelegate from "../delegates/genre_menu";
 
 const Select = hoctable.hoc.Select();
 
+// Index View
+//
+// This component demonstrates an example of a react application "view" that renders out an instance of the hoctable
+// table and menu components. The delegates for these are resolved into the view by the route in order to allow url
+// based initial state preparation.
 class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    this.filters        = new Filters();
-    this.table_delegate = new TableDelegate(this.filters);
-    this.genre_delegate = new GenreDelegate(this.filters);
-    this.search         = this.search.bind(this);
+    let { filters } = props.resolution;
 
     let update = this.forceUpdate.bind(this);
-    this.filters.subscribe(update);
+
+    this.subscriptions = {
+      filters: filters.subscribe(update)
+    };
+  }
+
+  componentWillUnmount() {
+    let { subscriptions, props } = this;
+    let { filters } = props.resolution;
+    filters.unsubscribe(subscriptions.filters);
   }
 
   search({target}) {
-    let {table_delegate, filters} = this;
-    let {value} = target;
-    filters.dispatch({field: "title", value});
+    let { resolution } = this.props;
+    let { table_delegate, filters } = resolution;
+    let { value } = target;
+    filters.dispatch({ field: "title", value });
   }
 
   render() {
-    let {table_delegate, genre_delegate, filters} = this;
+    let { resolution } = this.props;
+    let { table_delegate, genre_delegate, filters } = resolution;
 
     return (
       <div className="index-page">
-        <HeroTitle title={i18n("project_title")} subtitle={i18n("project_subtitle")} />
-        <hr />
         <section className="container">
           <div className="container columns">
             <div className="column is-one-quarter">
-              <input type="text" placeholder={i18n("search_titles")} onChange={this.search} />
+              <input type="text" placeholder={i18n("search_titles")} onChange={this.search.bind(this)} />
             </div>
             <div className="column is-one-quarter">
               <div className="float-left">

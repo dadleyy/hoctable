@@ -1,6 +1,7 @@
+import * as env from "config/environment";
+
 function Footer() {
-  let { attributes: author_data } = document.querySelector("meta[name=author]") || { };
-  let author = author_data && author_data.content ? author_data.content.value : null;
+  let { author } = env;
 
   return (
     <main className="hero">

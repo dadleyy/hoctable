@@ -12,6 +12,28 @@ $table-border: #ededed
 
 #main
   z-index: 1
+  padding: 2rem 0 1.5rem
+
+@for $i from 1 through 10
+  $size-class: $i * 10
+  $size-value: 0.5 + ($i * 0.5)
+
+  .margin-top-#{$size-class}
+    margin-top: $size-value + unquote("rem")
+
+  .margin-bottom-#{$size-class}
+    margin-bottom: $size-value + unquote("rem")
+
+  .margin-left-#{$size-class}
+    margin-left: $size-value + unquote("rem")
+
+  .margin-right-#{$size-class}
+    margin-right: $size-value + unquote("rem")
+
+  .fs-#{$size-class},
+  .fs-#{$size-class}:after,
+  .fs-#{$size-class}:before
+    font-size: $size-value + unquote("rem")
 
 .float-left
   float: left
