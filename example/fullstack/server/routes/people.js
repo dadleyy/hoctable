@@ -1,4 +1,4 @@
-const people = require("../../../test/data/people");
+const people = require("../../../../test/data/people");
   
 module.exports = function findPeople(req, res) {
   let {orderby, max, page, name} = req.query;

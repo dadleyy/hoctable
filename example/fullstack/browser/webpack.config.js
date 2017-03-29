@@ -37,11 +37,11 @@ module.exports = {
   resolve: {
     modules: [
       path.join(__dirname, "js"),
-      path.join(__dirname, "../../node_modules")
+      path.join(__dirname, "../../../node_modules")
     ],
     extensions: [".js", ".jsx"],
     alias: {
-      hoctable : __dirname + "/../../dist/es5/hoctable/hoctable"
+      hoctable : __dirname + "/../../../dist/es5/hoctable/hoctable"
     }
   },
   module: {

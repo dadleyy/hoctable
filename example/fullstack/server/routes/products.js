@@ -1,4 +1,4 @@
-const products = require("../../../test/data/products");
+const products = require("../../../../test/data/products");
 
 function toi(i) { return parseInt(i, 10); }
 function lower(s) { return s && s.toLowerCase(); };

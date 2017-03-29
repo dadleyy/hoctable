@@ -11,7 +11,8 @@
     "umd_min_out": "./dist/umd/hoctable/hoctable-umd.min.js",
     "td_out": "./dist/typings/hoctable",
     "ghp_out": "./dist/gh-pages",
-    "ghp_css_flags": "-o ./dist/gh-pages/css --include-path ./node_modules/bulma"
+    "ghp_css_flags": "-o ./dist/gh-pages/css --include-path ./node_modules/bulma",
+    "fullstack_webpack": "./example/fullstack/browser/webpack.config.js"
   },
   "scripts": {
     "clean": "rimraf ./dist ./tmp",
@@ -37,7 +38,7 @@
     "build:ghp:watch": "watch \"npm run build:ghp\" ./example/ghp",
     "build:ghp": "npm run build:ghp:js && npm run build:ghp:html && npm run build:ghp:css",
     "prepublish": "npm run clean && npm run build:all",
-    "example:server": "webpack-dev-server --config example/browser/webpack.config.js",
+    "example:server": "webpack-dev-server --config $npm_package_config_fullstack_webpack",
     "test": "karma start ./karma.conf.js --single-run true",
     "test:watch": "karma start ./karma.conf.js --single-run false"
   },
