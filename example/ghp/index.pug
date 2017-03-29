@@ -38,15 +38,15 @@ html(style="background-color: white; min-height: 100%; position: relative;")
         var ENV = {
           author: "#{author.name}",
           routing: {
-            baseUrl: "#{base}",
+            "base_url": "#{base}",
           },
           contentful: {
             "api_base_url": "https://cdn.contentful.com",
             "space_id": "#{contentful_space_id}",
             "access_token": "#{contentful_access_token}",
           },
-          externalUrls: {
-            githubProject: "#{homepage}",
+          external_urls: {
+            "github_project": "#{homepage}"
           }
         };
 

@@ -1,7 +1,7 @@
 import * as env from "config/environment";
 
 function Footer() {
-  let { author } = env;
+  let { author, external_urls } = env;
 
   return (
     <main className="hero">
@@ -11,7 +11,7 @@ function Footer() {
             <p><span>&copy;</span><span>{new Date().getFullYear()}</span> <span>{author}</span></p>
           </div>
           <div className="level-right">
-            <a href="https://github.com/dadleyy/hoctable" className="button is-info">
+            <a href={external_urls.github_project} className="button is-info">
               <i className="ion-social-github icon is-medium"></i>
             </a>
           </div>

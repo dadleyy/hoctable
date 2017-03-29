@@ -18,7 +18,7 @@ function start() {
   router.register(about);
   router.register(missing);
 
-  router.start(routing && routing.baseUrl ? routing.baseUrl : "/hoctable/");
+  router.start(routing && routing.base_url ? routing.base_url : "/hoctable/");
   ReactDOM.render(<Header />, el("application-header"));
   ReactDOM.render(<Footer />, el("application-footer"));
 }
