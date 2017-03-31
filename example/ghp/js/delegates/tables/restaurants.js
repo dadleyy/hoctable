@@ -45,6 +45,15 @@ class Delegate {
       params.lon = longitude;
     }
 
+    if(filters.title) {
+      params.q = filters.title;
+    }
+
+    if(filters.category && filters.category.all !== true) {
+      let { id: category_id } = filters.category;
+      params.category = category_id;
+    }
+
     return client.search({ start, count: size, ...params }).then(loaded).catch(failed);
   }
 

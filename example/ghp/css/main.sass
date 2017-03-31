@@ -38,17 +38,27 @@ $table-border: #ededed
 .float-left
   float: left
 
+.pointer
+  cursor: pointer
+
 .hoctable__select
   @extend .box
-  padding: 0 0.5rem
+  @extend .menu-list
+  padding: 0
   max-height: 240px
   overflow-y: auto
 
-.hoctable__select-option
-  padding: 0.2rem 0
+.hoctable__select-option,
+.hoctable__select-option--loading
+  padding: 0.4rem 0.6rem
 
-.pointer
-  cursor: pointer
+
+.hoctable__action-menu
+  display: inline-block
+
+.hoctable__select-option
+  @extend .pointer
+  @extend .button.is-white
 
 body, html
   position: relative

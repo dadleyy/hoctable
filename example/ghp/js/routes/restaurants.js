@@ -3,6 +3,7 @@ import * as env from "config/environment";
 
 import Filters from "services/filters";
 import TableDelegate from "delegates/tables/restaurants";
+import CategoryDelegate from "delegates/menus/categories";
 
 const path = "restaurants";
 const view = "example/ghp/js/views/restaurants";
@@ -16,7 +17,8 @@ function resolve() {
 
   let filters = new Filters();
   let table_delegate = new TableDelegate({ access_token, api_base_url }, filters);
-  return defer.resolve({ filters, table_delegate });
+  let category_delegate = new CategoryDelegate({ access_token, api_base_url }, filters);
+  return defer.resolve({ filters, table_delegate, category_delegate });
 }
 
 export default { path, view, resolve };

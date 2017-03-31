@@ -1,6 +1,10 @@
+import { hoc } from "hoctable";
+
 import i18n from "services/i18n";
 import AppNav from "components/app_nav";
 import Table from "components/restaurants/table";
+
+const Select = hoc.Select();
 
 class Restaurants extends React.Component {
 
@@ -45,6 +49,22 @@ class Restaurants extends React.Component {
     geolocation.getCurrentPosition(success, error);
   }
 
+  search({ target }) {
+    let { resolution } = this.props;
+    let { table_delegate, filters } = resolution;
+    let { value } = target;
+
+    if(this.throttle) {
+      clearTimeout(this.throttle);
+    }
+
+    function run() {
+      filters.dispatch({ field: "title", value });
+    }
+
+    this.throttle = setTimeout(run, 300);
+  }
+
   render() {
     let { props } = this;
 
@@ -54,6 +74,14 @@ class Restaurants extends React.Component {
           <AppNav />
         </section>
         <section className="container">
+          <div className="margin-bottom-20 clearfix columns">
+            <div className="column is-one-quarter">
+              <input type="text" placeholder={i18n("search_restaurants")} onChange={this.search.bind(this)} />
+            </div>
+            <div className="column is-one-quarter">
+              <Select delegate={props.resolution.category_delegate} />
+            </div>
+          </div>
           <Table delegate={props.resolution.table_delegate} />
         </section>
       </main>
