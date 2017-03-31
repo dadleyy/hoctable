@@ -1,15 +1,17 @@
 import * as hoctable from "hoctable";
-import i18n from "../services/i18n";
-import DemoTable from "../components/demos/table";
+import i18n from "services/i18n";
+
+import DemoTable from "components/movies/table";
+import AppNav from "components/app_nav";
 
 const Select = hoctable.hoc.Select();
 
-// Index View
+// Movies View
 //
 // This component demonstrates an example of a react application "view" that renders out an instance of the hoctable
 // table and menu components. The delegates for these are resolved into the view by the route in order to allow url
 // based initial state preparation.
-class Index extends React.Component {
+class Movies extends React.Component {
 
   constructor(props) {
     super(props);
@@ -40,7 +42,10 @@ class Index extends React.Component {
     let { table_delegate, genre_delegate, filters } = resolution;
 
     return (
-      <div className="index-page">
+      <main className="index-page">
+        <section className="container margin-bottom-30">
+          <AppNav />
+        </section>
         <section className="container">
           <div className="container columns">
             <div className="column is-one-quarter">
@@ -55,10 +60,10 @@ class Index extends React.Component {
           <hr />
           <DemoTable delegate={table_delegate} />
         </section>
-      </div>
+      </main>
     );
   }
 
 }
 
-export default Index;
+export default Movies;

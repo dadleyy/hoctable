@@ -23,9 +23,10 @@ export interface ButtonProps {
 }
 
 export interface ColumnDefinition {
-  rel    : string;
-  name   : string;
-  style? : any;
+  rel       : string;
+  name      : string;
+  sortable? : boolean;
+  style?    : any;
 }
 
 export interface ColumnFlags {
@@ -158,6 +159,11 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
     sort() {
       let { sort, column } = this.props;
       let update = this.forceUpdate.bind(this);
+
+      if(column.sortable === false) {
+        return;
+      }
+
       sort(column, update);
     }
 

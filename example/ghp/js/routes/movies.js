@@ -1,11 +1,11 @@
-import defer from "../services/defer";
+import defer from "services/defer";
 
-import GenreDelegate from "../delegates/genre_menu";
-import TableDelegate from "../delegates/table";
-import Filters from "../services/filters";
+import GenreDelegate from "delegates/menus/genres";
+import TableDelegate from "delegates/tables/movies";
+import Filters from "services/movie_filters";
 
-const path = "/";
-const view = "example/ghp/js/views/index";
+const path = "movies";
+const view = "example/ghp/js/views/movies";
 
 // Index route
 //

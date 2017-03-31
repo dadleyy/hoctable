@@ -1,5 +1,5 @@
-import MOVIES from "../var/movies";
-import i18n from "../services/i18n";
+import MOVIES from "var/movies";
+import i18n from "services/i18n";
 
 function clean(s) {
   return s.replace(/(^\s+|\s+$)/g, "");

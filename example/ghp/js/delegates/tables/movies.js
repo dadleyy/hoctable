@@ -1,6 +1,5 @@
-import i18n from "../services/i18n";
-import movies from "../services/movies";
-import * as hoctable from "hoctable";
+import i18n from "services/i18n";
+import movies from "services/movies";
 
 const COLUMNS = [{
   rel: "const",

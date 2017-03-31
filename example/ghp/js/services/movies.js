@@ -1,5 +1,11 @@
-import defer from "./defer";
-import MOVIES from "../var/movies";
+import defer from "services/defer";
+import MOVIES from "var/movies";
+
+// Movies service
+//
+// Since the movie data for this example is hard-coded in a json file, this point of this service is to mimic the
+// functionality of a server-side api for asynchronous data source demonstration purposes. Normally in a "real" 
+// application, the delegates would simply make xhr calls to a server-side api with the sorting/pagination information.
 
 const MAX_NETWORK_TIME = 400;
 const MIN_NETWORK_TIME = 30;
@@ -13,7 +19,7 @@ function throttle() {
 }
 
 function find(filters, max, current_page, orderby) {
-  let {promise, resolve, reject} = defer.defer();
+  let { promise, resolve, reject } = defer.defer();
   let results = [];
   let direction = orderby && orderby.charAt(0) === "-";
   let sort_field = direction ? orderby.substr(1) : orderby;
@@ -50,7 +56,7 @@ function find(filters, max, current_page, orderby) {
   results = results.slice(start, end);
 
   function finish() {
-    resolve({results, total});
+    resolve({ results, total });
   }
 
   setTimeout(finish, throttle());
@@ -58,4 +64,4 @@ function find(filters, max, current_page, orderby) {
   return promise;
 }
 
-export default {find};
+export default { find };

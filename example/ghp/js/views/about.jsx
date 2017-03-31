@@ -1,4 +1,4 @@
-import i18n from "../services/i18n";
+import i18n from "services/i18n";
 
 function About({ resolution }) {
   let { content } = resolution;

@@ -11,6 +11,12 @@ function resolve() {
     return defer.reject(new Error("invalid contentful configuration"));
   }
 
+  try {
+    access_token = atob(access_token);
+  } catch(e) {
+    return defer.reject(new Error("invalid contentful access token"));
+  }
+
   function loaded(xhr, data) {
     let json = JSON.parse(data);
     let [ content ] = json.items;

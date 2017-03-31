@@ -38,23 +38,6 @@ class Filters {
     return result;
   }
 
-  test(movie) {
-    let { filters, latest } = this;
-
-    if(filters.length === 0)
-      return true;
-
-    if(latest.title)
-      return lower(movie.title).indexOf(lower(latest.title)) >= 0;
-
-    let genres = movie.genres.split(",").map(clean);
-
-    if(latest.genre && genres.indexOf(latest.genre) === -1)
-      return false;
-
-    return true;
-  }
-
   dispatch(payload) {
     let { filters, listeners } = this;
     this.filters = filters.filter(function({ field }) { return field !== payload.field; });

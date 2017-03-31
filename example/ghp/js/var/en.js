@@ -2,6 +2,7 @@ const dictionary = {
   about: "About",
   about_hoctable: "About Hoctable",
   action: "Action",
+  address: "Address",
   adventure: "Adventure",
   all: "All",
   animation: "Animation",
@@ -27,8 +28,11 @@ const dictionary = {
   musical: "Musical",
   mystery: "Mystery",
 
+  name: "Name",
   news: "News",
   no_results: "No results.",
+
+  open: "Open",
 
   project_title: "Hoctable",
   project_subtitle: "A library of composable components",
