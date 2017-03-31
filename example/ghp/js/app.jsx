@@ -20,8 +20,7 @@ function start() {
   router.register(movies);
   router.register(restaurants);
   router.register(missing);
-
-  router.start(routing && routing.base_url ? routing.base_url : "/hoctable/");
+  router.start(routing && routing.base_url);
   ReactDOM.render(<Header />, el("application-header"));
   ReactDOM.render(<Footer />, el("application-footer"));
 }
