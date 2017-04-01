@@ -1,5 +1,6 @@
 lib
 npm-debug.log
+/coverage
 .DS_Store
 *.swp
 *.rdb

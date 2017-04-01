@@ -41,6 +41,7 @@
     "prepublish": "npm run clean && npm run build:all",
     "example:server": "webpack-dev-server --config $npm_package_config_fullstack_webpack",
     "test": "karma start ./karma.conf.js --single-run true",
+    "codecov:publish": "codecov -t $CODECOV_TOKEN",
     "test:watch": "karma start ./karma.conf.js --single-run false"
   },
   "author": {
@@ -49,6 +50,8 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "15.0.18",
+    "@types/react-dom": "^0.14.21",
     "babel-core": "6.24.0",
     "babel-loader": "^6.2.8",
     "babel-plugin-external-helpers": "6.18.0",
@@ -60,12 +63,15 @@
     "babel-runtime": "6.23.0",
     "bluebird": "3.5.0",
     "bulma": "^0.4.0",
+    "codecov": "^2.1.0",
+    "dotenv": "^3.0.0",
     "express": "5.0.0-alpha.5",
     "jasmine-ajax": "^3.2.0",
     "jasmine-core": "2.5.2",
     "karma": "1.5.0",
     "karma-babel-preprocessor": "6.0.1",
     "karma-chrome-launcher": "2.0.0",
+    "karma-coverage": "^1.1.1",
     "karma-effroi": "0.0.0",
     "karma-jasmine": "1.1.0",
     "karma-narrow-reporter": "^2.0.1",
@@ -86,9 +92,6 @@
     "uglify-js": "2.8.20",
     "watch": "^1.0.1",
     "webpack": "2.3.0",
-    "webpack-dev-server": "2.4.2",
-    "@types/react": "15.0.18",
-    "@types/react-dom": "^0.14.21",
-    "dotenv": "^3.0.0"
+    "webpack-dev-server": "2.4.2"
   }
 }

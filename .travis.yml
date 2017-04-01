@@ -8,6 +8,8 @@ install:
   - npm install
 script:
   - npm run test
+after_success:
+  - npm run codecov:publish
   - mkdir -p ./artifacts
     # universal module definition artifact
   - cp ./auto/bower.json ./dist/umd/hoctable/bower.json
