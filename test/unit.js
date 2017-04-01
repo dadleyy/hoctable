@@ -34,10 +34,11 @@ require.config({
   callback : expose, 
 
   paths    : {
-    "example"   : "/base/example/fullstack/browser/js",
-    "fixtures"  : "/base/test/fixtures",
-    "react"     : "/base/node_modules/react/dist/react",
-    "react-dom" : "/base/node_modules/react-dom/dist/react-dom",
-    "test"      : "/base/test"
+    "example"      : "/base/example/fullstack/browser/js",
+    "fixtures"     : "/base/test/fixtures",
+    "test_helpers" : "/base/test/helpers",
+    "react"        : "/base/node_modules/react/dist/react",
+    "react-dom"    : "/base/node_modules/react-dom/dist/react-dom",
+    "test"         : "/base/test"
   }
 });

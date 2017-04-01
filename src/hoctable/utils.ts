@@ -1,10 +1,5 @@
 import dom from "hoctable/utils/dom";
-
-let id_pool = 0;
-
-function uuid() : string {
-  return btoa(`id-${++id_pool}`);
-}
+import uuid from "hoctable/utils/uuid";
 
 function replace<T>(target : Array<T>, source : Array<T>) : Array<T> {
   target.length = 0;

@@ -2,6 +2,14 @@ const {default: utils} = require("hoctable/utils");
 
 describe("utils test suite", function() {
 
+  describe("uuid generation", function() {
+
+    it("generates a string", function() {
+      expect(typeof utils.uuid()).toBe("string");
+    });
+
+  });
+
   describe("add/remove classes", function() {
 
     let bag = {};

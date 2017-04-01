@@ -1,5 +1,5 @@
 import ActionMenu from "hoctable/hoc/action_menu";
-import {PopupCloseCallback} from "hoctable/hoc/action_menu";
+import { PopupCloseCallback } from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -40,11 +40,12 @@ export type ComposedSelect        = React.ComponentClass<SingleSelectProps>;
 export const CLASSES = {
   SELECT         : "hoctable__select",
   SELECT_OPTION  : "hoctable__select-option",
-  SELECT_LOADING : "hoctable__select-option--loading"
+  SELECT_LOADING : "hoctable__select-option--loading",
+  SELECT_BUTTON  : "hoctable__select-toggle"
 };
 
 export function DefaultButton({delegate}) {
-  return (<a className="button">{delegate.text()}</a>);
+  return (<a className={CLASSES["SELECT_BUTTON"]}>{delegate.text()}</a>);
 }
 
 export function DefaultLoading() {

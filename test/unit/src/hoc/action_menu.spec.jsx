@@ -1,25 +1,24 @@
-const {default: Viewport}   = require("hoctable/services/window");
-const {default: Popups}     = require("hoctable/services/popups");
-const {default: ActionMenu} = require("hoctable/hoc/action_menu");
-const React                 = require("react");
+const { default: ActionMenu } = require("hoctable/hoc/action_menu");
+const helpers                 = require("test_helpers");
+const React                   = require("react");
 
 describe("hoc/ActionMenu test suite", function() {
 
-  let bag = {};
+  const bag = { };
+  const BUTTON_TEXT = "button text here";
+  const MENU_BODY_TEXT = "menu body text";
 
   class Button extends React.Component {
 
     constructor(props) {
       super(props);
-      bag.spies.button_create = true;
     }
 
     render() {
-      let {text} = this.props;
-      bag.spies.button_render = true;
+      let { text } = this.props;
 
       return (
-        <div className="test-button"><a>{text}</a></div>
+        <div data-rel="button"><a>{text}</a></div>
       );
     }
 
@@ -29,72 +28,71 @@ describe("hoc/ActionMenu test suite", function() {
 
     constructor(props) {
       super(props);
-      bag.spies.menu_create = true;
     }
 
     render() {
-      let {text} = this.props;
-      bag.spies.menu_render = true;
+      let { menu_body_text } = this.props;
+
       return (
-        <div className="test-popup">
-          <h1>{text}</h1>
+        <div data-rel="menu-body">
+          <h1>{menu_body_text}</h1>
         </div>
       );
     }
 
   }
 
+  const dom = {
+
+    get menu() {
+      let { popups } = bag.dom;
+      return popups && popups.querySelector("[data-rel=menu-body]");
+    },
+
+    get button() {
+      let { container } = bag.dom;
+      return container && container.querySelector("[data-rel=button]");
+    }
+
+  };
+
+  function render() {
+    ReactDOM.render(<bag.Menu {...bag.render_props} />, bag.dom.container);
+  }
+
   beforeEach(function() {
-    bag = {spies: {}, options: []};
-    bag.container = document.createElement("div");
-    bag.popups    = document.createElement("div");
-
-    document.body.appendChild(bag.popups);
-    document.body.appendChild(bag.container);
-
-    Popups.mount(bag.popups);
-    Viewport.bind();
+    bag.spies = { };
     bag.Menu = ActionMenu(Menu, Button);
+    bag.render_props = { text: BUTTON_TEXT, menu_body_text: MENU_BODY_TEXT };
   });
 
-  afterEach(function() {
-    Popups.unmount();
-    document.body.removeChild(bag.popups);
-    document.body.removeChild(bag.container);
-  });
+  beforeEach(helpers.dom.setup.bind(bag));
+  afterEach(helpers.dom.teardown.bind(bag));
 
-  it("should render out the transcluded button", function() {
-    ReactDOM.render(<bag.Menu text={"testing 123"} />, bag.container);
-    let btn = bag.container.getElementsByClassName("test-button");
-    expect(btn.length).toBe(1);
-    expect(bag.spies.button_render).toBe(true);
-    expect(bag.spies.button_create).toBe(true);
-    expect(bag.spies.menu_create).toBe(undefined);
-    expect(bag.spies.menu_render).toBe(undefined);
-    expect(bag.popups.childNodes.length).toBe(0);
+  it("should render out the transcluded button, sending all props down to it", function() {
+    render();
+    expect(dom.button.firstChild.innerHTML).toBe(BUTTON_TEXT);
   });
 
   it("should render the menu when the clicked", function() {
-    ReactDOM.render(<bag.Menu text={"testing 123"} />, bag.container);
-    let [trigger] = bag.container.getElementsByClassName("test-button");
-    let [anchor]  = trigger.getElementsByTagName("a");
-    effroi.mouse.click(anchor);
-    expect(bag.spies.menu_create).toBe(true);
-    expect(bag.spies.menu_render).toBe(true);
-    expect(bag.popups.childNodes.length).toBe(1);
-    let [heading] = bag.popups.getElementsByTagName("h1");
-    expect(heading.innerHTML).toBe("testing 123");
+    render();
+    expect(dom.menu).toBe(null);
+    dom.button.click();
+    expect(dom.menu.firstChild.innerHTML).toBe(MENU_BODY_TEXT);
   });
 
   describe("having opened the popup", function() {
 
-    beforeEach(function() {
-      ReactDOM.render(<bag.Menu text={"testing 123"} />, bag.container);
-      let [trigger] = bag.container.getElementsByClassName("test-button");
-      let [anchor]  = trigger.getElementsByTagName("a");
-      effroi.mouse.click(anchor);
+    beforeEach(render);
 
+    beforeEach(function() {
+      dom.button.click();
       bag.distraction = document.createElement("div");
+      bag.distraction.style.position = "fixed";
+      bag.distraction.style.bottom = "0px";
+      bag.distraction.style.right = "0px";
+      bag.distraction.style.width = "10px";
+      bag.distraction.style.height = "10px";
       document.body.appendChild(bag.distraction);
     });
 
@@ -103,14 +101,9 @@ describe("hoc/ActionMenu test suite", function() {
     });
 
     it("should close it when clicking anywhere else on page", function() {
-      bag.distraction.style.position = "fixed";
-      bag.distraction.style.bottom = "0px";
-      bag.distraction.style.right = "0px";
-      bag.distraction.style.width = "10px";
-      bag.distraction.style.height = "10px";
-      expect(bag.popups.childNodes.length).toBe(1);
-      effroi.mouse.click(bag.distraction);
-      expect(bag.popups.childNodes.length).toBe(0);
+      expect(dom.menu.children.length).toBe(1);
+      bag.distraction.click();
+      expect(dom.menu).toBe(null);
     });
 
   });

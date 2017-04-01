@@ -1,3 +1,5 @@
+import util from "hoctable/utils";
+
 export interface Dimensions {
   width : number;
   height: number;
@@ -12,6 +14,10 @@ class MouseState {
   public start   : Position;
   public end     : Position;
   public current : Position;
+
+  constructor() {
+    this.start = this.end = this.current = { x: -1, y: -1 };
+  }
 }
 
 export interface ListenerCallback {
@@ -25,34 +31,58 @@ export interface WindowListener {
   context?   : any;
 }
 
-const ENTER_FULLSCREEN   = ["requestFullscreen" , "webkitRequestFullscreen" , "mozRequestFullScreen" , "msRequestFullscreen"];
-const EXIT_FULLSCREEN    = ["exitFullscreen"    , "webkitExitFullscreen"    , "mozCancelFullScreen"  , "msExitFullscreen"];
-const FULLSCREEN_ELEMENT = ["fullscreenElement" , "webkitFullscreenElement" , "mozFullScreenElement" , "msFullscreenElement"];
+interface Dictionary<T> { [key: string]: T; }
 
-let listeners : Array<WindowListener> = [];
-let mouse = new MouseState();
+interface InteralState {
+  mouse           : MouseState;
+  listeners       : Array<WindowListener>;
+  bound           : boolean;
+  document_events : Dictionary<EventListener>;
+}
 
-let bound = false;
+const ENTER_FULLSCREEN = [
+  "requestFullscreen",
+  "webkitRequestFullscreen",
+  "mozRequestFullScreen",
+  "msRequestFullscreen"
+];
 
-let uuid = (function() {
-  let pool = 0;
-  return function() : string { return `_${++pool}_`; };
-})();
+const EXIT_FULLSCREEN = [
+  "exitFullscreen", 
+  "webkitExitFullscreen",
+  "mozCancelFullScreen",
+  "msExitFullscreen"
+];
+
+const FULLSCREEN_ELEMENT = [
+  "fullscreenElement",
+  "webkitFullscreenElement",
+  "mozFullScreenElement",
+  "msFullscreenElement"
+];
+
+const internal_state : InteralState = {
+  mouse: new MouseState(),
+  listeners: [],
+  bound: false,
+  document_events: {},
+};
 
 function on(event_name : string, handler : ListenerCallback, context? : any) : string {
-  var id = uuid();
-  listeners.push({event_name, id, handler, context});
+  const id = util.uuid();
+  internal_state.listeners.push({ event_name, id, handler, context });
   return id;
 }
 
 function off(id : string) : string | number {
-  let count = listeners.length;
+  let { listeners } = internal_state;
 
-  for(let i = 0; i < count; i++) {
+  for(let i = 0, c = listeners.length; i < c; i++) {
     let l = listeners[i];
 
-    if(l.id !== id) 
+    if(l.id !== id) {
       continue;
+    }
 
     listeners.splice(i, 1);
     return id;
@@ -65,13 +95,16 @@ function trigger(evt : string, fn? : ListenerCallback) : ListenerCallback {
   let before = "function" === typeof fn ? fn : function() { };
 
   function handler(e : any) {
+    let { listeners } = internal_state;
+
     before(e);
 
     for(let i = 0, c = listeners.length; i < c; i++) {
-      let {event_name, handler, context} = listeners[i];
+      let { event_name, handler, context } = listeners[i];
 
-      if(evt === event_name)
+      if(evt === event_name) {
         handler.call(context, e);
+      }
     }
 
     return true;
@@ -81,33 +114,62 @@ function trigger(evt : string, fn? : ListenerCallback) : ListenerCallback {
 }
 
 function move(e) {
-  mouse.current = {x: e.clientX, y: e.clientY};
+  let { mouse } = internal_state;
+  mouse.current = { x: e.clientX, y: e.clientY };
 }
 
 function down(e) {
-  mouse.start = {x: e.clientX, y: e.clientY};
+  let { mouse } = internal_state;
+  mouse.start = { x: e.clientX, y: e.clientY };
 }
 
 function up(e) {
-  mouse.end = {x: e.clientX, y: e.clientY};
+  let { mouse } = internal_state;
+  mouse.end = { x: e.clientX, y: e.clientY };
 }
 
 function click(e) {
-  // if this was a drag event - do nothing
-  if(mouse.start.x !== mouse.end.x || mouse.start.y !== mouse.end.y) return;
+  let { mouse } = internal_state;
+  let { start, end } = mouse;
+
+  // If the mouse moved during the click, do nothing.
+  if(start.x !== end.x || start.y !== end.y) {
+    return;
+  }
+
   trigger("isoclick")(e);
 }
 
-function bind() {
-  if(bound) { return false; }
-  bound = true;
+function unbind() {
+  let { listeners } = internal_state;
+  listeners.length = 0;
 
-  document.addEventListener("click", trigger("click", click));
-  document.addEventListener("mousedown", trigger("mousedown", down));
-  document.addEventListener("mousemove", trigger("mousemove", move));
-  document.addEventListener("mouseup", trigger("mouseup", up));
-  document.addEventListener("keyup", trigger("keyup"));
-  document.addEventListener("keyup", trigger("keyup"));
+  for(let key in internal_state.document_events) {
+    let listener = internal_state.document_events[key];
+    document.removeEventListener(key, listener);
+  }
+
+  internal_state.bound = false;
+}
+
+internal_state.document_events["click"] = trigger("click", click);
+internal_state.document_events["mousedown"] = trigger("mousedown", down);
+internal_state.document_events["mousemove"] = trigger("mousemove", move);
+internal_state.document_events["mouseup"] = trigger("mouseup", up);
+internal_state.document_events["keyup"] = trigger("keyup");
+internal_state.document_events["keydown"] = trigger("keydown");
+
+function bind() {
+  if(internal_state.bound) {
+    return false;
+  }
+
+  internal_state.bound = true;
+
+  for(let key in internal_state.document_events) {
+    let listener = internal_state.document_events[key];
+    document.addEventListener(key, listener);
+  }
 
   let vendors = [
     "onfullscreenchange",
@@ -123,17 +185,17 @@ function bind() {
 }
 
 function dimensions() : Dimensions {
-  let {innerWidth: width, innerHeight: height} = window;
-  return {width, height};
+  let { innerWidth: width, innerHeight: height } = window;
+  return { width, height };
 }
 
 function scroll() : Position {
-  let {scrollX: x, scrollY: y} = window;
-  return {x, y};
+  let { scrollX: x, scrollY: y } = window;
+  return { x, y };
 }
 
 let fullscreen = {
-  
+
   open(el : Node) : boolean {
     let fn      = null;
     let vendors = (el === null ? EXIT_FULLSCREEN : ENTER_FULLSCREEN).slice(0);
@@ -167,4 +229,6 @@ let fullscreen = {
 
 };
 
-export default {on, off, bind, dimensions, scroll, fullscreen};
+export default {
+  on, off, bind, dimensions, scroll, fullscreen, unbind
+};

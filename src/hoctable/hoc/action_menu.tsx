@@ -70,11 +70,12 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
       // open the popup component with all of the props that were given to us
       let popup = Popups.open(<Popup {...this.props} close={close.bind(this)} />, placement);
 
-      if(popup === -1)
-        return;
+      if(popup === -1) {
+        throw new Error("unable to open popup, is service mounted?");
+      }
 
       // update our state with the popup id so we may close it on unmount
-      this.setState({popup});
+      this.setState({ popup });
     }
 
     render() {

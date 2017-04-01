@@ -18,6 +18,7 @@ module.exports = function(config) {
 
     "test/unit/**/*.js"        : ["babel"],
     "test/unit/**/*.jsx"       : ["babel"],
+    "test/helpers.js"          : ["babel"],
     "test/unit.js"             : ["babelexternal"]
   };
 
@@ -34,6 +35,8 @@ module.exports = function(config) {
 
     {pattern: "./example/fullstack/browser/js/**/*.js", included: false},
     {pattern: "./example/fullstack/browser/js/**/*.jsx", included: false},
+
+    {pattern: "./test/helpers.js", included: false},
 
     "./test/unit.js"
   ];
