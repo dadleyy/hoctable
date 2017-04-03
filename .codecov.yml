@@ -1,0 +1,6 @@
+coverage:
+  range: 10...100
+  status:
+    patch:
+      default:
+        enabled: no
