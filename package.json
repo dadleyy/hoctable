@@ -91,7 +91,7 @@
     "typescript": "2.2.2",
     "uglify-js": "2.8.21",
     "watch": "^1.0.1",
-    "webpack": "2.3.0",
+    "webpack": "2.3.3",
     "webpack-dev-server": "2.4.2"
   }
 }
