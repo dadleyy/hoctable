@@ -1,6 +1,6 @@
 import ActionMenu from "hoctable/hoc/action_menu";
-import {ItemSignals, ItemProps, DefaultButton} from "hoctable/hoc/select";
-import {PopupCloseCallback} from "hoctable/hoc/action_menu";
+import { ItemSignals, ItemProps, DefaultButton } from "hoctable/hoc/select";
+import { PopupCloseCallback } from "hoctable/hoc/action_menu";
 import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -76,8 +76,8 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
 
 }
 
-function Factory(ItemType : ItemTransclusion, ButtonComponent = DefaultButton) : ComposedSelect {
-  const Item = ItemFactory(ItemType);
+function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : ComposedSelect {
+  const ComposedItem = ItemFactory(Item);
 
   class MultiSelect extends React.Component<MultiSelectProps, any> {
     private options : Array<HTMLElement>;
@@ -114,7 +114,7 @@ function Factory(ItemType : ItemTransclusion, ButtonComponent = DefaultButton) :
           let option = option_list[i];
           let body   = document.createElement("div");
 
-          ReactDOM.render(<Item delegate={delegate} option={option} signals={signals} />, body);
+          ReactDOM.render(<ComposedItem delegate={delegate} option={option} signals={signals} />, body);
           list_el.appendChild(body);
           options.push(body);
         }
