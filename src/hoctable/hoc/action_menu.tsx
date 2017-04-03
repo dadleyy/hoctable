@@ -18,13 +18,19 @@ export interface PopupCloseCallback {
   () : void;
 }
 
+export const CLASSES = {
+  MENU                  : "hoctable__menu",
+  MENU_DEFAULT_BUTTON   : "hoctable__menu-default-button",
+  MENU_BUTTON_CONTAINER : "hoctable__menu-button-container",
+};
+
 function bottom(box : ClientRect) : number {
   return box.top + box.height;
 }
 
 export function DefaultButton(props : any) : React.ReactElement<any> {
-  let {text} = props;
-  return (<a className="hoctable__button">{text}</a>);
+  let { text } = props;
+  return (<a className={CLASSES.MENU_DEFAULT_BUTTON}>{text}</a>);
 };
 
 function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) : React.ComponentClass<P> {
@@ -35,11 +41,11 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
     constructor(props) {
       super(props);
       this.open  = this.open.bind(this);
-      this.state = {popup: null};
+      this.state = { popup: null };
     }
 
     componentWillUnmount() {
-      let {state} = this;
+      let { state } = this;
       Popups.close(state.popup);
     }
 
@@ -80,8 +86,8 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
 
     render() {
       return (
-        <div className="hoctable__action-menu">
-          <div className="hoctable__action-menu-trigger" onClick={this.open} ref="button">
+        <div className={CLASSES.MENU}>
+          <div className={CLASSES.MENU_BUTTON_CONTAINER} onClick={this.open} ref="button">
             <Button {...this.props} />
           </div>
         </div>

@@ -60,20 +60,14 @@ module.exports = function(config) {
     "karma-requirejs",
     "karma-typescript",
     "karma-babel-preprocessor",
-    "karma-typescript-preprocessor",
     "karma-phantomjs-launcher",
     "karma-chrome-launcher",
     "karma-narrow-reporter",
-    "karma-coverage",
     {"preprocessor:babelexternal": ["factory", external]},
     {"framework:jasmine-ajax": ["factory", jasmineAjax]}
   ];
 
   let options = { preprocessors, browsers, plugins, frameworks, files, reporters };
-
-  options.coverageReporter = {
-    reporters: [{type: 'lcov'}]
-  };
 
   options.babelPreprocessor = {
     options: {
