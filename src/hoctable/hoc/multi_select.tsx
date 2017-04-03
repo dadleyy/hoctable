@@ -89,15 +89,13 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : Com
     }
 
     transclude(list_el : HTMLElement) {
-      let {delegate, close} = this.props;
-      let {options} = this;
+      let { delegate, close } = this.props;
+      let { options } = this;
 
       if(!list_el)
         return;
 
-      let signals = {
-        selection() { setTimeout(close); }
-      };
+      let signals = { selection: this.forceUpdate.bind(this) };
 
       function render(option_list) {
         let {childNodes: children} = list_el;
