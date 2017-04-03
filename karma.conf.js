@@ -3,15 +3,15 @@ const path  = require("path");
 
 module.exports = function(config) {
   let browsers   = ["PhantomJS"];
-  let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "effroi"];
-  let reporters  = ["narrow", "coverage"];
+  let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "effroi", "karma-typescript"];
+  let reporters  = ["narrow", "karma-typescript"];
 
   let preprocessors = {
     "example/fullstack/browser/**/*.js"  : ["babel"],
     "example/fullstack/browser/**/*.jsx" : ["babel"],
 
-    "src/**/*.ts"              : ["typescript", "coverage"],
-    "src/**/*.tsx"             : ["typescript", "coverage"],
+    "src/**/*.ts"              : ["karma-typescript"],
+    "src/**/*.tsx"             : ["karma-typescript"],
 
     "test/unit/**/*.js"        : ["babel"],
     "test/unit/**/*.jsx"       : ["babel"],
@@ -58,6 +58,7 @@ module.exports = function(config) {
     "karma-effroi",
     "karma-jasmine",
     "karma-requirejs",
+    "karma-typescript",
     "karma-babel-preprocessor",
     "karma-typescript-preprocessor",
     "karma-phantomjs-launcher",
@@ -84,9 +85,15 @@ module.exports = function(config) {
     }
   };
 
-  options.typescriptPreprocessor = {
-    options: {
-      sourceMap         : false,
+  options.karmaTypescriptConfig = {
+    reports: {
+      "lcovonly": {
+        "directory": "./coverage",
+        "filename": "coverage.lcov"
+      }
+    },
+    compilerOptions: {
+      sourceMap         : true,
       target            : "ES5",
       module            : "amd",
       noImplicitAny     : false,

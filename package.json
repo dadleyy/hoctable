@@ -77,6 +77,7 @@
     "karma-narrow-reporter": "^2.0.1",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-requirejs": "1.1.0",
+    "karma-typescript": "^3.0.0",
     "karma-typescript-preprocessor": "0.3.1",
     "node-sass": "^4.0.0",
     "pug": "^2.0.0-beta7",
