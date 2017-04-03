@@ -9,10 +9,10 @@ function bytesToUuid(buf : Array<number>) : string {
   var i = 0;
 
   return hex_table[buf[i++]] + hex_table[buf[i++]] +
-         hex_table[buf[i++]] + hex_table[buf[i++]] + '-' +
-         hex_table[buf[i++]] + hex_table[buf[i++]] + '-' +
-         hex_table[buf[i++]] + hex_table[buf[i++]] + '-' +
-         hex_table[buf[i++]] + hex_table[buf[i++]] + '-' +
+         hex_table[buf[i++]] + hex_table[buf[i++]] + "-" +
+         hex_table[buf[i++]] + hex_table[buf[i++]] + "-" +
+         hex_table[buf[i++]] + hex_table[buf[i++]] + "-" +
+         hex_table[buf[i++]] + hex_table[buf[i++]] + "-" +
          hex_table[buf[i++]] + hex_table[buf[i++]] +
          hex_table[buf[i++]] + hex_table[buf[i++]] +
          hex_table[buf[i++]] + hex_table[buf[i++]];
@@ -30,4 +30,4 @@ export default function uuid() : string {
   }
 
   return bytesToUuid(rnd_buffer);
-};
+}

@@ -3,15 +3,15 @@ const path  = require("path");
 
 module.exports = function(config) {
   let browsers   = ["PhantomJS"];
-  let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "effroi", "karma-typescript"];
+  let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "karma-typescript"];
   let reporters  = ["narrow", "karma-typescript"];
 
   let preprocessors = {
     "example/fullstack/browser/**/*.js"  : ["babel"],
     "example/fullstack/browser/**/*.jsx" : ["babel"],
 
-    "src/**/*.ts"              : ["karma-typescript"],
-    "src/**/*.tsx"             : ["karma-typescript"],
+    "src/**/*.ts"              : ["tslint", "karma-typescript"],
+    "src/**/*.tsx"             : ["tslint", "karma-typescript"],
 
     "test/unit/**/*.js"        : ["babel"],
     "test/unit/**/*.jsx"       : ["babel"],
@@ -55,7 +55,7 @@ module.exports = function(config) {
   jasmineAjax.$inject = ["config.files"]
 
   let plugins = [
-    "karma-effroi",
+    "karma-tslint",
     "karma-jasmine",
     "karma-requirejs",
     "karma-typescript",
@@ -77,6 +77,12 @@ module.exports = function(config) {
     filename: function (file) {
       return file.originalPath.replace(/\.jsx$/, ".js");
     }
+  };
+
+  options.tslintPreprocessor = {
+    configuration: "./tslint.json",
+    formatter: "prose",
+    stopOnFailure: true
   };
 
   options.karmaTypescriptConfig = {

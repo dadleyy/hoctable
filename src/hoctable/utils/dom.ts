@@ -1,17 +1,18 @@
-export function addClass(element : HTMLElement, class_name : string) {
+export function addClass(element : HTMLElement, class_name : string) : void {
   let {className: current_value} = element;
-  let current_list = current_value.split(" ").filter(function(v) { return v.length >= 1; });
+  let current_list = current_value.split(" ").filter(function(v) : boolean { return v.length >= 1; });
 
-  if(current_list.indexOf(class_name) !== -1)
+  if(current_list.indexOf(class_name) !== -1) {
     return;
+  }
 
   current_list.push(class_name);
   element.className = current_list.join(" ");
 }
 
-export function removeClass(element : HTMLElement, class_name : string) {
-  let {className: current_value} = element;
-  let current_list = current_value.split(" ").filter(function(v) { return v.length >= 1 && v !== class_name; });
+export function removeClass(element : HTMLElement, class_name : string) : void {
+  let { className: attr } = element;
+  let current_list = attr.split(" ").filter(function(v) : boolean { return v.length >= 1 && v !== class_name; });
   element.className = current_list.join(" ");
 }
 
@@ -22,8 +23,8 @@ function remove(element : Node) : Node {
 function contains(target : Node, child : Node) : boolean {
   let head = child.parentNode;
 
-  while(head != null) {
-    if (head == target) return true;
+  while(head) {
+    if (head === target) return true;
     head = head.parentNode;
   }
 

@@ -5,13 +5,8 @@ import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-export interface OptionsCallback {
-  (results : Array<any>) : void;
-}
-
-export interface ToggledCallback {
-  () : void;
-}
+export type OptionsCallback = (results : Array<any>) => void;
+export type ToggledCallback = () => void;
 
 export interface MultiSelectDelegate {
   options    : (callback : OptionsCallback) => void;
@@ -29,32 +24,33 @@ export type MultiSelectItemProps = ItemProps<MultiSelectDelegate>;
 export type ItemTransclusion     = React.ComponentClass<MultiSelectItemProps>;
 export type ComposedSelect       = React.ComponentClass<MultiSelectProps>;
 
-export const CLASSES : { [key:string]:string; } = {
+export const CLASSES = {
   MULTISELECT_ITEM           : "hoctable__multiselect-item",
   MULTISELECT_ITEM_TOGGLE    : "hoctable__multiselect-item-toggle",
   MULTISELECT_ITEM_TEXT      : "hoctable__multiselect-item-text",
   MULTISELECT                : "hoctable__multiselect"
-}
+};
 
 function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemTransclusion {
 
   class Item extends React.Component<MultiSelectItemProps, any> {
 
-    render() {
+    render() : React.ReactElement<any> {
       let { props } = this;
       let { delegate, option, signals } = props;
       let selected = delegate.isSelected(option);
 
-      function finished() {
+      function finished() : void {
         signals.selection();
       }
 
-      function select() {
+      function select() : void {
         return delegate.toggle(option, finished);
       }
 
       if(Inner) {
-        let content = <Inner {...props} />
+        let content = <Inner {...props} />;
+
         return (<div className={CLASSES["MULTISELECT_ITEM"]} onClick={select}>{content}</div>);
       }
 
@@ -88,26 +84,29 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : Com
       this.transclude = this.transclude.bind(this);
     }
 
-    transclude(list_el : HTMLElement) {
+    transclude(list_el : HTMLElement) : void {
       let { delegate, close } = this.props;
       let { options } = this;
 
-      if(!list_el)
+      if(!list_el) {
         return;
+      }
 
       let signals = { selection: this.forceUpdate.bind(this) };
 
-      function render(option_list) {
-        let {childNodes: children} = list_el;
+      function render(option_list : Array<any>) : void {
+        let { childNodes: children } = list_el;
 
-        // cleanup previous tbody elements
+        // Cleanup previously rendered options
         while(options.length) {
           let [next] = options.splice(0, 1);
           ReactDOM.unmountComponentAtNode(next);
           utils.dom.remove(next);
         }
 
-        // see the hoc table
+        /* Iterate over the options returned by the delegate, rendering them into the list element reference provided
+         * by react during the `ref` callback.
+         */
         for(let i = 0, c = option_list.length; i < c; i++) {
           let option = option_list[i];
           let body   = document.createElement("div");
@@ -121,7 +120,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : Com
       delegate.options(render);
     }
 
-    render() {
+    render() : React.ReactElement<any> {
       return (<div className={CLASSES["MULTISELECT"]} ref={this.transclude}></div>);
     }
 

@@ -4,18 +4,13 @@ import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-export interface SelectCallback {
-  () : void;
-}
-
-export interface OptionsCallback {
-  (options : Array<any>) : void;
-}
+export type SelectCallback = () => void;
+export type OptionsCallback = (options : Array<any>) => void;
 
 export interface SingleSelectDelegate {
   translate : (item : any) => string;
   select    : (item : any, callback : SelectCallback) => void;
-  options   : (callback : OptionsCallback) => void
+  options   : (callback : OptionsCallback) => void;
 }
 
 export interface ItemSignals {
@@ -44,25 +39,25 @@ export const CLASSES = {
   SELECT_BUTTON  : "hoctable__select-toggle"
 };
 
-export function DefaultButton({delegate}) {
+export function DefaultButton({delegate}) : React.ReactElement<any> {
   return (<a className={CLASSES["SELECT_BUTTON"]}>{delegate.text()}</a>);
 }
 
-export function DefaultLoading() {
+export function DefaultLoading() : React.ReactElement<any> {
   return (<div className={CLASSES["SELECT_LOADING"]}><p>loading</p></div>);
 }
 
 function ItemFactory(Inner : ItemComponent) : ItemComponent {
 
-  function Item(props : SingleSelectItemProps) {
+  function Item(props : SingleSelectItemProps) : React.ReactElement<any> {
     let {delegate, option, signals} = props;
     let content = Inner ? <Inner {...props} /> : (<p>{delegate.translate(option)}</p>);
 
-    function finished() {
+    function finished() : void {
       signals.selection();
     }
 
-    function select() {
+    function select() : void {
       return delegate.select(option, finished);
     }
 
@@ -85,10 +80,10 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       this.transclude = this.transclude.bind(this);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount() : void {
       let { options } = this;
 
-      // cleanup previous tbody elements
+      // Cleanup previously rendered items.
       while(options.length) {
         let [ next ] = options.splice(0, 1);
 
@@ -103,7 +98,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       this.canceled = true;
     }
 
-    transclude(list_el : HTMLElement) {
+    transclude(list_el : HTMLElement) : void {
       let { delegate, close } = this.props;
       let { options } = this;
 
@@ -112,10 +107,10 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       }
 
       let signals = {
-        selection() { setTimeout(close); }
+        selection() : void { setTimeout(close); }
       };
 
-      function render(option_list : Array<any>) {
+      function render(option_list : Array<any>) : void {
         let { canceled } = this;
         let { childNodes: children } = list_el;
 
@@ -131,7 +126,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
           utils.dom.remove(next);
         }
 
-        // see the hoc table
+        // Iterate over the items provided by the delegate, rendering them.
         for(let i = 0, c = option_list.length; i < c; i++) {
           let option = option_list[i];
           let body   = document.createElement("div");
@@ -154,7 +149,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       delegate.options(render.bind(this));
     }
 
-    render() {
+    render() : React.ReactElement<any> {
       return (<div className={CLASSES["SELECT"]} ref={this.transclude}></div>);
     }
 

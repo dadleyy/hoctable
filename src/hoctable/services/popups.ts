@@ -8,10 +8,6 @@ export interface PopupPlacement {
   top    : number;
 }
 
-export interface PopupGlobalCloseEvent {
-  target : Node
-}
-
 export interface PopupHandle {
   id   : string;
   node : HTMLElement;
@@ -20,7 +16,7 @@ export interface PopupHandle {
 export type PopupHandleReference = string | number;
 
 export const GUTTER_WIDTH = 10;
-export const SYNC_WAIT_TIME = 0;
+export const SYNC_WAIT_TIME = 3;
 
 class SyncGroup {
   private timeout : number | null;
@@ -30,7 +26,7 @@ class SyncGroup {
     this.pool = [];
   }
 
-  add(identifier : string) {
+  add(identifier : string) : void {
     let { timeout } = this;
 
     this.pool.push(identifier);
@@ -42,23 +38,27 @@ class SyncGroup {
     this.timeout = setTimeout(this.flush.bind(this), SYNC_WAIT_TIME);
   }
 
-  flush() {
+  // After every addition of a new popup, this function will clear the list of opening poups.
+  flush() : void {
     this.pool.length = 0;
   }
 
-  // This function is used during click events to 
+  /* This function is used during click events to check if the click event is associated with a popup that was opened
+   * in the same click event process.
+   */
   release(identifier : string) : boolean {
     let index = this.pool.indexOf(identifier);
+
     return index !== -1 ? !!this.pool.splice(index, 1) : false;
   }
 
 }
 
 class InteralState {
-  public root          : Node;
-  public popups        : Array<PopupHandle>;
-  public subscriptions : Array<string>;
-  public sync_group    : SyncGroup;
+  root          : Node;
+  popups        : Array<PopupHandle>;
+  subscriptions : Array<string>;
+  sync_group    : SyncGroup;
 
   constructor() {
     this.popups = [];
@@ -89,7 +89,6 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
     style.left = `${placement.left}px`;
   }
 
-
   // Create the unique id for this popup and the container it will be rendered into.
   let id = util.uuid();
   let node = util.dom.create("div", style);
@@ -101,6 +100,7 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
   // Add a reference to our internal state manager and send the id to the sync group.
   popups.push({ id, node });
   sync_group.add(id);
+
   return id;
 }
 
@@ -114,7 +114,7 @@ function close(popup_id : PopupHandleReference) : number {
       continue;
     }
 
-    let dom_node = ReactDOM.findDOMNode(node)
+    let dom_node = ReactDOM.findDOMNode(node);
     ReactDOM.unmountComponentAtNode(dom_node);
     dom_node.parentNode.removeChild(dom_node);
     open_popups.splice(i, 1);
@@ -125,7 +125,7 @@ function close(popup_id : PopupHandleReference) : number {
   return -1;
 }
 
-function closeOpen(trigger : PopupGlobalCloseEvent) : number {
+function closeOpen(trigger : Event) : number {
   let { popups: open_popups, sync_group } = internal_state;
   let { target } = trigger;
 
@@ -135,7 +135,7 @@ function closeOpen(trigger : PopupGlobalCloseEvent) : number {
     let dom_node = ReactDOM.findDOMNode(node);
 
     // If this node is inside the target of the click - continue
-    if(sync_group.release(id) || util.dom.contains(dom_node, target)) {
+    if(sync_group.release(id) || util.dom.contains(dom_node, target as Node)) {
       continue;
     }
 
@@ -146,7 +146,7 @@ function closeOpen(trigger : PopupGlobalCloseEvent) : number {
   return 0;
 }
 
-function mount(target) {
+function mount(target) : void {
   let { subscriptions } = internal_state;
   internal_state.root = target;
 
@@ -157,7 +157,7 @@ function mount(target) {
   util.replace(subscriptions, [Viewport.on("isoclick", closeOpen)]);
 }
 
-function unmount() {
+function unmount() : void {
   let { popups: open_popups } = internal_state;
 
   internal_state.root = null;
