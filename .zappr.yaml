@@ -1,0 +1,4 @@
+commit:
+  message:
+    patterns:
+      - "^\\[a\\-z\\]"

@@ -17,6 +17,7 @@ module.exports = function(config) {
     "test/unit/**/*.js"  : ["babel"],
     "test/unit/**/*.jsx" : ["babel"],
     "test/helpers.js"    : ["babel"],
+    "test/data/**/*.js"  : ["babel"],
     "test/unit.js"       : ["babelexternal"]
   };
 
@@ -24,6 +25,8 @@ module.exports = function(config) {
     "./node_modules/babel-polyfill/dist/polyfill.js",
     {pattern: "./node_modules/react/dist/react.js", included: false},
     {pattern: "./node_modules/react-dom/dist/react-dom.js", included: false},
+
+    {pattern: "./test/data/**/*.js", included: false},
 
     {pattern: "./test/unit/**/*.spec.js", included: false},
     {pattern: "./test/unit/**/*.spec.jsx", included: false},

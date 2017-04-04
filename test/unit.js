@@ -35,7 +35,7 @@ require.config({
 
   paths    : {
     "example"      : "/base/example/fullstack/browser/js",
-    "fixtures"     : "/base/test/fixtures",
+    "fixtures"     : "/base/test/data",
     "test_helpers" : "/base/test/helpers",
     "react"        : "/base/node_modules/react/dist/react",
     "react-dom"    : "/base/node_modules/react-dom/dist/react-dom",
