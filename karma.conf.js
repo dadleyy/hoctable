@@ -5,18 +5,19 @@ module.exports = function(config) {
   let browsers   = ["PhantomJS"];
   let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "karma-typescript"];
   let reporters  = ["narrow", "karma-typescript"];
+  let ts_preprocessors = process.env["DISABLE_LINT"] ? ["karma-typescript"] : ["tslint", "karma-typescript"];
 
   let preprocessors = {
     "example/fullstack/browser/**/*.js"  : ["babel"],
     "example/fullstack/browser/**/*.jsx" : ["babel"],
 
-    "src/**/*.ts"              : ["tslint", "karma-typescript"],
-    "src/**/*.tsx"             : ["tslint", "karma-typescript"],
+    "src/**/*.ts"  : ts_preprocessors,
+    "src/**/*.tsx" : ts_preprocessors,
 
-    "test/unit/**/*.js"        : ["babel"],
-    "test/unit/**/*.jsx"       : ["babel"],
-    "test/helpers.js"          : ["babel"],
-    "test/unit.js"             : ["babelexternal"]
+    "test/unit/**/*.js"  : ["babel"],
+    "test/unit/**/*.jsx" : ["babel"],
+    "test/helpers.js"    : ["babel"],
+    "test/unit.js"       : ["babelexternal"]
   };
 
   let files = [

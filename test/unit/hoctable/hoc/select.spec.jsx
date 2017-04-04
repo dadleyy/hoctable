@@ -24,11 +24,15 @@ describe("hoc/Select test suite", function() {
   class Delegate {
 
     text() {
-      return bag.text;
+      return bag.selected_item ? bag.selected_item.name : bag.text;
     }
 
     options(callback) {
-      bag.callback = callback;
+      bag.callbacks.options = callback;
+    }
+
+    select(item, callback) {
+      bag.callbacks.select = { item, callback };
     }
 
   }
@@ -77,6 +81,7 @@ describe("hoc/Select test suite", function() {
 
   beforeEach(function() {
     bag.spies = { };
+    bag.callbacks = { };
   });
 
   function render() {
@@ -128,7 +133,7 @@ describe("hoc/Select test suite", function() {
       describe("having been sent options via the delegate", function() {
 
         beforeEach(function() {
-          bag.callback(OPTIONS);
+          bag.callbacks.options(OPTIONS);
         });
 
         it("should render out the item components", function() {
@@ -139,6 +144,39 @@ describe("hoc/Select test suite", function() {
             let { name } = OPTIONS[i];
             expect(innerHTML).toBe(name);
           }
+
+        });
+
+        describe("having selected an option via click", function() {
+
+          beforeEach(function() {
+            let [ first ] = dom.options;
+            first.click();
+          });
+
+          it("should have called the \'select\' function on the delegate", function() {
+            let { item } = bag.callbacks.select;
+            expect(item.name).toBe(OPTIONS[0].name);
+          });
+
+          describe("having called the select callback after sending the item", function() {
+
+            it("should now render the item\'s text in the button", function() {
+              let { callback, item } = bag.callbacks.select;
+              bag.selected_item = item;
+              callback();
+              expect(dom.default_button.innerHTML).toBe(OPTIONS[0].name);
+            });
+
+            it("should have closed the popup", function() {
+              let { callback, item } = bag.callbacks.select;
+              bag.selected_item = item;
+              callback();
+              expect(dom.default_button.innerHTML).toBe(OPTIONS[0].name);
+              expect(dom.menu_body).toBe(null);
+            });
+
+          });
 
         });
 
@@ -181,7 +219,7 @@ describe("hoc/Select test suite", function() {
       render();
       dom.default_button.click();
       expect(dom.transcluded_loader.firstChild.innerHTML).toBe(LOADER_TEXT);
-      bag.callback([{ }]);
+      bag.callbacks.options([{ }]);
       expect(dom.transcluded_loader).toBe(null);
     });
 

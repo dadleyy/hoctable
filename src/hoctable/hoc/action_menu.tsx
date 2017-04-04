@@ -71,7 +71,7 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
 
       function close() : void {
         Popups.close(popup);
-        this.setState({popup: null});
+        this.setState({ popup: null });
       }
 
       // Open the popup component with all of the props that were given to us

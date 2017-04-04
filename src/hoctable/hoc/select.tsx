@@ -107,7 +107,11 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       }
 
       let signals = {
-        selection() : void { setTimeout(close); }
+        selection: () => {
+          this.setState({ updated: Date.now() });
+
+          return close();
+        }
       };
 
       function render(option_list : Array<any>) : void {
