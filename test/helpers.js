@@ -1,6 +1,8 @@
 const { default: Viewport } = require("hoctable/services/window");
 const { default: Popups }   = require("hoctable/services/popups");
 
+const ReactDOM = require("react-dom");
+
 function create(type, relationship_key) {
   let element = document.createElement(type);
   element.setAttribute("data-rel", relationship_key);
@@ -20,6 +22,7 @@ const dom = {
 
   teardown() {
     let { dom } = this;
+    ReactDOM.unmountComponentAtNode(dom.container);
     Popups.unmount();
     document.body.removeChild(dom.popups);
     document.body.removeChild(dom.container);

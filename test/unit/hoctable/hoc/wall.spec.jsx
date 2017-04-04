@@ -1,14 +1,18 @@
-const {default: Wall, CLASSES} = require("hoctable/hoc/wall");
+const { default: Wall, CLASSES } = require("hoctable/hoc/wall");
 const React = require("react");
+const helpers = require("test_helpers");
+const people = require("fixtures/people");
 
 describe("hoc/Wall test suite", function() {
 
-  let bag = {};
+  const bag = { };
 
-  class Preview extends React.Component {
+  function Preview(props) {
+    return (<div data-rel="preview-item"></div>);
   }
 
-  class Card extends React.Component {
+  function Card(props) {
+    return (<div data-rel="card-item"></div>);
   }
 
   class Delegate {
@@ -17,8 +21,7 @@ describe("hoc/Wall test suite", function() {
     }
 
     items(callback) {
-      bag.spies.items = true;
-      bag.items(callback);
+      bag.callbacks.items = callback;
     }
 
   }
@@ -26,38 +29,30 @@ describe("hoc/Wall test suite", function() {
   let dom = {
 
     get controls() {
-      return bag.container.getElementsByClassName(CLASSES.WALL_CONTROLS);
+      return bag.dom.container.getElementsByClassName(CLASSES.WALL_CONTROLS);
     },
 
     get viewport() {
-      return bag.container.getElementsByClassName(CLASSES.WALL_VIEWPORT);
+      return bag.dom.container.getElementsByClassName(CLASSES.WALL_VIEWPORT);
+    },
+
+    get items() {
+      return bag.dom.container.querySelectorAll("[data-rel=preview-item]");
     }
 
   };
 
+  beforeEach(helpers.dom.setup.bind(bag));
+  afterEach(helpers.dom.teardown.bind(bag));
+
   beforeEach(function() {
-    bag = {
-      spies : { }, 
-      store : { items: [] }
-    };
-
-    bag.items = function(callback) {
-      callback(bag.store.items);
-    };
-
-    bag.container = document.createElement("div");
+    bag.callbacks = { };
     bag.Wall      = Wall(Preview, Card);
     bag.delegate  = new Delegate();
-
-    document.body.appendChild(bag.container);
-  });
-
-  afterEach(function() {
-    document.body.removeChild(bag.container);
   });
 
   function render() {
-    ReactDOM.render(<bag.Wall delegate={bag.delegate} />, bag.container);
+    ReactDOM.render(<bag.Wall delegate={bag.delegate} />, bag.dom.container);
   }
 
   describe("without valid delegate", function() {
@@ -71,24 +66,38 @@ describe("hoc/Wall test suite", function() {
       try {
         render();
       } catch(e) { err = e; }
-      expect(err === null).toBe(false);
+      expect(err).not.toBe(null);
     });
 
   });
 
-  it("should provide the data loaded callback to the delegate in load", function() { 
-    let cb = null;
-    bag.items = function(c) { cb = c; };
-    render();
-    expect(typeof cb === "function").toBe(true);
-  });
+  describe("rendering the wall component", function() {
 
-  it("should render out the controls + viewport", function() { 
-    expect(dom.controls.length).toBe(0);
-    expect(dom.viewport.length).toBe(0);
-    render();
-    expect(dom.controls.length).toBe(1);
-    expect(dom.viewport.length).toBe(1);
+    beforeEach(render);
+
+    it("should provide the data loaded callback to the delegate in load", function() { 
+      expect(typeof bag.callbacks.items).toBe("function");
+    });
+
+    it("should render out the controls + viewport", function() { 
+      expect(dom.controls.length).toBe(1);
+      expect(dom.viewport.length).toBe(1);
+    });
+
+
+    describe("having been provided an array of items via the delegate", function() {
+
+      beforeEach(function() {
+        bag.items = people.splice(0, 10);
+        bag.callbacks.items(bag.items);
+      });
+
+      it("should render out an item component per item in the sent array", function() {
+        expect(dom.items.length).toBe(bag.items.length);
+      });
+
+    });
+
   });
 
 

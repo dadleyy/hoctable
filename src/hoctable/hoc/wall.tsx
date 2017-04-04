@@ -374,7 +374,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       this.subscriptions = {};
 
       let launch = () : void => {
-        let {state, timings} = this;
+        let { state, timings } = this;
         timings.interval(cycle, this, CYCLE_INTERVAL);
         this.setState({opening: false, fullscreen: true});
       };
@@ -420,7 +420,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     componentWillUnmount() : void {
-      let {subscriptions, timings, renderer} = this;
+      let { subscriptions, timings, renderer } = this;
       renderer.clear();
       timings.stop();
       Viewport.off(subscriptions["fullscreen"]);
@@ -538,7 +538,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       let styles = {};
 
       function load(list_el) : void {
-        let [latest]  = renderers;
+        let [ latest ]  = renderers;
         let left = refs["left"] as HTMLElement;
         let right = refs["right"] as HTMLElement;
 
