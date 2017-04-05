@@ -57,6 +57,18 @@ const FULLSCREEN_ELEMENT = [
   "msFullscreenElement"
 ];
 
+const FULLSCREEN_ERROR = [
+  "fullscreenerror",
+  "webkitfullscreenerror",
+  "mozfullscreenerror"
+];
+
+const FULLSCREEN_CHANGE = [
+  "fullscreenchange",
+  "webkitfullscreenchange",
+  "mozfullscreenchange"
+];
+
 const internal_state : InteralState = {
   mouse: new MouseState(),
   listeners: [],
@@ -154,6 +166,22 @@ internal_state.document_events["mousemove"] = trigger("mousemove", move);
 internal_state.document_events["mouseup"] = trigger("mouseup", up);
 internal_state.document_events["keyup"] = trigger("keyup");
 internal_state.document_events["keydown"] = trigger("keydown");
+
+for(let i = 0, c = ENTER_FULLSCREEN.length; i < c; i++) {
+  let enter_fn = ENTER_FULLSCREEN[i];
+
+  if(typeof document.body[enter_fn] !== "function") {
+    continue;
+  }
+
+  let change_event = FULLSCREEN_CHANGE[i];
+  let error_event = FULLSCREEN_ERROR[i];
+
+  if(change_event && error_event) {
+    internal_state.document_events[change_event] = trigger("fullscreenchange");
+    internal_state.document_events[error_event] = trigger("fullscreenerror");
+  }
+}
 
 function bind() : void {
   const { bound } = internal_state;

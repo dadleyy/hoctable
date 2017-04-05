@@ -1,31 +1,9 @@
 const { default: Viewport } = require("hoctable/services/window");
+const { mouse } = require("test_helpers");
 
 describe("services/window test suite", function() {
 
   const bag = { };
-
-  function mouse(type, x, y) {
-    let event = document.createEvent("MouseEvents");
-    event.initMouseEvent(type, true, true, window, 0, 0, 0, x, y, false, false, false, false, 0, null);
-
-    function send() {
-      document.dispatchEvent(event);
-    }
-
-    return { event, send };
-  }
-
-  mouse.down = function(x, y) {
-    return mouse("mousedown", x, y);
-  };
-
-  mouse.click = function(x, y) {
-    return mouse("click", x, y);
-  };
-
-  mouse.up = function(x, y) {
-    return mouse("mouseup", x, y);
-  };
 
   beforeEach(Viewport.bind);
   afterEach(Viewport.unbind);
