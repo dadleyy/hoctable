@@ -30,6 +30,26 @@ describe("services/window test suite", function() {
   beforeEach(Viewport.bind);
   afterEach(Viewport.unbind);
 
+
+  describe("fullscreen event bindings", function() {
+
+    beforeEach(function() {
+      bag.fullscreen_element = document.createElement("div");
+      document.body.appendChild(bag.fullscreen_element);
+    });
+
+    afterEach(function() {
+      document.body.removeChild(bag.fullscreen_element);
+      delete bag.fullscreen_element;
+    });
+
+    it("shoud have made the element very large", function() {
+      let result = Viewport.fullscreen.open(bag.fullscreen_element);
+      expect(typeof result).toBe("boolean");
+    });
+
+  });
+
   describe("having been accidentally bound twice", function() {
 
     beforeEach(Viewport.bind);

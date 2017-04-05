@@ -169,18 +169,6 @@ function bind() : void {
     let listener = internal_state.document_events[key];
     document.addEventListener(key, listener);
   }
-
-  let vendors = [
-    "onfullscreenchange",
-    "onwebkitfullscreenchange",
-    "onmozfullscreenchange",
-    "onmsfullscreenchange"
-  ];
-
-  for(let i = 0, c = vendors.length; i < c; i++) {
-    let name = vendors[i];
-    document[name] = trigger("fullscreen");
-  }
 }
 
 function dimensions() : Dimensions {
