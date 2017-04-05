@@ -43,9 +43,18 @@ describe("services/window test suite", function() {
       delete bag.fullscreen_element;
     });
 
-    it("shoud have made the element very large", function() {
+    it("should return a boolean when attempting to open an element", function() {
       let result = Viewport.fullscreen.open(bag.fullscreen_element);
       expect(typeof result).toBe("boolean");
+    });
+
+    it("should return a boolean when attempting to open null", function() {
+      let result = Viewport.fullscreen.open(null);
+      expect(typeof result).toBe("boolean");
+    });
+
+    it("should return null when attempting to get the current element having not opened anything", function() {
+      expect(Viewport.fullscreen.current).toBe(null);
     });
 
   });

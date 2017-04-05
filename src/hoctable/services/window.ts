@@ -211,7 +211,7 @@ let fullscreen = {
     let vendors = FULLSCREEN_ELEMENT.slice(0);
 
     while(!result && vendors.length) {
-      result = document[vendors.shift()];
+      result = document[vendors.shift()] || null;
     }
 
     return result;
