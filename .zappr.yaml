@@ -1,4 +1,5 @@
 commit:
   message:
     patterns:
-      - "^\\[a\\-z\\]"
+      - "^[a-z]"
+      - "^chore\\(\\S+\\)"
