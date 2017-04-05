@@ -7,7 +7,12 @@ describe("services/window test suite", function() {
   function mouse(type, x, y) {
     let event = document.createEvent("MouseEvents");
     event.initMouseEvent(type, true, true, window, 0, 0, 0, x, y, false, false, false, false, 0, null);
-    return event;
+
+    function send() {
+      document.dispatchEvent(event);
+    }
+
+    return { event, send };
   }
 
   mouse.down = function(x, y) {
@@ -22,12 +27,28 @@ describe("services/window test suite", function() {
     return mouse("mouseup", x, y);
   };
 
-  beforeEach(function() {
-    Viewport.bind();
-  });
+  beforeEach(Viewport.bind);
+  afterEach(Viewport.unbind);
 
-  afterEach(function() {
-    Viewport.unbind();
+  describe("having been accidentally bound twice", function() {
+
+    beforeEach(Viewport.bind);
+
+    beforeEach(function() {
+      bag.clicks = 0;
+    });
+
+    function handle() {
+      bag.clicks++;
+    }
+
+    it("should not be executing listeners twice", function() {
+      var a = Viewport.on("click", handle);
+      mouse.click(0,0).send();
+      expect(bag.clicks).toBe(1);
+      Viewport.off(a);
+    });
+
   });
 
   it("should return a unique id when adding event listeners", function() {
@@ -35,7 +56,6 @@ describe("services/window test suite", function() {
     expect(typeof a).toBe("string");
     Viewport.off(a);
   });
-
 
   describe("iso click event handlers", function() {
 
@@ -54,9 +74,10 @@ describe("services/window test suite", function() {
     });
 
     it("should call the iso click handler when mouse not moved", function() {
-      document.dispatchEvent(mouse.down(0,0));
-      document.dispatchEvent(mouse.up(0,0));
-      document.dispatchEvent(mouse.click(0,0));
+      mouse.down(0,0).send();
+      mouse.up(0,0).send();
+      mouse.click(0,0).send();
+
       expect(bag.spies.isoclick).toBe(true);
     });
 
