@@ -1,7 +1,7 @@
 import Table from "./hoctable/hoc/table";
 import { ColumnProps, TableProps } from "./hoctable/hoc/table";
 
-import ActionMenu from "./hoctable/hoc/action_menu";
+import Menu from "./hoctable/hoc/menu";
 
 import Select from "./hoctable/hoc/select";
 import { SingleSelectDelegate, ItemProps, SingleSelectProps } from "./hoctable/hoc/select";
@@ -20,7 +20,7 @@ import { Position, Dimensions } from "./hoctable/services/window";
 
 import utils from "./hoctable/utils";
 
-const hoc      = { MultiSelect, Wall, ActionMenu, Table, Select };
+const hoc      = { MultiSelect, Wall, Menu, Table, Select };
 const services = { Popups, Viewport };
 
 export { hoc, services };

@@ -1,6 +1,6 @@
-import ActionMenu from "hoctable/hoc/action_menu";
+import MenuFactory from "hoctable/hoc/menu";
 import { ItemSignals, ItemProps, DefaultButton } from "hoctable/hoc/select";
-import { PopupCloseCallback } from "hoctable/hoc/action_menu";
+import { PopupCloseCallback } from "hoctable/hoc/menu";
 import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -126,7 +126,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : Com
 
   }
 
-  return ActionMenu<MultiSelectProps>(MultiSelect, ButtonComponent);
+  return MenuFactory<MultiSelectProps>(MultiSelect, ButtonComponent);
 
 }
 

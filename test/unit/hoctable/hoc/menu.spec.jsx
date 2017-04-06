@@ -1,5 +1,5 @@
-const { default: ActionMenu } = require("hoctable/hoc/action_menu");
-const { CLASSES }             = require("hoctable/hoc/action_menu");
+const { default: ActionMenu } = require("hoctable/hoc/menu");
+const { CLASSES }             = require("hoctable/hoc/menu");
 const helpers                 = require("test_helpers");
 const React                   = require("react");
 

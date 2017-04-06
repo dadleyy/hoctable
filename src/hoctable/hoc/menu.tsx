@@ -32,7 +32,7 @@ export function DefaultButton(props : any) : React.ReactElement<any> {
   return (<a className={CLASSES.MENU_DEFAULT_BUTTON}>{text}</a>);
 }
 
-function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) : React.ComponentClass<P> {
+function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) : React.ComponentClass<P> {
 
   class Menu extends React.Component<P, MenuState> {
     private popup : string;
@@ -101,4 +101,4 @@ function ActionMenu<P>(Popup : React.ComponentClass<any>, Button = DefaultButton
 
 }
 
-export default ActionMenu;
+export default Factory;

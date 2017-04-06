@@ -1,5 +1,5 @@
-import ActionMenu from "hoctable/hoc/action_menu";
-import { PopupCloseCallback } from "hoctable/hoc/action_menu";
+import MenuFactory from "hoctable/hoc/menu";
+import { PopupCloseCallback } from "hoctable/hoc/menu";
 import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -160,7 +160,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
   }
 
   // The select is really just a menu who's body is a little bit smarter.
-  return ActionMenu<SingleSelectProps>(Menu, ButtonComponent);
+  return MenuFactory<SingleSelectProps>(Menu, ButtonComponent);
 
 }
 
