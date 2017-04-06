@@ -9,7 +9,12 @@ function send(url, params) {
     xhr.setRequestHeader(ACCESS_TOKEN_HEADER, atob(access_token));
   }
 
-  return qwest.get(url,  params, { cache: true }, preflight);
+  function status(xhr, result) {
+    const { status: code } = xhr;
+    return code !== 200 ? defer.reject(result) : defer.resolve(result);
+  }
+
+  return qwest.get(url,  params, { cache: true }, preflight).then(status);
 }
 
 class Client {
@@ -18,17 +23,24 @@ class Client {
     this.credentials = credentials;
   }
 
+  cities(query) {
+    const { api_base_url } = this.credentials;
+    const url = `${api_base_url}/cities`;
+
+    function success(result) {
+      let { location_suggestions } = result;
+      return location_suggestions ? defer.resolve(result) : defer.reject(new Error("invalid response"));
+    }
+
+    const params = { q: query };
+    return send.call(this, url, params).then(success);
+  }
+
   categories(params = { }) {
     let { access_token, api_base_url } = this.credentials;
     let url = `${api_base_url}/categories`;
 
-    function success(xhr, result) {
-      const { status } = xhr;
-
-      if(status !== 200) {
-        return defer.reject(new Error("invalid zomato response code"))
-      }
-
+    function success(result) {
       return result && result.categories ? defer.resolve(result) : defer.reject(new Error("invalid response"));
     }
 
@@ -39,13 +51,7 @@ class Client {
     let { api_base_url } = this.credentials;
     let url = `${api_base_url}/search`;
 
-    function success(xhr, result) {
-      const { status } = xhr;
-
-      if(status !== 200) {
-        return defer.reject(new Error("invalid zomato response code"))
-      }
-
+    function success(result) {
       return result && result.restaurants ? defer.resolve(result) : defer.reject(new Error("invalid response"));
     }
 

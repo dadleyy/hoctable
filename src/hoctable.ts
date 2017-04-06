@@ -7,7 +7,7 @@ import Select from "./hoctable/hoc/select";
 import { SingleSelectDelegate, ItemProps, SingleSelectProps } from "./hoctable/hoc/select";
 
 import MultiSelect from "./hoctable/hoc/multi_select";
-import { MultiSelectProps, MultiSelectDelegate } from "./hoctable/hoc/multi_select";
+import { SearchProps, MultiSelectProps, MultiSelectDelegate } from "./hoctable/hoc/multi_select";
 
 import Wall from "./hoctable/hoc/wall";
 import { WallProps, WallItemProps, WallDelegate } from "./hoctable/hoc/wall";

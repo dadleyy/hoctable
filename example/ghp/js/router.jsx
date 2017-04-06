@@ -49,11 +49,13 @@ const Router = {
       require([view], render);
     }
 
-    function failed({ code = 500, url }) {
+    function failed(error) {
       // Allow routes to reject w/ redirects.
-      if(code === 300 && url) {
+      if(error.code === 300 && error.url) {
         return page(url);
       }
+
+      console.error(error);
 
       ReactDOM.render(<Errored />, el("main"));
     }

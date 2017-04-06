@@ -44,7 +44,8 @@ $table-border: #ededed
 .pointer
   cursor: pointer
 
-.hoctable__select
+.hoctable__select,
+.hoctable__multiselect
   @extend .box
   @extend .menu-list
   padding: 0
@@ -52,9 +53,20 @@ $table-border: #ededed
   overflow-y: auto
 
 .hoctable__select-option,
+.hoctable__multiselect-item,
 .hoctable__select-option--loading
   padding: 0.4rem 0.6rem
 
+.hoctable__multiselect-item
+  @extend .is-clearfix
+  @extend .is-flex
+  align-items: center
+
+.hoctable__multiselect-item-text
+  @extend .margin-left-10
+
+.hoctable__multiselect-search
+  padding: 0.5rem 0.6rem
 
 .hoctable__action-menu
   display: inline-block

@@ -18,16 +18,16 @@ describe("hoc/MultiSelect test suite", function() {
       return bag.text;
     }
 
-    options(callback) {
-      bag.callbacks.options = callback;
+    options(params, callback) {
+      bag.callbacks.options = { callback, params };
     }
 
     isSelected(item) {
       return bag.selected.indexOf(item.id) !== -1;
     }
 
-    translate(item) {
-      return item.text;
+    translate(identifier, item) {
+      return item ? item.text : "placeholder";
     }
 
     toggle(item, callback) {
@@ -154,7 +154,7 @@ describe("hoc/MultiSelect test suite", function() {
       describe("having been sent options through the callback function w/ none selected", function() {
 
         beforeEach(function() {
-          bag.callbacks.options(bag.options);
+          bag.callbacks.options.callback(bag.options);
         });
 
         it("should render out the option components", function() {
@@ -191,7 +191,7 @@ describe("hoc/MultiSelect test suite", function() {
             beforeEach(function() {
               bag.selected = [bag.callbacks.toggle.item.id];
               bag.callbacks.toggle.callback();
-              bag.callbacks.options(bag.options);
+              bag.callbacks.options.callback(bag.options);
             });
 
             it("should now have a single selected toggle", function() {
@@ -209,7 +209,7 @@ describe("hoc/MultiSelect test suite", function() {
 
         beforeEach(function() {
           bag.selected = [1];
-          bag.callbacks.options(bag.options);
+          bag.callbacks.options.callback(bag.options);
         });
 
         it("should have a single checked toggle", function() {
@@ -280,7 +280,7 @@ describe("hoc/MultiSelect test suite", function() {
       describe("having been sent options through the callback function w/ none selected", function() {
 
         beforeEach(function() {
-          bag.callbacks.options(bag.options);
+          bag.callbacks.options.callback(bag.options);
         });
 
         it("should have rendered out the custom options", function() {

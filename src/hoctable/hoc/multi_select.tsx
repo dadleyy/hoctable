@@ -7,11 +7,16 @@ import * as ReactDOM from "react-dom";
 
 export type OptionsCallback = (results : Array<any>) => void;
 export type ToggledCallback = () => void;
+export type OptionsDataLoader = (params : OptionsDataLoaderParams, callback : OptionsCallback) => void;
+
+export interface OptionsDataLoaderParams {
+  query : string;
+}
 
 export interface MultiSelectDelegate {
-  options    : (callback : OptionsCallback) => void;
+  options    : OptionsDataLoader;
   toggle     : (item : any, callback : ToggledCallback) => void;
-  translate? : (item : any) => string;
+  translate? : (identifier : string, item? : any) => string;
   isSelected : (item : any) => boolean;
 }
 
@@ -20,15 +25,26 @@ export interface MultiSelectProps {
   close    : PopupCloseCallback;
 }
 
+export interface SearchProps {
+  value    : string;
+  search   : (value : React.ChangeEvent<HTMLInputElement>) => void;
+  delegate : MultiSelectDelegate;
+}
+
 export type MultiSelectItemProps = ItemProps<MultiSelectDelegate>;
 export type ItemTransclusion     = React.ComponentClass<MultiSelectItemProps>;
 export type ComposedSelect       = React.ComponentClass<MultiSelectProps>;
 
+export const DEBOUNCE_TIME = 30;
+
 export const CLASSES = {
-  MULTISELECT_ITEM           : "hoctable__multiselect-item",
-  MULTISELECT_ITEM_TOGGLE    : "hoctable__multiselect-item-toggle",
-  MULTISELECT_ITEM_TEXT      : "hoctable__multiselect-item-text",
-  MULTISELECT                : "hoctable__multiselect"
+  MULTISELECT_ITEM             : "hoctable__multiselect-item",
+  MULTISELECT_ITEM_LIST        : "hoctable__multiselect-item-list",
+  MULTISELECT_ITEM_TOGGLE      : "hoctable__multiselect-item-toggle",
+  MULTISELECT_ITEM_TEXT        : "hoctable__multiselect-item-text",
+  MULTISELECT_SEARCH           : "hoctable__multiselect-search",
+  MULTISELECT_SEARCH_CONTAINER : "hoctable__multiselect-search-box",
+  MULTISELECT                  : "hoctable__multiselect"
 };
 
 function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemTransclusion {
@@ -60,7 +76,7 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
             <input type="checkbox" onChange={select} checked={selected} />
           </div>
           <div className={CLASSES["MULTISELECT_ITEM_TEXT"]}>
-            <p>{delegate.translate(option)}</p>
+            <p>{delegate.translate("option", option)}</p>
           </div>
         </div>
       );
@@ -72,21 +88,32 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
 
 }
 
-function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : ComposedSelect {
+export function DefaultSearch(props : SearchProps) : React.ReactElement<SearchProps> {
+  const { value, search, delegate } = props;
+
+  return (
+    <div className={CLASSES["MULTISELECT_SEARCH"]}>
+      <input type="text" value={value || ""} placeholder={delegate.translate("placeholder")} onChange={search} />
+    </div>
+  );
+}
+
+function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Search = DefaultSearch) : ComposedSelect {
   const ComposedItem = ItemFactory(Item);
 
   class MultiSelect extends React.Component<MultiSelectProps, any> {
-    private options : Array<HTMLElement>;
+    private options        : Array<HTMLElement>;
+    private search_timeout : number;
 
     constructor(props) {
       super(props);
-      this.options    = [];
-      this.transclude = this.transclude.bind(this);
+      this.options = [];
+      this.state = { };
     }
 
     transclude(list_el : HTMLElement) : void {
-      let { delegate, close } = this.props;
-      let { options } = this;
+      let { options, state, props} = this;
+      let { delegate, close } = props;
 
       if(!list_el) {
         return;
@@ -117,11 +144,47 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton) : Com
         }
       }
 
-      delegate.options(render);
+      let params : OptionsDataLoaderParams = { query: state.query };
+      delegate.options(params, render);
+    }
+
+    search(event : React.ChangeEvent<HTMLInputElement>) : void {
+      const { target } = event;
+      const { value: query } = target;
+
+      const update = () : void => {
+        let { search_timeout } = this;
+
+        if(search_timeout !== current_timeout) {
+          return;
+        }
+
+        this.setState({ query });
+      };
+
+      if(this.search_timeout) {
+        clearTimeout(this.search_timeout);
+      }
+
+      const current_timeout = setTimeout(update, DEBOUNCE_TIME);
+      this.search_timeout = current_timeout;
     }
 
     render() : React.ReactElement<any> {
-      return (<div className={CLASSES["MULTISELECT"]} ref={this.transclude}></div>);
+      const { props, state } = this;
+      let search = null;
+
+      if(Search !== null) {
+        let search_props = { value: state.query, delegate: props.delegate };
+        search = (<Search {...search_props} search={this.search.bind(this)}/>);
+      }
+
+      return (
+        <div className={CLASSES["MULTISELECT"]}>
+          <div className={CLASSES["MULTISELECT_SEARCH_CONTAINER"]}>{search}</div>
+          <div className={CLASSES["MULTISELECT_ITEM_LIST"]} ref={this.transclude.bind(this)} />
+        </div>
+      );
     }
 
   }

@@ -6,6 +6,7 @@ const dictionary = {
   adventure: "Adventure",
   all: "All",
   all_categories: "All Categories",
+  all_cities: "All Cities",
   animation: "Animation",
 
   biography: "Biography",
@@ -44,6 +45,7 @@ const dictionary = {
   romance: "Romance",
 
   sci_fi: "Science Fiction",
+  search: "Search",
   search_restaurants: "Search Restaurants",
   search_titles: "Search Titles",
   select_genre: "All Genres (Select One)",

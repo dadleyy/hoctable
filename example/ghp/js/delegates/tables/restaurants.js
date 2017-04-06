@@ -49,6 +49,11 @@ class Delegate {
       params.q = filters.title;
     }
 
+    if(filters.cities && filters.cities.length >= 1) {
+      params.entity_type = 'city';
+      params.entity_id = filters.cities.map(function({ id }) { return id; }).join(',');
+    }
+
     if(filters.category && filters.category.all !== true) {
       let { id: category_id } = filters.category;
       params.category = category_id;

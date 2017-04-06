@@ -5,6 +5,7 @@ import AppNav from "components/app_nav";
 import Table from "components/restaurants/table";
 
 const Select = hoc.Select();
+const MultiSelect = hoc.MultiSelect();
 
 class Restaurants extends React.Component {
 
@@ -75,11 +76,14 @@ class Restaurants extends React.Component {
         </section>
         <section className="container">
           <div className="margin-bottom-20 clearfix columns">
-            <div className="column is-one-quarter">
+            <div className="column is-one-quarter is-paddingless">
               <input type="text" placeholder={i18n("search_restaurants")} onChange={this.search.bind(this)} />
             </div>
-            <div className="column is-one-quarter">
+            <div className="float-left margin-left-10">
               <Select delegate={props.resolution.category_delegate} />
+            </div>
+            <div className="float-left margin-left-10">
+              <MultiSelect delegate={props.resolution.city_delegate} />
             </div>
           </div>
           <Table delegate={props.resolution.table_delegate} />
