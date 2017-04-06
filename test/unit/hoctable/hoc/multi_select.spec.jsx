@@ -309,6 +309,27 @@ describe("hoc/MultiSelect test suite", function() {
 
         });
 
+        describe("when the user enters multiple search queries within short period of time", function() {
+
+          beforeEach(function(done) {
+            dom.search_input.value = "hello world";
+            dom.search_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+
+            setTimeout(function() {
+              dom.search_input.value = "goodbye";
+              dom.search_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+              setTimeout(done, DEBOUNCE_TIME + 100);
+            }, DEBOUNCE_TIME / 2);
+          });
+
+          it("should only have asked the delegate for items w/ most recent event", function() {
+            let { query } = bag.callbacks.options.params;
+            expect(bag.callbacks.options.count).toBe(2);
+            expect(query).toBe("goodbye");
+          });
+
+        });
+
       });
 
     });
