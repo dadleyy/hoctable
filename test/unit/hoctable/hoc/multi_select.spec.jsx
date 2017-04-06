@@ -1,6 +1,6 @@
 const { default: Factory }        = require("hoctable/hoc/multi_select");
 const { CLASSES: SELECT_CLASSES } = require("hoctable/hoc/select");
-const { CLASSES }                 = require("hoctable/hoc/multi_select");
+const { CLASSES, DEBOUNCE_TIME }  = require("hoctable/hoc/multi_select");
 const helpers                     = require("test_helpers");
 const React                       = require("react");
 
@@ -19,7 +19,8 @@ describe("hoc/MultiSelect test suite", function() {
     }
 
     options(params, callback) {
-      bag.callbacks.options = { callback, params };
+      let { count } = bag.callbacks.options || { count: 0 };
+      bag.callbacks.options = { callback, params, count: ++count };
     }
 
     isSelected(item) {
@@ -40,6 +41,10 @@ describe("hoc/MultiSelect test suite", function() {
 
     get menu_body() {
       return bag.dom.popups.querySelector(`.${CLASSES.MULTISELECT}`);
+    },
+
+    get search_input() {
+      return bag.dom.popups.querySelector(`.${CLASSES.MULTISELECT_SEARCH} input`);
     },
 
     custom: {
@@ -284,7 +289,24 @@ describe("hoc/MultiSelect test suite", function() {
         });
 
         it("should have rendered out the custom options", function() {
+          expect(bag.callbacks.options.count).toBe(1);
           expect(dom.custom.options.length).toBe(2);
+        });
+
+        describe("when the user enters a search query", function() {
+
+          beforeEach(function(done) {
+            dom.search_input.value = "hello world";
+            dom.search_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+            setTimeout(done, DEBOUNCE_TIME + 100);
+          });
+
+          it("should have asked the delegate for items again", function() {
+            let { query } = bag.callbacks.options.params;
+            expect(bag.callbacks.options.count).toBe(2);
+            expect(query).toBe("hello world");
+          });
+
         });
 
       });
