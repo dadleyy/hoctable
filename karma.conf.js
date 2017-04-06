@@ -4,7 +4,7 @@ const path  = require("path");
 module.exports = function(config) {
   let browsers   = ["PhantomJS"];
   let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "karma-typescript"];
-  let reporters  = ["narrow", "karma-typescript"];
+  let reporters  = ["mocha", "karma-typescript"];
   let ts_preprocessors = process.env["DISABLE_LINT"] ? ["karma-typescript"] : ["tslint", "karma-typescript"];
 
   let preprocessors = {
@@ -64,6 +64,7 @@ module.exports = function(config) {
     "karma-requirejs",
     "karma-typescript",
     "karma-babel-preprocessor",
+    "karma-mocha-reporter",
     "karma-phantomjs-launcher",
     "karma-chrome-launcher",
     "karma-narrow-reporter",
@@ -91,8 +92,11 @@ module.exports = function(config) {
 
   options.karmaTypescriptConfig = {
     reports: {
+      "html": {
+        "directory": "./coverage/html",
+      },
       "lcovonly": {
-        "directory": "./coverage",
+        "directory": "./coverage/lcov",
         "filename": "coverage.lcov"
       }
     },

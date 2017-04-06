@@ -27,7 +27,7 @@
     "fullstack_webpack": "./example/fullstack/browser/webpack.config.js"
   },
   "scripts": {
-    "clean": "rimraf ./dist ./tmp",
+    "clean": "rimraf ./dist ./tmp ./coverage",
     "lint": "tslint -c ./tslint.json -p ./tsconfig.json",
     "build:watch": "watch \"npm run build:all\" ./src",
     "build:watch:es5": "watch \"npm run clean && npm run build:es5 && npm run build:es5:bundle\" ./src",
@@ -92,6 +92,7 @@
     "karma-babel-preprocessor": "6.0.1",
     "karma-chrome-launcher": "2.0.0",
     "karma-jasmine": "1.1.0",
+    "karma-mocha-reporter": "^2.2.3",
     "karma-narrow-reporter": "^2.0.1",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-requirejs": "1.1.0",
