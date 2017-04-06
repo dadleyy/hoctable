@@ -34,7 +34,7 @@ export class ItemDelegate {
   }
 
   highlight(rendered_id : string) : void {
-    let {actions} = this;
+    let { actions } = this;
     actions.highlight(rendered_id);
   }
 
@@ -241,11 +241,6 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
         return;
       }
 
-      // Unable to find the target element, abort.
-      if(source === null) {
-        return;
-      }
-
       /* If the id sent in was null, it is time to clear out the existing highlight by unmounting the car, removing
        * the container from the dom and clearing out the active reference.
        */
@@ -266,6 +261,10 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
         this.active = null;
 
+        return;
+      }
+
+      if(!source) {
         return;
       }
 
@@ -483,7 +482,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     /* Called for every cycle interval as well as mouse interactions (on/off) on the grid items, this function is
      * responsible for opening the highlight view of the component.
      */
-    highlight(rendered_id : string | null) : void {
+    highlight(rendered_id : string | null, user_event : boolean = false) : void {
       let { state, timings, renderer, refs } = this;
       let source = rendered_id === null ? null : renderer.find(rendered_id);
       let { highlight: current } = renderer;
@@ -554,7 +553,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
         // If we're coming onto an element, stop the cycle and highlight the item
         timings.stop();
-        this.highlight(rendered_id);
+        this.highlight(rendered_id, true);
       };
 
       // Prepare some information with which we will calculate positions

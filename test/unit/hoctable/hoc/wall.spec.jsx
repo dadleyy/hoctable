@@ -1,4 +1,4 @@
-const { default: Wall, CLASSES } = require("hoctable/hoc/wall");
+const { default: Wall, CLASSES, DEBOUNCEMENT } = require("hoctable/hoc/wall");
 const React = require("react");
 const helpers = require("test_helpers");
 const people = require("fixtures/people");
@@ -10,12 +10,13 @@ describe("hoc/Wall test suite", function() {
   const CYCLE_INTERVAL = 10;
   const FULLSCREEN_DELAY = 5;
 
-  function Preview(props) {
-    return (<div data-rel="preview-item"></div>);
+  function Preview({ item }) {
+    const style = { display: "block", width: "100px", height: "100px" };
+    return (<div data-rel="preview-item" style={style}>{item.name}</div>);
   }
 
-  function Card(props) {
-    return (<div data-rel="card-item"></div>);
+  function Card({ item }) {
+    return (<div data-rel="card-item">{item.name}</div>);
   }
 
   class Delegate {
@@ -25,7 +26,6 @@ describe("hoc/Wall test suite", function() {
 
     items(callback) {
       let { count } = bag.callbacks.items || { count: 0 };
-
       bag.callbacks.items = { callback, count: ++count };
     }
 
@@ -192,6 +192,23 @@ describe("hoc/Wall test suite", function() {
                 expect(dom.highlight.length).toBe(1);
                 done();
               }, 200);
+            });
+
+            describe("having received a mouse over event on an item", function() {
+
+              beforeEach(function(done) {
+                const [ first ] = dom.items;
+                const { width, height, left, top } = first.getBoundingClientRect();
+                helpers.mouse.over(left + (width * 0.5), top + (height * 0.5), first).send();
+                setTimeout(done, DEBOUNCEMENT);
+              });
+
+              it("should have a highlighted item", function() {
+                let [ highlight ] = dom.highlight;
+                let { innerHTML: text } = highlight.querySelector("[data-rel=card-item]");
+                expect(text).toBe(bag.items[0].name);
+              });
+
             });
 
           });

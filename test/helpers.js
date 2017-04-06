@@ -37,12 +37,12 @@ const dom = {
 
 };
 
-function mouse(type, x, y) {
+function mouse(type, x, y, target = document) {
   let event = document.createEvent("MouseEvents");
   event.initMouseEvent(type, true, true, window, 0, 0, 0, x, y, false, false, false, false, 0, null);
 
   function send() {
-    document.dispatchEvent(event);
+    target.dispatchEvent(event);
   }
 
   return { event, send };
@@ -58,6 +58,14 @@ mouse.click = function(x, y) {
 
 mouse.up = function(x, y) {
   return mouse("mouseup", x, y);
+};
+
+mouse.over = function(x, y, target = document) {
+  return mouse("mouseover", x, y, target);
+};
+
+mouse.out = function(x, y, target = document) {
+  return mouse("mouseout", x, y, target);
 };
 
 function fullScreenError(event) {
