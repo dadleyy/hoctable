@@ -5,7 +5,7 @@
   "homepage": "https://github.com/dadleyy/hoctable",
   "keywords": [
     "react",
-    "high orger components",
+    "high order components",
     "typescript",
     "components",
     "select",
@@ -52,7 +52,7 @@
     "build:all": "npm run build:typings && npm run build:browser",
     "build": "npm run lint && npm run build:all",
     "build:ghp:js:compile": "tsc -p ./example/ghp/tsconfig.json -outFile $npm_package_config_ghp_out/js/app.js",
-    "build:ghp:js:min": "uglifyjs -v -o $npm_package_config_ghp_out/js/app.min.js $npm_package_config_ghp_out/js/app.js",
+    "build:ghp:js:min": "uglifyjs -o $npm_package_config_ghp_out/js/app.min.js $npm_package_config_ghp_out/js/app.js",
     "build:ghp:js": "npm run build:ghp:js:compile && npm run build:ghp:js:min",
     "build:ghp:html": "pug -O ./package.json -o $npm_package_config_ghp_out ./example/ghp/*.pug",
     "build:ghp:css": "node-sass ./example/ghp/css/main.sass $npm_package_config_ghp_css_flags",
