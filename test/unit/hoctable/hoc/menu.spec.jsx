@@ -1,5 +1,6 @@
 const { default: ActionMenu } = require("hoctable/hoc/menu");
 const { CLASSES }             = require("hoctable/hoc/menu");
+const { default: Popups }     = require("hoctable/services/popups");
 const helpers                 = require("test_helpers");
 const React                   = require("react");
 
@@ -102,16 +103,31 @@ describe("hoc/ActionMenu test suite", function() {
       bag.render_props = { text: BUTTON_TEXT, menu_body_text: MENU_BODY_TEXT };
     });
 
+    beforeEach(render);
+
     it("should render out the transcluded button, sending all props down to it", function() {
-      render();
       expect(dom.custom.button.firstChild.innerHTML).toBe(BUTTON_TEXT);
     });
 
     it("should render the menu when the clicked", function() {
-      render();
       expect(dom.menu).toBe(null);
       dom.custom.button.click();
       expect(dom.menu.firstChild.innerHTML).toBe(MENU_BODY_TEXT);
+    });
+
+    it("should throw an exception if popup manager was not mounted", function(done) {
+      Popups.unmount();
+      let onerror = window.onerror;
+
+      function errored(e) {
+        expect(e).not.toBe(undefined);
+        window.onerror = onerror;
+        done();
+        return false;
+      }
+
+      window.onerror = errored;
+      dom.custom.button.click();
     });
 
     describe("having opened the popup", function() {
