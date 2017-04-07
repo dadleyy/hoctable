@@ -287,23 +287,17 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       };
 
       if(from_right && !from_bottom) {
-        style["left"]  = null;
-        style["right"] = `${vw - (right - width)}px`;
+        style = { ...style, left: null, right: `${vw - (right - width)}px` };
       }
 
       else if(from_bottom && !from_right) {
         destination = viewports.right;
-        style["left"]    = `-${vw - right}px`;
-        style["top"]     = null;
-        style["bottom"]  = `${vh - top}px`;
+        style = { ...style, left: `-${vw - right}px`, top: null, bottom: `${vh - top}px` };
       }
 
       else if(from_bottom && from_right) {
         destination = viewports.right;
-        style["left"]   = null;
-        style["top"]    = null;
-        style["bottom"] = `${vh - top}px`;
-        style["right"]  = `${vw - (right - width)}px`;
+        style = { ...style, left: null, top: null, bottom: `${vh - top}px`, right: `${vw - (right - width)}px` };
       }
 
       // Create container & render into

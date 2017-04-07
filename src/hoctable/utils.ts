@@ -11,4 +11,8 @@ function replace<T>(target : Array<T>, source : Array<T>) : Array<T> {
   return target;
 }
 
-export default {dom, replace, uuid};
+function extend(a : Object, b : Object) : Object {
+  return { ...a, ...b };
+}
+
+export default { dom, replace, uuid, extend };

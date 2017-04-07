@@ -34,6 +34,25 @@ describe("utils test suite", function() {
       expect(properties.color).toBe("red");
     });
 
+    it("should override styles appropriately", function() {
+      tag.style["color"] = "blue";
+      expect(properties.color).toBe("blue");
+      utils.dom.stylize(tag, { color: "red" });
+      expect(properties.color).toBe("red");
+    });
+
+  });
+
+  describe("extend", function() {
+
+    it("should override first object w/ new properties from second", function() {
+      var a = { name: "danny" };
+      var b = { name: "gerry" };
+      var r = utils.extend(a, b);
+      expect(r.name).toBe("gerry");
+      expect(a.name).toBe("danny");
+    });
+
   });
 
   describe("create element", function() {
