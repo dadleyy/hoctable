@@ -1,5 +1,6 @@
 const { default: SelectFactory } = require("hoctable/hoc/select");
 const { CLASSES }                = require("hoctable/hoc/select");
+const { default: Popups }        = require("hoctable/services/popups");
 const helpers                    = require("test_helpers");
 const React                      = require("react");
 
