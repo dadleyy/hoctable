@@ -10,6 +10,32 @@ describe("utils test suite", function() {
 
   });
 
+  describe("stylize", function() {
+
+    let tag = null;
+
+    function get(property) {
+      return tag.style.getPropertyValue(property);
+    }
+
+    const properties = {
+      get color() {
+        return get("color");
+      }
+    };
+
+    beforeEach(function() {
+      tag = document.createElement("div");
+    });
+
+    it("should apply styles appropriately", function() {
+      expect(properties.color).not.toBe("red");
+      utils.dom.stylize(tag, { color: "red" });
+      expect(properties.color).toBe("red");
+    });
+
+  });
+
   describe("create element", function() {
 
     it("should create an element with the styles and classes provided", function() {

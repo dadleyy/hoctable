@@ -31,16 +31,24 @@ function contains(target : Node, child : Node) : boolean {
   return false;
 }
 
+function stylize(node : HTMLElement, style : CSSStyleDeclaration) : HTMLElement {
+  const apply = node.style.setProperty.bind(node.style);
+
+  for(let property in style) {
+    let value = style[property];
+    apply(property, value);
+  }
+
+  return node;
+}
+
 function create(tag : string, style? : any, classes? : Array<string>) : HTMLElement {
   let element = document.createElement(tag);
 
   element.setAttribute("util-dom", "true");
 
-  let rules = style ? Object.keys(style) : [];
-
-  for(let i = 0, c = rules.length; i < c; i++) {
-    let rule  = rules[i];
-    element.style[rule] = style[rule];
+  if(style) {
+    stylize(element, style);
   }
 
   for(let i = 0, l = classes || [], c = l.length; i < c; i++) {
@@ -51,5 +59,6 @@ function create(tag : string, style? : any, classes? : Array<string>) : HTMLElem
   return element;
 }
 
-const classes = {add: addClass, remove: removeClass};
-export default {create, remove, contains, classes};
+const classes = { add: addClass, remove: removeClass };
+
+export default { create, remove, contains, classes, stylize };

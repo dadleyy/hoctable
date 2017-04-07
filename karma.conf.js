@@ -2,7 +2,7 @@ const babel = require("babel-core");
 const path  = require("path");
 
 module.exports = function(config) {
-  let browsers   = ["PhantomJS"];
+  let browsers   = ["Phantom_Desktop"];
   let frameworks = ["requirejs", "jasmine", "jasmine-ajax", "karma-typescript"];
   let reporters  = ["mocha", "karma-typescript"];
   let ts_preprocessors = process.env["DISABLE_LINT"] ? ["karma-typescript"] : ["tslint", "karma-typescript"];
@@ -73,6 +73,18 @@ module.exports = function(config) {
   ];
 
   let options = { preprocessors, browsers, plugins, frameworks, files, reporters };
+
+  options.customLaunchers = {
+    "Phantom_Desktop": {
+      base: "PhantomJS",
+      options: {
+        viewportSize: {
+          width: 1200,
+          height: 1000
+        }
+      }
+    }
+  };
 
   options.babelPreprocessor = {
     options: {
