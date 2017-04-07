@@ -72,7 +72,7 @@
   "devDependencies": {
     "@types/react": "15.0.21",
     "@types/react-dom": "^0.14.21",
-    "babel-core": "6.24.0",
+    "babel-core": "6.24.1",
     "babel-loader": "^6.2.8",
     "babel-plugin-external-helpers": "6.18.0",
     "babel-plugin-transform-es2015-modules-amd": "6.24.1",
