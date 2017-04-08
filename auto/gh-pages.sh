@@ -10,9 +10,10 @@ TARGET_BRANCH="gh-pages"
 GIT_REPO="https://${GITHUB_ACCESS_TOKEN}@github.com/dadleyy/hoctable.git"
 CLONE_DIR="$CURRENT_DIR/$WORKING_DIR"
 SHA=$(git rev-parse --verify HEAD)
+GHP_SIGNAL_STRING="[ghp]"
 
-if [ "$TRAVIS_BRANCH" != "master" ]; then
-  echo "skipping gh-pages, not building master branch"
+if [[ "$TRAVIS_COMMIT_MESSAGE" != *"$GHP_SIGNAL_STRING"* ]]; then
+  echo "skipping gh-pages, commit message missing \"$GHP_SIGNAL_STRING\" string"
   exit 0
 fi
 
