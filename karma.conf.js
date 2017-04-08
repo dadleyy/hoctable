@@ -14,11 +14,12 @@ module.exports = function(config) {
     "src/**/*.ts"  : ts_preprocessors,
     "src/**/*.tsx" : ts_preprocessors,
 
-    "test/unit/**/*.js"  : ["babel"],
-    "test/unit/**/*.jsx" : ["babel"],
-    "test/helpers.js"    : ["babel"],
-    "test/data/**/*.js"  : ["babel"],
-    "test/unit.js"       : ["babelexternal"]
+    "test/unit/**/*.js"      : ["babel"],
+    "test/unit/**/*.jsx"     : ["babel"],
+    "test/helpers.js"        : ["babel"],
+    "test/data/**/*.js"      : ["babel"],
+    "test/delegates/**/*.js" : ["babel"],
+    "test/unit.js"           : ["babelexternal"]
   };
 
   let files = [
@@ -27,6 +28,7 @@ module.exports = function(config) {
     {pattern: "./node_modules/react-dom/dist/react-dom.js", included: false},
 
     {pattern: "./test/data/**/*.js", included: false},
+    {pattern: "./test/delegates/**/*.js", included: false},
 
     {pattern: "./test/unit/**/*.spec.js", included: false},
     {pattern: "./test/unit/**/*.spec.jsx", included: false},

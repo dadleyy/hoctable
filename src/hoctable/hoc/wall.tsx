@@ -115,7 +115,7 @@ export class TransitionTimings {
 
   interval(handler : TransitionInstruction, context : any, delay = DEBOUNCEMENT) : void {
     let { interval_id } = this;
-    let exec = () => this.enqueue(handler, context, 0);
+    let exec = () : void => this.enqueue(handler, context, 0);
 
     if(interval_id !== null) {
       this.stop();
@@ -477,9 +477,10 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
      * responsible for opening the highlight view of the component.
      */
     highlight(rendered_id : string | null, user_event : boolean = false) : void {
-      let { state, timings, renderer, refs } = this;
-      let source = rendered_id === null ? null : renderer.find(rendered_id);
-      let { highlight: current } = renderer;
+      const { state, timings, renderer, props, refs } = this;
+      const { delegate } = props;
+      const source = rendered_id === null ? null : renderer.find(rendered_id);
+      const { highlight: current } = renderer;
 
       // If we were unable to find the target to highlight, exit now.
       if(!source) {
@@ -520,7 +521,8 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       /* If we have a valid target enqueue the "open" action with a delay in the event we have an existing highlight,
        * or immediately if there is no existing highlight.
        */
-      timings.enqueue(open, this, current === null ? 0 : DEBOUNCEMENT);
+      const delay = current === null ? 0 : (typeof delegate.delay === "function" ? delegate.delay() : DEBOUNCEMENT);
+      timings.enqueue(open, this, delay);
     }
 
     /* Called once the delegate has loaded in it's items, this function handles iterating over the items, calculating

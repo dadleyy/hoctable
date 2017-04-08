@@ -7,8 +7,8 @@ const ReactDOM = require("react-dom");
 describe("hoc/Wall test suite", function() {
 
   const bag = { };
-  const CYCLE_INTERVAL = 10;
-  const FULLSCREEN_DELAY = 5;
+  const CYCLE_INTERVAL = 500;
+  const FULLSCREEN_DELAY = 100;
 
   function Preview({ item }) {
     const style = { display: "block", width: "100px", height: "100px" };
@@ -149,7 +149,10 @@ describe("hoc/Wall test suite", function() {
             error: helpers.fullscreen.on("fullscreen:error", errored),
           };
 
-          bag.callbacks.fullscreen = done;
+          bag.callbacks.fullscreen = function() {
+            setTimeout(done, 10);
+          };
+
           dom.buttons.enter_fullscreen.click();
         });
 
@@ -168,7 +171,7 @@ describe("hoc/Wall test suite", function() {
 
           beforeEach(function(done) {
             expect(bag.callbacks.items.count).toBe(1);
-            setTimeout(done, FULLSCREEN_DELAY + 100);
+            setTimeout(done, FULLSCREEN_DELAY);
           });
 
           it("should have asked the delegate for items once again", function() {
@@ -184,14 +187,11 @@ describe("hoc/Wall test suite", function() {
 
             beforeEach(function(done) {
               bag.callbacks.items.callback(bag.items);
-              setTimeout(done, CYCLE_INTERVAL + FULLSCREEN_DELAY + 100);
+              setTimeout(done, CYCLE_INTERVAL + FULLSCREEN_DELAY);
             });
 
-            it("should have randomly highlighted an item", function(done) {
-              setTimeout(function() {
-                expect(dom.highlight.length).toBe(1);
-                done();
-              }, 200);
+            it("should have randomly highlighted an item", function() {
+              expect(dom.highlight.length).toBe(1);
             });
 
             describe("having received a mouse over event on an item", function() {

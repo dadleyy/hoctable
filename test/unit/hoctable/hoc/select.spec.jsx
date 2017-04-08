@@ -3,6 +3,7 @@ const { CLASSES }                = require("hoctable/hoc/select");
 const { default: Popups }        = require("hoctable/services/popups");
 const helpers                    = require("test_helpers");
 const React                      = require("react");
+const Delegate                   = require("delegates/select");
 
 describe("hoc/Select test suite", function() {
 
@@ -20,22 +21,6 @@ describe("hoc/Select test suite", function() {
     return (
       <div data-rel="option-item"><p data-rel="option-item-text">{name}</p></div>
     );
-  }
-
-  class Delegate {
-
-    text() {
-      return bag.selected_item ? bag.selected_item.name : bag.text;
-    }
-
-    options(callback) {
-      bag.callbacks.options = callback;
-    }
-
-    select(item, callback) {
-      bag.callbacks.select = { item, callback };
-    }
-
   }
 
   function Loader() {
@@ -93,7 +78,7 @@ describe("hoc/Select test suite", function() {
 
     beforeEach(function() {
       bag.Select   = SelectFactory(Option);
-      bag.delegate = new Delegate();
+      bag.delegate = new Delegate(bag);
     });
 
     it("should throw an exception when rendering without delegate", function() {
@@ -191,7 +176,7 @@ describe("hoc/Select test suite", function() {
 
     beforeEach(function() {
       bag.Select   = SelectFactory(Option, Button);
-      bag.delegate = new Delegate();
+      bag.delegate = new Delegate(bag);
     });
 
     beforeEach(render);
@@ -206,7 +191,7 @@ describe("hoc/Select test suite", function() {
 
     beforeEach(function() {
       bag.Select   = SelectFactory(Option, undefined, Loader);
-      bag.delegate = new Delegate();
+      bag.delegate = new Delegate(bag);
     });
 
     it("should render out the loading component while options are loading", function() {

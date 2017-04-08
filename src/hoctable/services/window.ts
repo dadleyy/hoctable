@@ -121,22 +121,22 @@ function trigger(evt : string, fn? : EventListener) : EventListener {
   return handler;
 }
 
-function move(e) : void {
+function move(e : MouseEvent) : void {
   let { mouse } = internal_state;
   mouse.current = { x: e.clientX, y: e.clientY };
 }
 
-function down(e) : void {
+function down(e : MouseEvent) : void {
   let { mouse } = internal_state;
   mouse.start = { x: e.clientX, y: e.clientY };
 }
 
-function up(e) : void {
+function up(e : MouseEvent) : void {
   let { mouse } = internal_state;
   mouse.end = { x: e.clientX, y: e.clientY };
 }
 
-function click(e) : void {
+function click(e : MouseEvent) : void {
   let { mouse } = internal_state;
   let { start, end } = mouse;
 

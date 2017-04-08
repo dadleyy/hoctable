@@ -1,6 +1,6 @@
 import util from "hoctable/utils";
 import Popups from "hoctable/services/popups";
-import {PopupPlacement} from "hoctable/services/popups";
+import { PopupPlacement } from "hoctable/services/popups";
 import Viewport from "hoctable/services/window";
 import * as React from "react";
 
@@ -35,7 +35,6 @@ export function DefaultButton(props : any) : React.ReactElement<any> {
 function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) : React.ComponentClass<P> {
 
   class Menu extends React.Component<P, MenuState> {
-    private popup : string;
 
     constructor(props) {
       super(props);

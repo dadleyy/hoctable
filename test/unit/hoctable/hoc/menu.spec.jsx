@@ -1,6 +1,7 @@
 const { default: ActionMenu } = require("hoctable/hoc/menu");
 const { CLASSES }             = require("hoctable/hoc/menu");
 const { default: Popups }     = require("hoctable/services/popups");
+const { SYNC_WAIT_TIME }      = require("hoctable/services/popups");
 const helpers                 = require("test_helpers");
 const React                   = require("react");
 
@@ -81,7 +82,6 @@ describe("hoc/ActionMenu test suite", function() {
     bag.render_props = { text: BUTTON_TEXT, menu_body_text: MENU_BODY_TEXT };
   });
 
-
   describe("with unmounted popup manager", function() {
 
     beforeEach(function() {
@@ -115,8 +115,13 @@ describe("hoc/ActionMenu test suite", function() {
 
   describe("with mounted poup manager", function() {
 
-    beforeEach(helpers.dom.setup.bind(bag));
-    afterEach(helpers.dom.teardown.bind(bag));
+    beforeEach(function() {
+      helpers.dom.setup.call(bag);
+    });
+
+    afterEach(function() {
+      helpers.dom.teardown.call(bag);
+    });
 
     describe("with custom button", function() {
 
@@ -155,23 +160,19 @@ describe("hoc/ActionMenu test suite", function() {
 
         beforeEach(function() {
           dom.custom.button.click();
-          bag.distraction = document.createElement("div");
-          bag.distraction.style.position = "fixed";
-          bag.distraction.style.bottom = "0px";
-          bag.distraction.style.right = "0px";
-          bag.distraction.style.width = "10px";
-          bag.distraction.style.height = "10px";
-          document.body.appendChild(bag.distraction);
         });
 
-        afterEach(function() {
-          document.body.removeChild(bag.distraction);
-        });
-
-        it("should close it when clicking anywhere else on page", function() {
+        it("should close it when clicking anywhere else on page", function(done) {
           expect(dom.menu.children.length).toBe(1);
-          bag.distraction.click();
-          expect(dom.menu).toBe(null);
+          let { innerWidth: x, innerHeight: y } = window;
+
+          function close() {
+            helpers.mouse.click(x, y).send();
+            expect(dom.menu).toBe(null);
+            setTimeout(done, 0);
+          }
+
+          setTimeout(close, 100 + SYNC_WAIT_TIME);
         });
 
       });

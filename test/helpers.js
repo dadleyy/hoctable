@@ -52,8 +52,8 @@ mouse.down = function(x, y) {
   return mouse("mousedown", x, y);
 };
 
-mouse.click = function(x, y) {
-  return mouse("click", x, y);
+mouse.click = function(x, y, target = document.body) {
+  return mouse("click", x, y, target);
 };
 
 mouse.up = function(x, y) {

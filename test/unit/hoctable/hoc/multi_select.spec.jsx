@@ -3,6 +3,7 @@ const { CLASSES: SELECT_CLASSES } = require("hoctable/hoc/select");
 const { CLASSES, DEBOUNCE_TIME }  = require("hoctable/hoc/multi_select");
 const helpers                     = require("test_helpers");
 const React                       = require("react");
+const Delegate                    = require("delegates/multi_select");
 
 describe("hoc/MultiSelect test suite", function() {
 
@@ -10,31 +11,6 @@ describe("hoc/MultiSelect test suite", function() {
 
   function Option({ option }) {
     return (<div data-rel="custom-option"></div>);
-  }
-
-  class Delegate {
-
-    text() {
-      return bag.text;
-    }
-
-    options(params, callback) {
-      let { count } = bag.callbacks.options || { count: 0 };
-      bag.callbacks.options = { callback, params, count: ++count };
-    }
-
-    isSelected(item) {
-      return bag.selected.indexOf(item.id) !== -1;
-    }
-
-    translate(identifier, item) {
-      return item ? item.text : "placeholder";
-    }
-
-    toggle(item, callback) {
-      bag.callbacks.toggle = { item, callback };
-    }
-
   }
 
   const dom = {
@@ -106,7 +82,7 @@ describe("hoc/MultiSelect test suite", function() {
 
     beforeEach(function() {
       bag.Select   = Factory();
-      bag.delegate = new Delegate();
+      bag.delegate = new Delegate(bag);
       bag.text = "click me";
       bag.selected = [ ];
       bag.options = [
@@ -232,7 +208,7 @@ describe("hoc/MultiSelect test suite", function() {
 
     beforeEach(function() {
       bag.Select   = Factory(Option);
-      bag.delegate = new Delegate();
+      bag.delegate = new Delegate(bag);
       bag.text = "click me";
       bag.selected = [ ];
       bag.options = [

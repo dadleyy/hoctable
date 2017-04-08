@@ -1,37 +1,34 @@
 const { default: SearchFactory } = require("hoctable/hoc/search");
 const { CLASSES, DEBOUNCE_TIME } = require("hoctable/hoc/search");
 const helpers = require("test_helpers");
+const people = require("fixtures/people");
 const React = require("react");
+const ReactDOM = require("react-dom");
+const Delegate = require("delegates/search");
 
 describe("hoc/Search test suite", function() {
 
-  const bag = { };
+  let bag = null;
+
   const LOADER_TEXT = "loading";
   const OPTIONS = [
     { name: "cafe bene" },
     { name: "capital one cafe" }
   ];
 
-  function Option({ option }) {
-    const { name } = option;
-    return (
-      <div data-rel="option-item"><p data-rel="option-item-text">{name}</p></div>
-    );
-  }
+  class Option extends React.Component {
 
-  class Delegate {
-
-    translate(identifier, item) {
-      switch(identifier) {
-        case "placeholder":
-          return "search";
-        default:
-          return "whoa";
-      }
+    componentWillUnmount() {
+      bag.callbacks.unmount = (bag.callbacks.unmount || 0) + 1;
     }
 
-    search(query, callback) {
-      bag.callbacks.search = { query, callback };
+    render() {
+      const { props } = this;
+      const { name } = props.option;
+
+      return (
+        <div data-rel="option-item"><p data-rel="option-item-text">{name}</p></div>
+      );
     }
 
   }
@@ -48,12 +45,34 @@ describe("hoc/Search test suite", function() {
 
     get input() {
       return bag.dom.container.querySelector(`.${CLASSES.INPUT_CONTAINER} input`);
+    },
+
+    default: {
+
+      get items() {
+        return bag.dom.popups.querySelectorAll(`.${CLASSES.ITEM_CONTAINER}`);
+      }
+
+    },
+
+    custom: {
+
+      get items() {
+        return bag.dom.popups.querySelectorAll("[data-rel=option-item]");
+      }
+
     }
 
   };
 
-  beforeEach(helpers.dom.setup.bind(bag));
-  afterEach(helpers.dom.teardown.bind(bag));
+  beforeEach(function() {
+    bag = { };
+    helpers.dom.setup.call(bag);
+  });
+
+  afterEach(function() {
+    helpers.dom.teardown.call(bag);
+  });
 
   beforeEach(function() {
     bag.spies = { };
@@ -64,11 +83,12 @@ describe("hoc/Search test suite", function() {
     ReactDOM.render(<bag.Search delegate={bag.delegate} />, bag.dom.container);
   }
 
-  describe("with default button + loader transclusions", function() {
+  describe("with default option transclusion", function() {
 
     beforeEach(function() {
-      bag.Search   = SearchFactory(Option);
-      bag.delegate = new Delegate();
+      bag.callbacks = { };
+      bag.Search   = SearchFactory();
+      bag.delegate = new Delegate(bag);
     });
 
     beforeEach(render);
@@ -86,6 +106,116 @@ describe("hoc/Search test suite", function() {
 
       it("should have asked the delegate for the search results", function() {
         expect(bag.callbacks.search.query).toBe("my search query");
+      });
+
+      describe("having been provided items through the data callback", function() {
+
+        beforeEach(function() {
+          bag.items = people.slice(0, 10);
+          bag.callbacks.search.callback(bag.items);
+        });
+
+        it("should render out items for each element in the array", function() {
+          expect(dom.default.items.length).toBe(bag.items.length);
+        });
+
+        describe("having clicked one of the rendered items", function() {
+
+          beforeEach(function() {
+            const [ first ] = dom.default.items;
+            first.click();
+          });
+
+          it("should have sent the item to the delegate\'s select function", function() {
+            expect(bag.callbacks.select.item.name).toBe(bag.items[0].name);
+          });
+
+          describe("having been provided an item from the select callback" , function() {
+
+            beforeEach(function() {
+              bag.callbacks.select.callback(bag.callbacks.select.item);
+            });
+
+            it("should have closed the popup", function() {
+              expect(bag.dom.popups.children.length).toBe(0);
+            });
+
+          });
+
+        });
+
+      });
+
+    });
+
+  });
+
+  describe("with custom option transclusion", function() {
+
+    beforeEach(function() {
+      bag.Search   = SearchFactory(Option);
+      bag.delegate = new Delegate(bag);
+    });
+
+    beforeEach(render);
+
+    it("should render properly", function() {
+      expect(dom.input).not.toBe(null);
+    });
+
+    describe("when user inputs some text", function() {
+
+      beforeEach(function(done) {
+        helpers.keyboard.fill(dom.input, "my search query");
+        setTimeout(done, DEBOUNCE_TIME + 10);
+      });
+
+      it("should have asked the delegate for the search results", function() {
+        expect(bag.callbacks.search.query).toBe("my search query");
+      });
+
+      describe("having been provided items through the data callback", function() {
+
+        beforeEach(function() {
+          bag.items = people.slice(0, 10);
+          bag.callbacks.search.callback(bag.items);
+        });
+
+        it("should render out items for each element in the array", function() {
+          expect(dom.custom.items.length).toBe(bag.items.length);
+        });
+
+        it("should unmount the options when the component itself is unmounted", function() {
+          expect(bag.callbacks.unmount).toBe(undefined);
+          ReactDOM.unmountComponentAtNode(bag.dom.container);
+          expect(bag.callbacks.unmount).toBe(bag.items.length);
+        });
+
+        describe("having clicked one of the rendered items", function() {
+
+          beforeEach(function() {
+            const [ first ] = dom.custom.items;
+            first.click();
+          });
+
+          it("should have sent the item to the delegate\'s select function", function() {
+            expect(bag.callbacks.select.item.name).toBe(bag.items[0].name);
+          });
+
+          describe("having been provided an item from the select callback" , function() {
+
+            beforeEach(function() {
+              bag.callbacks.select.callback(bag.callbacks.select.item);
+            });
+
+            it("should have closed the popup", function() {
+              expect(bag.dom.popups.children.length).toBe(0);
+            });
+
+          });
+
+        });
+
       });
 
     });

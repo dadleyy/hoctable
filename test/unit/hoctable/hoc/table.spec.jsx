@@ -1,6 +1,7 @@
 const { default: TableFactory, CLASSES } = require("hoctable/hoc/table");
 const helpers = require("test_helpers");
 const people = require("fixtures/people");
+const Delegate = require("delegates/table");
 
 describe("hoc/Table component test suite", function() {
 
@@ -22,18 +23,6 @@ describe("hoc/Table component test suite", function() {
         <td>{row.content}</td>
       </tr>
     );
-  }
-
-  class Delegate {
-
-    columns() {
-      return bag.columns;
-    }
-
-    rows(pagination, sorting, callback) {
-      bag.callbacks.rows = { pagination, sorting, callback };
-    }
-
   }
 
   class View extends React.Component {
@@ -103,7 +92,7 @@ describe("hoc/Table component test suite", function() {
 
     beforeEach(function() {
       bag.Table = TableFactory(Row);
-      bag.delegate = new Delegate();
+      bag.delegate = new Delegate(bag);
     });
 
     it("should not have rendered out the pagination quite yet", function() {
