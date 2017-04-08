@@ -52,7 +52,7 @@ const Router = {
     function failed(error) {
       // Allow routes to reject w/ redirects.
       if(error.code === 300 && error.url) {
-        return page(url);
+        return page(error.url);
       }
 
       console.error(error);

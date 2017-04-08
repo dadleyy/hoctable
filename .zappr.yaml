@@ -3,3 +3,4 @@ commit:
     patterns:
       - "^[a-z]"
       - "^chore\\(\\S+\\)"
+      - "^\\[ghp\\]"
