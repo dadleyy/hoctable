@@ -1,7 +1,10 @@
 language: node_js
 sudo: false
+git:
+  depth: 3
 node_js:
   - 6.9.0
+  - 6.10.1
 before_install:
   - npm i -g npm@3.9.0
 install:
