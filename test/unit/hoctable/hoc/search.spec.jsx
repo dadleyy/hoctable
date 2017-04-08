@@ -1,5 +1,5 @@
 const { default: SearchFactory } = require("hoctable/hoc/search");
-const { CLASSES } = require("hoctable/hoc/search");
+const { CLASSES, DEBOUNCE_TIME } = require("hoctable/hoc/search");
 const helpers = require("test_helpers");
 const React = require("react");
 
@@ -30,6 +30,10 @@ describe("hoc/Search test suite", function() {
       }
     }
 
+    search(query, callback) {
+      bag.callbacks.search = { query, callback };
+    }
+
   }
 
   function Loader() {
@@ -43,7 +47,7 @@ describe("hoc/Search test suite", function() {
   const dom = {
 
     get input() {
-      return bag.dom.container.querySelector(`.${CLASSES.SEARCH_CONTAINER} input`);
+      return bag.dom.container.querySelector(`.${CLASSES.INPUT_CONTAINER} input`);
     }
 
   };
@@ -71,6 +75,19 @@ describe("hoc/Search test suite", function() {
 
     it("should render properly", function() {
       expect(dom.input).not.toBe(null);
+    });
+
+    describe("when user inputs some text", function() {
+
+      beforeEach(function(done) {
+        helpers.keyboard.fill(dom.input, "my search query");
+        setTimeout(done, DEBOUNCE_TIME + 10);
+      });
+
+      it("should have asked the delegate for the search results", function() {
+        expect(bag.callbacks.search.query).toBe("my search query");
+      });
+
     });
 
   });

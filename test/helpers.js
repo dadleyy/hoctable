@@ -112,4 +112,13 @@ const fullscreen = {
 
 };
 
-module.exports = { dom, fullscreen, mouse };
+function keyboard() {
+}
+
+keyboard.fill = function(element, value) {
+  const event = new Event("input", { bubbles: true, cancelable: true });
+  element.value = value;
+  element.dispatchEvent(event);
+};
+
+module.exports = { dom, fullscreen, mouse, keyboard };

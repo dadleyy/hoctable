@@ -296,8 +296,7 @@ describe("hoc/MultiSelect test suite", function() {
         describe("when the user enters a search query", function() {
 
           beforeEach(function(done) {
-            dom.search_input.value = "hello world";
-            dom.search_input.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+            helpers.keyboard.fill(dom.search_input, "hello world");
             setTimeout(done, DEBOUNCE_TIME + 100);
           });
 
