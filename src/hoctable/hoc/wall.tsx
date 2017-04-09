@@ -484,7 +484,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
       // If we were unable to find the target to highlight, exit now.
       if(!source) {
-        return;
+        return renderer.highlight = null;
       }
 
       function close() : void {

@@ -209,6 +209,21 @@ describe("hoc/Wall test suite", function() {
                 expect(text).toBe(bag.items[0].name);
               });
 
+              describe("having received a mouse out event for that item", function() {
+
+                  beforeEach(function() {
+                    const [ first ] = dom.items;
+                    const { width, height, left, top } = first.getBoundingClientRect();
+                    helpers.mouse.out(left + (width * 0.5), top + (height * 0.5), first).send();
+                  });
+
+                  it("should no longer have a highlight item", function() {
+                    let [ highlight ] = dom.highlight;
+                    expect(highlight).toBe(undefined);
+                  });
+
+              });
+
             });
 
           });
