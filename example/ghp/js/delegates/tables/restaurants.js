@@ -39,7 +39,7 @@ class Delegate {
       callback({ rows });
     }
 
-    if(filters.location) {
+    if(filters.location && !filters.city) {
       let { latitude, longitude } = filters.location;
       params.lat = latitude;
       params.lon = longitude;
@@ -49,9 +49,10 @@ class Delegate {
       params.q = filters.title;
     }
 
-    if(filters.cities && filters.cities.length >= 1) {
+    if(filters.city) {
+      const { id: city_id } = filters.city;
       params.entity_type = 'city';
-      params.entity_id = filters.cities.map(function({ id }) { return id; }).join(',');
+      params.entity_id = city_id;
     }
 
     if(filters.category && filters.category.all !== true) {

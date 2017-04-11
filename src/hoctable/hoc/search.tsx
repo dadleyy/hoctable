@@ -16,6 +16,10 @@ export interface ItemContainerSignals {
   select : (item : any) => void;
 }
 
+interface ControlsProps {
+  clear : () => void;
+}
+
 export interface ItemContainerProps {
   signals   : ItemContainerSignals;
   item      : any;
@@ -33,24 +37,44 @@ export interface RenderedItemMapping {
 
 export const CLASSES = {
   SEARCH: "hoctable__search",
-  INPUT_CONTAINER: "hoctable__search-input-continer",
+  SEARCH_POPUP: "hoctable__search-popup",
+  INPUT_CONTAINER: "hoctable__search-input-container",
   RESULTS_PLACEHOLDER: "hoctable__search-results-placeholder",
-  ITEM_CONTAINER: "hoctable-search-results-item"
+  SELECTION_CONTROL: "hoctable__search-selection-control",
+  CLEAR_CONTROL_ICON: "hoctable__search-selection-clear-icon",
+  ITEM_CONTAINER: "hoctable-search-results-item",
+  CONTROLS: "hoctable__search-controls"
 };
 
-export interface ItemProps {
+export interface SearchItemProps {
   option    : any;
   delegate? : SearchDelegate;
 }
 
 export const DEBOUNCE_TIME = 30;
 
-export function DefaultItem(props : ItemProps) : React.ReactElement<any> {
+function c(lookup : string) : string {
+  return CLASSES[lookup];
+}
+
+export function DefaultItem(props : SearchItemProps) : React.ReactElement<any> {
   const { option, delegate } = props;
 
   return (
-    <div className={CLASSES["ITEM_CONTAINER"]}>
+    <div className={c("ITEM_CONTAINER")}>
       <p>{delegate.translate("option", option)}</p>
+    </div>
+  );
+}
+
+function SelectionControl(props : ControlsProps) : React.ReactElement<any> {
+  const { clear } = props;
+
+  return (
+    <div className="">
+      <div className={c("SELECTION_CONTROL")} onClick={clear}>
+        <i className={c("CLEAR_CONTROL_ICON")} />
+      </div>
     </div>
   );
 }
@@ -59,10 +83,10 @@ function ItemContainer(props : ItemContainerProps) : React.ReactElement<any> {
   const { signals, item } = props;
   const select = signals.select.bind(null, item);
 
-  return (<div className={CLASSES["SEARCH_ITEM_CONTAINER"]} onClick={select}>{props.children}</div>);
+  return (<div className={c("SEARCH_ITEM_CONTAINER")} onClick={select}>{props.children}</div>);
 }
 
-function Factory(ItemComponent? : React.ComponentClass<ItemProps>) : React.ComponentClass<SearchProps> {
+function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React.ComponentClass<SearchProps> {
 
   class Search extends React.Component<SearchProps, any> {
     private popup_handle : any;
@@ -81,7 +105,7 @@ function Factory(ItemComponent? : React.ComponentClass<ItemProps>) : React.Compo
     }
 
     transclude(search_query : string) : void {
-      const { props, refs, rendered_items } = this;
+      const { props, rendered_items } = this;
       const { delegate } = props;
 
       const done = (selected_item : any) : void => {
@@ -101,7 +125,7 @@ function Factory(ItemComponent? : React.ComponentClass<ItemProps>) : React.Compo
 
       const render = (results : Array<any>) : void => {
         const placeholder = this.refs["placeholder"] as HTMLElement;
-        const bounding = placeholder.getBoundingClientRect();
+        const { left, top } = placeholder.getBoundingClientRect();
         const popup_children : Array<React.ReactNode> = [ ];
 
         for(let i = 0, c = results.length; i < c; i++) {
@@ -115,8 +139,12 @@ function Factory(ItemComponent? : React.ComponentClass<ItemProps>) : React.Compo
           popup_children.push(node);
         }
 
-        const popup_node = (<div className={CLASSES["SEARCH_POPUP"]}>{popup_children}</div>);
-        this.popup_handle = Popups.open(popup_node, bounding);
+        const popup_node = (<div className={c("SEARCH_POPUP")}>{popup_children}</div>);
+
+        // We should now safely close the previous popup
+        Popups.close(this.popup_handle);
+
+        this.popup_handle = Popups.open(popup_node, { left, top });
       };
 
       delegate.search(search_query, render);
@@ -125,23 +153,53 @@ function Factory(ItemComponent? : React.ComponentClass<ItemProps>) : React.Compo
     render() : React.ReactElement<any> {
       const { props, state } = this;
       const { delegate } = props;
+      const { selected_item } = state;
+      const value = selected_item ? delegate.translate("selection", selected_item) : (state.value || "");
 
-      const search = ({ target }) => {
-        const update = this.transclude.bind(this, target.value);
+      const done = (selection : any) : void => {
+        this.setState({ selected_item: selection });
+      };
+
+      const search = ({ target } : React.SyntheticEvent<HTMLInputElement>) => {
+        const { value: new_value } = target as HTMLInputElement;
+        const update = this.transclude.bind(this, new_value);
 
         if(this.state.timer) {
           clearTimeout(this.state.timer);
         }
 
-        this.state.timer = setTimeout(update, DEBOUNCE_TIME);
+        const timer = setTimeout(update, DEBOUNCE_TIME);
+
+        if(selected_item) {
+          state.timer = timer;
+          state.value = new_value;
+
+          return delegate.select(null, done);
+        }
+
+        this.setState({ timer, value: new_value, selected_item: null });
       };
 
+      const clear = () : void => {
+        const { state: current_state } = this;
+
+        clearTimeout(current_state.timer);
+
+        // Clear out the value in the input element.
+        current_state.value = "";
+
+        return delegate.select(null, done);
+      };
+
+      const control = selected_item ? <SelectionControl clear={clear} /> : null;
+
       return (
-        <div className={CLASSES["SEARCH"]}>
-          <div className={CLASSES["INPUT_CONTAINER"]}>
-            <input type="text" placeholder={delegate.translate("placeholder")} onChange={search} />
+        <div className={c("SEARCH")}>
+          <div className={c("CONTROLS")}>{control}</div>
+          <div className={c("INPUT_CONTAINER")}>
+            <input type="text" placeholder={delegate.translate("placeholder")} onChange={search} value={value} />
           </div>
-          <div className={CLASSES["RESULTS_PLACEHOLDER"]} ref="placeholder" />
+          <div className={c("RESULTS_PLACEHOLDER")} ref="placeholder" />
         </div>
       );
     }

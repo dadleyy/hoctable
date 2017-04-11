@@ -25,7 +25,7 @@
     "umd_min_out": "./dist/umd/hoctable/hoctable-umd.min.js",
     "td_out": "./dist/typings/hoctable",
     "ghp_out": "./dist/gh-pages",
-    "ghp_css_flags": "-o ./dist/gh-pages/css --include-path ./node_modules/bulma",
+    "ghp_css_flags": "-o ./dist/gh-pages/css --include-path ./node_modules/bulma --include-path ./node_modules/font-awesome/scss",
     "fullstack_webpack": "./example/fullstack/browser/webpack.config.js"
   },
   "scripts": {
@@ -80,7 +80,6 @@
     "babel-plugin-transform-es2015-modules-amd": "6.24.1",
     "babel-plugin-transform-runtime": "6.15.0",
     "babel-polyfill": "6.20.0",
-    "babel-preset-es2015": "6.24.1",
     "babel-preset-es2015": "6.24.0",
     "babel-preset-react": "6.24.1",
     "babel-runtime": "6.23.0",
@@ -89,6 +88,7 @@
     "codecov": "^2.1.0",
     "dotenv": "^3.0.0",
     "express": "5.0.0-alpha.5",
+    "font-awesome": "^4.7.0",
     "jasmine-ajax": "^3.2.0",
     "jasmine-core": "2.5.2",
     "karma": "1.6.0",

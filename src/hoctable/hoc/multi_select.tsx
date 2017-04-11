@@ -25,7 +25,7 @@ export interface MultiSelectProps {
   close    : PopupCloseCallback;
 }
 
-export interface SearchProps {
+export interface MultiSelectSearchProps {
   value    : string;
   search   : (value : React.ChangeEvent<HTMLInputElement>) => void;
   delegate : MultiSelectDelegate;
@@ -88,7 +88,7 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
 
 }
 
-export function DefaultSearch(props : SearchProps) : React.ReactElement<SearchProps> {
+export function DefaultSearch(props : MultiSelectSearchProps) : React.ReactElement<MultiSelectSearchProps> {
   const { value, search, delegate } = props;
 
   return (

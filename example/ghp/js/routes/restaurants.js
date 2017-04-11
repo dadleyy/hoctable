@@ -4,7 +4,7 @@ import * as env from "config/environment";
 import Filters from "services/filters";
 import TableDelegate from "delegates/tables/restaurants";
 import CategoryDelegate from "delegates/menus/categories";
-import CityDelegate from "delegates/menus/cities";
+import CityDelegate from "delegates/search/cities";
 
 const path = "restaurants";
 const view = "example/ghp/js/views/restaurants";

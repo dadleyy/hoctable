@@ -1,6 +1,9 @@
 $table-border: #ededed
 
+@import "./fonts/awesome"
+@import "font-awesome"
 @import "bulma"
+@import "./mixins/transforms"
 
 #popups
   z-index: 10
@@ -41,21 +44,62 @@ $table-border: #ededed
 .float-left
   float: left
 
+.float-right
+  float: right
+
 .pointer
   cursor: pointer
 
+.is-paddingless-tb
+  padding-top: 0
+  padding-bottom: 0
+
+.is-paddingless-lr
+  padding-left: 0
+  padding-right: 0
+
 .hoctable__select,
-.hoctable__multiselect
+.hoctable__multiselect,
+.hoctable__search-popup
   @extend .box
   @extend .menu-list
   padding: 0
   max-height: 240px
   overflow-y: auto
 
+.hoctable__search-selection-control
+  @extend .button
+  @extend .pointer
+  @extend .margin-left-10
+
+.hoctable__search-selection-clear-icon
+  @extend .fa-close
+  @extend .fa
+  @extend .is-paddingless
+
 .hoctable__select-option,
 .hoctable__multiselect-item,
+.hoctable-search-results-item,
 .hoctable__select-option--loading
   padding: 0.4rem 0.6rem
+
+.hoctable__search
+  @extend .clearfix
+  position: relative
+
+.hoctable__search-input-container
+  overflow: hidden
+  display: block
+  height: auto
+
+.hoctable__search-controls
+  @extend .float-right
+
+.hoctable__search-results-placeholder
+  +translate(0, 5px)
+  position: absolute
+  bottom: 0
+  left: 0
 
 .hoctable__multiselect-item
   @extend .is-clearfix
@@ -71,7 +115,8 @@ $table-border: #ededed
 .hoctable__action-menu
   display: inline-block
 
-.hoctable__select-option
+.hoctable__select-option,
+.hoctable-search-results-item
   @extend .pointer
   @extend .button.is-white
 
