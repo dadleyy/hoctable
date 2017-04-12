@@ -86,11 +86,6 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       // Cleanup previously rendered items.
       while(options.length) {
         let [ next ] = options.splice(0, 1);
-
-        if(!next) {
-          continue;
-        }
-
         ReactDOM.unmountComponentAtNode(next);
         utils.dom.remove(next);
       }

@@ -3,6 +3,7 @@ const { CLASSES }                = require("hoctable/hoc/select");
 const { default: Popups }        = require("hoctable/services/popups");
 const helpers                    = require("test_helpers");
 const React                      = require("react");
+const ReactDOM                   = require("react-dom");
 const Delegate                   = require("delegates/select");
 const Dom                        = require("dom/select");
 
@@ -89,6 +90,19 @@ describe("hoc/Select test suite", function() {
 
       it("should render the default loader component", function() {
         expect(dom.default_loader).not.toBe(null);
+      });
+
+      describe("having been unmounted before the delegate finishes the callback", function() {
+
+        beforeEach(function() {
+          ReactDOM.unmountComponentAtNode(bag.dom.container);
+          bag.callbacks.options(OPTIONS);
+        });
+
+        it("should be okay", function() {
+          expect(dom.options).toBe(null);
+        });
+
       });
 
       describe("having been sent options via the delegate", function() {

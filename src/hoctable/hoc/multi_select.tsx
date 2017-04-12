@@ -126,7 +126,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
 
         // Cleanup previously rendered options
         while(options.length) {
-          let [next] = options.splice(0, 1);
+          let [ next ] = options.splice(0, 1);
           ReactDOM.unmountComponentAtNode(next);
           utils.dom.remove(next);
         }
