@@ -55,6 +55,11 @@ class Delegate {
       params.entity_id = city_id;
     }
 
+    if(filters.cuisines) {
+      const { cuisines } = filters;
+      console.log(cuisines);
+    }
+
     if(filters.category && filters.category.all !== true) {
       let { id: category_id } = filters.category;
       params.category = category_id;

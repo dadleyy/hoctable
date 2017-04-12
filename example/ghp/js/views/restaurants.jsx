@@ -3,6 +3,7 @@ import { hoc } from "hoctable";
 import i18n from "services/i18n";
 import AppNav from "components/app_nav";
 import Table from "components/restaurants/table";
+import CuisineDelegate from "delegates/menus/cuisines";
 
 const Select = hoc.Select();
 const MultiSelect = hoc.MultiSelect();
@@ -68,7 +69,30 @@ class Restaurants extends React.Component {
   }
 
   render() {
-    let { props } = this;
+    const { props } = this;
+    const { resolution } = props;
+    const { api_credentials, filters } = resolution
+
+    const controls = [(
+      <div className="float-left" key="categories">
+        <Select delegate={props.resolution.category_delegate} />
+      </div>
+    ), (
+      <div className="float-left margin-left-10" key="cities">
+        <Search delegate={props.resolution.city_delegate} />
+      </div>
+    )];
+
+    if(filters.latest.city) {
+      const cuisine_delegate = new CuisineDelegate(api_credentials, filters);
+      const cuisine_control = (
+        <div className="float-left margin-left-10" key="cuisines">
+          <MultiSelect delegate={cuisine_delegate} />
+        </div>
+      );
+
+      controls.push(cuisine_control);
+    }
 
     return (
       <main>
@@ -80,12 +104,7 @@ class Restaurants extends React.Component {
             <div className="column is-one-quarter is-paddingless-tb">
               <input type="text" placeholder={i18n("search_restaurants")} onChange={this.search.bind(this)} />
             </div>
-            <div className="float-left margin-left-10">
-              <Select delegate={props.resolution.category_delegate} />
-            </div>
-            <div className="float-left margin-left-10">
-              <Search delegate={props.resolution.city_delegate} />
-            </div>
+            <div className="float-left clearfix margin-left-10">{controls}</div>
           </div>
           <Table delegate={props.resolution.table_delegate} />
         </section>

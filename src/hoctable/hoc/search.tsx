@@ -53,7 +53,7 @@ export interface SearchItemProps {
   delegate? : SearchDelegate;
 }
 
-export const DEBOUNCE_TIME = 30;
+export const DEBOUNCE_TIME = 300;
 
 function c(lookup : string) : string {
   return CLASSES[lookup];

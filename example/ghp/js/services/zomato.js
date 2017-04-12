@@ -23,6 +23,19 @@ class Client {
     this.credentials = credentials;
   }
 
+  cuisines(city_id, query, extra = { }) {
+    const { api_base_url } = this.credentials;
+    const url = `${api_base_url}/cuisines`;
+
+    function success(result) {
+      let { cuisines } = result;
+      return cuisines ? defer.resolve(result) : defer.reject(new Error("invalid response"));
+    }
+
+    const params = { q: query, city_id, ...extra };
+    return send.call(this, url, params).then(success);
+  }
+
   cities(query) {
     const { api_base_url } = this.credentials;
     const url = `${api_base_url}/cities`;

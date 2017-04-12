@@ -56,7 +56,7 @@
     "build:ghp:js:compile": "tsc -p ./example/ghp/tsconfig.json -outFile $npm_package_config_ghp_out/js/app.js",
     "build:ghp:js:min": "uglifyjs -o $npm_package_config_ghp_out/js/app.min.js $npm_package_config_ghp_out/js/app.js",
     "build:ghp:js": "npm run build:ghp:js:compile && npm run build:ghp:js:min",
-    "build:ghp:html": "pug -O ./package.json -o $npm_package_config_ghp_out ./example/ghp/*.pug",
+    "build:ghp:html": "env $(cat .env | xargs) pug -O ./package.json -o $npm_package_config_ghp_out ./example/ghp/*.pug",
     "build:ghp:css": "node-sass ./example/ghp/css/main.sass $npm_package_config_ghp_css_flags",
     "build:ghp:watch": "watch \"npm run build:ghp\" ./example/ghp",
     "build:ghp": "npm run build:ghp:js && npm run build:ghp:html && npm run build:ghp:css",

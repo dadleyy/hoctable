@@ -17,11 +17,14 @@ function resolve() {
   }
 
   const filters = new Filters();
+  const api_credentials = { access_token, api_base_url };
   const table_delegate = new TableDelegate({ access_token, api_base_url }, filters);
   const category_delegate = new CategoryDelegate({ access_token, api_base_url }, filters);
   const city_delegate = new CityDelegate({ access_token, api_base_url }, filters);
 
-  return defer.resolve({ filters, table_delegate, category_delegate, city_delegate });
+  return defer.resolve({
+    api_credentials, filters, table_delegate, category_delegate, city_delegate
+  });
 }
 
 export default { path, view, resolve };
