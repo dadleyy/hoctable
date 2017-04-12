@@ -19,6 +19,7 @@ module.exports = function(config) {
     "test/helpers.js"        : ["babel"],
     "test/data/**/*.js"      : ["babel"],
     "test/delegates/**/*.js" : ["babel"],
+    "test/dom/**/*.js" : ["babel"],
     "test/unit.js"           : ["babelexternal"]
   };
 
@@ -29,6 +30,7 @@ module.exports = function(config) {
 
     {pattern: "./test/data/**/*.js", included: false},
     {pattern: "./test/delegates/**/*.js", included: false},
+    {pattern: "./test/dom/**/*.js", included: false},
 
     {pattern: "./test/unit/**/*.spec.js", included: false},
     {pattern: "./test/unit/**/*.spec.jsx", included: false},

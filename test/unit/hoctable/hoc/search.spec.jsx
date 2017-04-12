@@ -5,10 +5,12 @@ const people = require("fixtures/people");
 const React = require("react");
 const ReactDOM = require("react-dom");
 const Delegate = require("delegates/search");
+const Dom = require("dom/search");
 
 describe("hoc/Search test suite", function() {
 
   let bag = null;
+  let dom = null;
 
   const LOADER_TEXT = "loading";
   const OPTIONS = [
@@ -41,33 +43,10 @@ describe("hoc/Search test suite", function() {
     );
   }
 
-  const dom = {
-
-    get input() {
-      return bag.dom.container.querySelector(`.${CLASSES.INPUT_CONTAINER} input`);
-    },
-
-    default: {
-
-      get items() {
-        return bag.dom.popups.querySelectorAll(`.${CLASSES.ITEM_CONTAINER}`);
-      }
-
-    },
-
-    custom: {
-
-      get items() {
-        return bag.dom.popups.querySelectorAll("[data-rel=option-item]");
-      }
-
-    }
-
-  };
-
   beforeEach(function() {
     bag = { };
     helpers.dom.setup.call(bag);
+    dom = Dom(bag);
   });
 
   afterEach(function() {

@@ -2,6 +2,7 @@ const { default: TableFactory, CLASSES } = require("hoctable/hoc/table");
 const helpers = require("test_helpers");
 const people = require("fixtures/people");
 const Delegate = require("delegates/table");
+const Dom = require("dom/table");
 
 describe("hoc/Table component test suite", function() {
 
@@ -11,7 +12,8 @@ describe("hoc/Table component test suite", function() {
     {rel: "gamma", name: "gamma column"}
   ];
 
-  const bag = { };
+  let bag = null;
+  let dom = null;
 
   function Row({ row }) {
     if(row.empty) {
@@ -42,50 +44,19 @@ describe("hoc/Table component test suite", function() {
     ReactDOM.render(<View />, bag.dom.container);
   }
 
-  let dom = {
-
-    get colgroup() {
-      return bag.dom.container.querySelector(`.${CLASSES.TABLE} colgroup`);
-    },
-
-    pagination: {
-
-      get container() {
-        return bag.dom.container.querySelector(`.${CLASSES.PAGINATION}`);
-      },
-
-      get previous() {
-        return bag.dom.container.querySelector(`.${CLASSES.PAGINATION_PREVIOUS}`);
-      },
-
-      get next() {
-        return bag.dom.container.querySelector(`.${CLASSES.PAGINATION_NEXT}`);
-      }
-
-    },
-
-    default: {
-
-      get active_columns() {
-        return bag.dom.container.querySelectorAll(`.${CLASSES.TH_CLASS_ACTIVE}`);
-      },
-
-      get columns() {
-        return bag.dom.container.querySelectorAll(`.${CLASSES.TABLE_HEAD} th`);
-      }
-
-    }
-
-  };
-
-  beforeEach(helpers.dom.setup.bind(bag));
-  afterEach(helpers.dom.teardown.bind(bag));
-
   beforeEach(function() {
-    bag.callbacks = { };
+    const callbacks = { };
+    bag = { callbacks };
+    dom = Dom(bag);
+
     bag.pagination = null;
     bag.sorting = null;
     bag.columns = TEST_COLUMNS;
+    helpers.dom.setup.call(bag)
+  });
+
+  afterEach(function() {
+    helpers.dom.teardown.call(bag)
   });
 
   describe("custom row transclusion + default column", function() {

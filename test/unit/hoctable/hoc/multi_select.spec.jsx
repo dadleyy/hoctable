@@ -4,74 +4,27 @@ const { CLASSES, DEBOUNCE_TIME }  = require("hoctable/hoc/multi_select");
 const helpers                     = require("test_helpers");
 const React                       = require("react");
 const Delegate                    = require("delegates/multi_select");
+const Dom                         = require("dom/multi_select");
 
 describe("hoc/MultiSelect test suite", function() {
 
-  let bag = { };
+  let bag = null;
+  let dom = null;
 
   function Option({ option }) {
     return (<div data-rel="custom-option"></div>);
   }
 
-  const dom = {
-
-    get menu_body() {
-      return bag.dom.popups.querySelector(`.${CLASSES.MULTISELECT}`);
-    },
-
-    get search_input() {
-      return bag.dom.popups.querySelector(`.${CLASSES.MULTISELECT_SEARCH} input`);
-    },
-
-    custom: {
-
-      get options() {
-        return bag.dom.popups.querySelectorAll("[data-rel=custom-option]");
-      },
-
-    },
-
-    default: {
-
-      get button() {
-        return bag.dom.container.querySelector(`.${SELECT_CLASSES.SELECT_BUTTON}`);
-      },
-
-      get options() {
-        return bag.dom.popups.querySelectorAll(`.${CLASSES.MULTISELECT_ITEM}`);
-      },
-
-      get option_texts() {
-        let { options } = dom.default;
-        let texts = [ ];
-
-        for(let i = 0, c = options.length; i < c; i++) {
-          let { firstChild } = options[i].querySelector(`.${CLASSES.MULTISELECT_ITEM_TEXT}`);
-          texts.push(firstChild.innerHTML);
-        }
-
-        return texts;
-      },
-
-      get toggles() {
-        let { menu_body } = dom;
-        return menu_body.querySelectorAll(`.${CLASSES.MULTISELECT_ITEM_TOGGLE} input`);
-      },
-
-      get selected_toggles() {
-        let { menu_body } = dom;
-        return menu_body.querySelectorAll(`.${CLASSES.MULTISELECT_ITEM_TOGGLE} input:checked`);
-      }
-
-    }
-
-  };
-
-  beforeEach(helpers.dom.setup.bind(bag));
-  afterEach(helpers.dom.teardown.bind(bag));
-
   beforeEach(function() {
-    bag.callbacks = { };
+    const callbacks = { }
+    bag = { callbacks };
+    dom = Dom(bag);
+
+    helpers.dom.setup.call(bag);
+  });
+
+  afterEach(function() {
+    helpers.dom.teardown.call(bag);
   });
 
   function render() {

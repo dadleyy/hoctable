@@ -4,10 +4,13 @@ const { default: Popups }     = require("hoctable/services/popups");
 const { SYNC_WAIT_TIME }      = require("hoctable/services/popups");
 const helpers                 = require("test_helpers");
 const React                   = require("react");
+const Dom                     = require("dom/menu");
 
 describe("hoc/ActionMenu test suite", function() {
 
-  const bag = { };
+  let bag = null;
+  let dom = null;
+
   const BUTTON_TEXT = "button text here";
   const MENU_BODY_TEXT = "menu body text";
 
@@ -45,39 +48,14 @@ describe("hoc/ActionMenu test suite", function() {
 
   }
 
-  const dom = {
-
-    get menu() {
-      let { popups } = bag.dom;
-      return popups && popups.querySelector("[data-rel=menu-body]");
-    },
-
-    custom: {
-
-      get button() {
-        let { container } = bag.dom;
-        return container && container.querySelector("[data-rel=button]");
-      }
-
-    },
-
-    default: {
-
-      get button() {
-        let { container } = bag.dom;
-        return container && container.querySelector(`.${CLASSES.MENU_DEFAULT_BUTTON}`);
-      }
-
-    }
-
-  };
-
   function render() {
     ReactDOM.render(<bag.Menu {...bag.render_props} />, bag.dom.container);
   }
 
   beforeEach(function() {
-    bag.spies = { };
+    bag = { };
+    dom = Dom(bag);
+
     bag.Menu = ActionMenu(Menu);
     bag.render_props = { text: BUTTON_TEXT, menu_body_text: MENU_BODY_TEXT };
   });
