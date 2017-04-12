@@ -6,7 +6,9 @@ class SearchDelegate {
 
   select(item, callback) {
     const { bag } = this;
-    bag.callbacks.select = { item, callback };
+    let { count } = bag.callbacks.select || { count: 0 };
+    count++;
+    bag.callbacks.select = { item, callback, count };
   }
 
   translate(identifier, item) {
@@ -20,7 +22,9 @@ class SearchDelegate {
 
   search(query, callback) {
     const { bag } = this;
-    bag.callbacks.search = { query, callback };
+    let { count } = bag.callbacks.search || { count: 0 };
+    count++;
+    bag.callbacks.search = { query, callback, count };
   }
 
 }

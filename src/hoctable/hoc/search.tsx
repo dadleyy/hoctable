@@ -37,10 +37,12 @@ export interface RenderedItemMapping {
 
 export const CLASSES = {
   SEARCH: "hoctable__search",
+  SEARCH_FILLED: "hoctable__search--filled",
   SEARCH_POPUP: "hoctable__search-popup",
   INPUT_CONTAINER: "hoctable__search-input-container",
   RESULTS_PLACEHOLDER: "hoctable__search-results-placeholder",
-  SELECTION_CONTROL: "hoctable__search-selection-control",
+  SELECTION_CONTROLS: "hoctable__search-selection-control",
+  SELECTION_CLEAR_CONTROL: "hoctable__search-clear-selection-control",
   CLEAR_CONTROL_ICON: "hoctable__search-selection-clear-icon",
   ITEM_CONTAINER: "hoctable-search-results-item",
   CONTROLS: "hoctable__search-controls"
@@ -71,8 +73,8 @@ function SelectionControl(props : ControlsProps) : React.ReactElement<any> {
   const { clear } = props;
 
   return (
-    <div className="">
-      <div className={c("SELECTION_CONTROL")} onClick={clear}>
+    <div className={c("SELECTION_CONTROLS")}>
+      <div className={c("SELECTION_CLEAR_CONTROL")} onClick={clear}>
         <i className={c("CLEAR_CONTROL_ICON")} />
       </div>
     </div>
@@ -192,9 +194,10 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
       };
 
       const control = selected_item ? <SelectionControl clear={clear} /> : null;
+      const classlist = selected_item ? [c("SEARCH"), c("SEARCH_FILLED")] : [c("SEARCH")];
 
       return (
-        <div className={c("SEARCH")}>
+        <div className={classlist.join(" ")} data-has-selection={!!selected_item}>
           <div className={c("CONTROLS")}>{control}</div>
           <div className={c("INPUT_CONTAINER")}>
             <input type="text" placeholder={delegate.translate("placeholder")} onChange={search} value={value} />

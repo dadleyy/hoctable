@@ -109,14 +109,84 @@ describe("hoc/Search test suite", function() {
             expect(bag.callbacks.select.item.name).toBe(bag.items[0].name);
           });
 
+          it("should not have rendered out the controls", function() {
+            expect(dom.controls.clear).toBe(null);
+          });
+
+          it("should have called the the select callback exactly once", function() {
+            expect(bag.callbacks.select.count).toBe(1);
+          });
+
+          it("should not have the \"has selection\" indicator", function() {
+            expect(dom.indicators.has_selection).toBe(false);
+          });
+
           describe("having been provided an item from the select callback" , function() {
 
             beforeEach(function() {
               bag.callbacks.select.callback(bag.callbacks.select.item);
+              expect(bag.callbacks.search.count).toBe(1);
+            });
+
+            it("should have added the \"has-selection\" data attribute", function() {
+              expect(dom.indicators.has_selection).toBe(true);
             });
 
             it("should have closed the popup", function() {
               expect(bag.dom.popups.children.length).toBe(0);
+            });
+
+            it("should have rendered the controls", function() {
+              expect(dom.controls.clear).not.toBe(null);
+            });
+
+            describe("when user enters another search query", function() {
+
+              beforeEach(function() {
+                helpers.keyboard.fill(dom.input, "my second search query");
+              });
+
+              it("should not have immediately asked the delegate to search again", function() {
+                expect(bag.callbacks.search.count).toBe(1);
+              });
+
+              it("should have asked the delegate to select null", function() {
+                expect(bag.callbacks.select.count).toBe(2);
+                expect(bag.callbacks.select.item).toBe(null);
+              });
+
+              it("should ask the delegate to search again after a brief wait", function(done) {
+                setTimeout(function() {
+                  expect(bag.callbacks.search.count).toBe(2);
+                  setTimeout(done);
+                }, DEBOUNCE_TIME + 10);
+              });
+
+              describe("having been provided null back from the selection callback", function() {
+
+                beforeEach(function() {
+                  bag.callbacks.select.callback(null);
+                });
+
+                it("should no longer have the \"has selection\" indicator", function() {
+                  expect(dom.indicators.has_selection).toBe(false);
+                });
+
+              });
+
+            });
+
+            describe("when user clicks the clear control", function() {
+
+              beforeEach(function() {
+                dom.controls.clear.click();
+              });
+
+              it("should have asked the delegate to select \"null\"", function() {
+                expect(bag.callbacks.select.count).toBe(2);
+                expect(bag.callbacks.select.item).toBe(null);
+              });
+
             });
 
           });

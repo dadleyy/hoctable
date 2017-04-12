@@ -9,6 +9,19 @@ module.exports = function(bag) {
     },
 
     controls: {
+
+      get clear() {
+        return bag.dom.container.querySelector(`.${CLASSES.SELECTION_CLEAR_CONTROL}`);
+      }
+
+    },
+
+    indicators: {
+
+      get has_selection() {
+        return bag.dom.container.querySelector(`.${CLASSES.SEARCH_FILLED}`) !== null;
+      }
+
     },
 
     default: {
