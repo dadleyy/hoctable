@@ -57,7 +57,7 @@ class Delegate {
 
     if(filters.cuisines) {
       const { cuisines } = filters;
-      console.log(cuisines);
+      params.cuisines = cuisines.map(({ cuisine_id }) => { return cuisine_id; }).join(",");
     }
 
     if(filters.category && filters.category.all !== true) {

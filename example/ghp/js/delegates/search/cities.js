@@ -46,7 +46,7 @@ class Delegate {
       case "option":
         return item.empty ? i18n("no_results") : item.name || i18n("unknown");
       case "placeholder":
-        return i18n("search");
+        return i18n("search_cities");
       default:
         return "";
     }
