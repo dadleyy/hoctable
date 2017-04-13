@@ -54,7 +54,13 @@ class Delegate {
 
   select(value, done) {
     const { filters } = this;
-    filters.dispatch({ field: "city", value });
+    const payloads = [{ field: "city", value }];
+
+    if(value === null) {
+      payloads.push({ field: "cuisines", value: null });
+    }
+
+    filters.dispatch(...payloads);
     done(value);
   }
 

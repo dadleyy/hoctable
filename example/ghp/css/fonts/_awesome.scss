@@ -1,4 +1,5 @@
-$fa_artifact_location: "http://fontawesome.io/assets/font-awesome/fonts/fontawesome-webfont";
+$routing_home: nodeEnv("GITHUB_PAGES_ROUTING_BASE");
+$fa_artifact_location: "#{$routing_home}fonts/fontawesome-webfont";
 
 @font-face {
   font-family: 'FontAwesome';

@@ -38,10 +38,14 @@ class Filters {
     return result;
   }
 
-  dispatch(payload) {
+  dispatch(...payloads) {
     let { filters, listeners } = this;
-    this.filters = filters.filter(function({ field }) { return field !== payload.field; });
-    this.filters.push(payload);
+
+    for(let i = 0, c = payloads.length; i < c; i++) {
+      const payload = payloads[i];
+      this.filters = filters.filter(function({ field }) { return field !== payload.field; });
+      this.filters.push(payload);
+    }
 
     for(let i = 0, c = listeners.length; i < c; i++) {
       let { update, id } = listeners[i];
