@@ -13,7 +13,8 @@ export interface MenuOpenEvent {
 }
 
 export interface MenuState {
-  popup : string | number;
+  popup    : string | number;
+  updated? : number;
 }
 
 export const CLASSES = {
@@ -44,6 +45,7 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
 
     componentWillUnmount() : void {
       let { state } = this;
+
       Popups.close(state.popup);
     }
 
@@ -73,8 +75,12 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
         this.setState({ popup: null });
       };
 
+      const redraw = () : void => {
+        this.setState({ updated: Date.now() });
+      };
+
       // Open the popup component with all of the props that were given to us
-      let popup = Popups.open(<Popup {...this.props} close={close} />, placement);
+      let popup = Popups.open(<Popup {...this.props} close={close} redraw={redraw} />, placement);
 
       if(popup === -1) {
         throw new Error("unable to open popup, is service mounted?");
@@ -85,6 +91,7 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
     }
 
     render() : JSX.Element {
+
       return (
         <div className={CLASSES.MENU}>
           <div className={CLASSES.MENU_BUTTON_CONTAINER} onClick={this.open} ref="button">

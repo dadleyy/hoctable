@@ -4,7 +4,11 @@ import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-export type SelectCallback = () => void;
+export interface SelectionFlags {
+  remain_open : boolean;
+}
+
+export type SelectCallback = (remain_open? : SelectionFlags) => void;
 export type OptionsCallback = (options : Array<any>) => void;
 
 export interface SingleSelectDelegate {
@@ -14,12 +18,13 @@ export interface SingleSelectDelegate {
 }
 
 export interface ItemSignals {
-  selection : () => void;
+  selection : (remain_open : boolean) => void;
 }
 
 export interface SingleSelectProps {
   delegate : SingleSelectDelegate;
   close    : PopupCloseCallback;
+  redraw   : PopupCloseCallback;
 }
 
 export interface ItemProps<DelegateType> {
@@ -50,11 +55,11 @@ export function DefaultLoading() : React.ReactElement<any> {
 function ItemFactory(Inner : ItemComponent) : ItemComponent {
 
   function Item(props : SingleSelectItemProps) : React.ReactElement<any> {
-    let {delegate, option, signals} = props;
-    let content = Inner ? <Inner {...props} /> : (<p>{delegate.translate(option)}</p>);
+    const { delegate, option, signals } = props;
+    const content = Inner ? <Inner {...props} /> : (<p>{delegate.translate(option)}</p>);
 
-    function finished() : void {
-      signals.selection();
+    function finished(flags? : SelectionFlags) : void {
+      signals.selection(flags && flags.remain_open === true);
     }
 
     function select() : void {
@@ -81,11 +86,11 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
     }
 
     componentWillUnmount() : void {
-      let { options } = this;
+      const { options } = this;
 
       // Cleanup previously rendered items.
       while(options.length) {
-        let [ next ] = options.splice(0, 1);
+        const [ next ] = options.splice(0, 1);
         ReactDOM.unmountComponentAtNode(next);
         utils.dom.remove(next);
       }
@@ -94,24 +99,24 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
     }
 
     transclude(list_el : HTMLElement) : void {
-      let { delegate, close } = this.props;
-      let { options } = this;
+      const { delegate, close, redraw } = this.props;
+      const { options } = this;
 
       if(!list_el) {
         return;
       }
 
-      let signals = {
-        selection: () => {
-          this.setState({ updated: Date.now() });
+      const selection = (remain_open : boolean) : void => {
+        this.setState({ updated: Date.now() });
 
-          return close();
-        }
+        return remain_open ? redraw() : close();
       };
 
+      const signals = { selection };
+
       const render = (option_list : Array<any>) : void => {
-        let { render_request } = this;
-        let { childNodes: children } = list_el;
+        const { render_request } = this;
+        const { childNodes: children } = list_el;
 
         // If the component was unmounted during an attempt to load options do nothing
         if(render_request !== current_request) {
@@ -120,15 +125,15 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
 
         // Cleanup previous rendered options
         while(options.length) {
-          let [next] = options.splice(0, 1);
+          const [next] = options.splice(0, 1);
           ReactDOM.unmountComponentAtNode(next);
           utils.dom.remove(next);
         }
 
         // Iterate over the items provided by the delegate, rendering them.
         for(let i = 0, c = option_list.length; i < c; i++) {
-          let option = option_list[i];
-          let body   = document.createElement("div");
+          const option = option_list[i];
+          const body   = document.createElement("div");
 
           ReactDOM.render(<Item delegate={delegate} option={option} signals={signals} />, body);
           list_el.appendChild(body);
@@ -138,7 +143,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
 
       // If we did not previously have menu items, gracefully display a loading element.
       if(options.length === 0) {
-        let body = document.createElement("div");
+        const body = document.createElement("div");
         ReactDOM.render(<Loading />, body);
         list_el.appendChild(body);
         options.push(body);
@@ -146,12 +151,13 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
 
       const current_request = this.render_request = utils.uuid();
 
-      // Load in the delegate's options
       delegate.options(render.bind(this));
     }
 
     render() : React.ReactElement<any> {
-      return (<div className={CLASSES["SELECT"]} ref={this.transclude}></div>);
+      const transclude = this.transclude.bind(this);
+
+      return (<div className={CLASSES["SELECT"]} ref={transclude}></div>);
     }
 
   }

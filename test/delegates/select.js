@@ -11,12 +11,19 @@ class Delegate {
 
   options(callback) {
     const { bag } = this;
-    bag.callbacks.options = callback;
+    const { options } = bag.callbacks;
+    const count = options && options.count ? options.count + 1 : 1;
+
+    bag.callbacks.options = { callback, count };
   }
 
   select(item, callback) {
     const { bag } = this;
-    bag.callbacks.select = { item, callback };
+    const { select } = bag.callbacks;
+
+    const count = (select && select.count ? select.count : 0) + 1;
+
+    bag.callbacks.select = { item, callback, count };
   }
 
 }

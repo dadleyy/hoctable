@@ -64,6 +64,7 @@
     "prepublishOnly": "npm run clean && npm run build",
     "example:server": "webpack-dev-server --config $npm_package_config_fullstack_webpack",
     "test": "karma start ./karma.conf.js --single-run true",
+    "test:narrow": "karma start ./karma.conf.js --single-run true --reporters=narrow",
     "codecov:publish": "codecov -t $CODECOV_TOKEN",
     "test:watch": "karma start ./karma.conf.js --single-run false --reporters=narrow",
     "test:watch:chrome": "karma start ./karma.conf.js --single-run false --reporters=narrow --browsers=Chrome"

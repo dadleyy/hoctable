@@ -1,5 +1,5 @@
 import MenuFactory from "hoctable/hoc/menu";
-import { ItemSignals, ItemProps, DefaultButton } from "hoctable/hoc/select";
+import { ItemProps, DefaultButton } from "hoctable/hoc/select";
 import { PopupCloseCallback } from "hoctable/hoc/menu";
 import utils from "hoctable/utils";
 import * as React from "react";
@@ -56,13 +56,13 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
       let { delegate, option, signals } = props;
       let selected = delegate.isSelected(option);
 
-      function finished() : void {
-        signals.selection();
-      }
+      const finished = (remain_open? : boolean) : void => {
+        signals.selection(remain_open);
+      };
 
-      function select() : void {
+      const select = () : void => {
         return delegate.toggle(option, finished);
-      }
+      };
 
       if(Inner) {
         let content = <Inner {...props} />;
@@ -125,7 +125,11 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
         return;
       }
 
-      let signals = { selection: this.forceUpdate.bind(this) };
+      const selection = () : void => {
+        this.setState({ updated: Date.now() });
+      };
+
+      const signals = { selection };
 
       const render = (option_list : Array<any>) : void  => {
         let { childNodes: children } = list_el;
