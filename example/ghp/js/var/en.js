@@ -37,6 +37,7 @@ const dictionary = {
 
   open: "Open",
 
+  powered_by: "Powered By",
   project_title: "Hoctable",
   project_subtitle: "A library of composable components",
 

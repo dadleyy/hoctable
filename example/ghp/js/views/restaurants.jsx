@@ -114,6 +114,17 @@ class Restaurants extends React.Component {
           </div>
           <Table delegate={props.resolution.table_delegate} />
         </section>
+        <hr />
+        <section className="container">
+          <div className="powered-by media">
+            <div className="level-left margin-right-20"><p>{i18n("powered_by")}</p></div>
+            <div className="level-left">
+              <a href="https://developers.zomato.com" rel="noopener">
+                <img src="//b.zmtcdn.com/images/logo/zomato_logo.svg" height="120" width="120px"/>
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
     );
   }
