@@ -235,6 +235,22 @@ describe("hoc/MultiSelect test suite", function() {
           expect(dom.custom.options.length).toBe(2);
         });
 
+ 
+        describe("when the component is unmounted before the search timeout is done", function() {
+
+          beforeEach(function(done) {
+            helpers.keyboard.fill(dom.search_input, "hello world");
+            ReactDOM.unmountComponentAtNode(bag.dom.container);
+            setTimeout(done, DEBOUNCE_TIME + 100);
+          });
+
+          it("should NOT have asked the delegate for items again", function() {
+            let { query } = bag.callbacks.options.params;
+            expect(bag.callbacks.options.count).toBe(1);
+          });
+
+        });
+
         describe("when the user enters a search query", function() {
 
           beforeEach(function(done) {

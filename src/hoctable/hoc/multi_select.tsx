@@ -114,6 +114,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
 
     componentWillUnmount() : void {
       this.render_request = null;
+      this.search_timeout = null;
     }
 
     transclude(list_el : HTMLElement) : void {
