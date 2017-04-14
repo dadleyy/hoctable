@@ -87,6 +87,20 @@ describe("hoc/Search test suite", function() {
         expect(bag.callbacks.search.query).toBe("my search query");
       });
 
+      describe("having been unmounted before callback is given dat", function() {
+
+        beforeEach(function() {
+          ReactDOM.unmountComponentAtNode(bag.dom.container);
+          bag.callbacks.search.callback(bag.items);
+        });
+
+        it("should have unmounted propertly and stayed unmounted", function() {
+          expect(dom.default.items.length).toBe(0);
+          expect(bag.dom.popups.children.length).toBe(0);
+        });
+
+      });
+
       describe("having been provided items through the data callback", function() {
 
         beforeEach(function() {

@@ -14,7 +14,11 @@ class Restaurants extends React.Component {
   constructor(props) {
     super(...arguments);
     let { filters } = props.resolution;
-    let update = this.forceUpdate.bind(this);
+
+    const update = () => {
+      if(!this.subscriptions.filters) return;
+      this.setState({ updated: Date.now() });
+    };
 
     this.subscriptions = {
       filters: filters.subscribe(update)
@@ -25,6 +29,7 @@ class Restaurants extends React.Component {
     let { subscriptions, props } = this;
     let { filters } = props.resolution;
     filters.unsubscribe(subscriptions.filters);
+    delete subscriptions.filters;
   }
 
   componentWillMount() {
@@ -82,6 +87,7 @@ class Restaurants extends React.Component {
         <Search delegate={props.resolution.city_delegate} />
       </div>
     )];
+
 
     if(filters.latest.city) {
       const cuisine_delegate = new CuisineDelegate(api_credentials, filters);

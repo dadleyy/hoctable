@@ -41,11 +41,14 @@ class Filters {
   dispatch(...payloads) {
     let { filters, listeners } = this;
 
-    for(let i = 0, c = payloads.length; i < c; i++) {
-      const payload = payloads[i];
-      this.filters = filters.filter(function({ field }) { return field !== payload.field; });
-      this.filters.push(payload);
-    }
+    // Get a list of the fields in the payloads provided.
+    const fields = payloads.map(({ field }) => { return field; });
+
+    // Filter the existing filters so that only the fields not in our payload are present.
+    const unique = filters.filter(({ field }) => { return fields.indexOf(field) === -1; });
+
+    // Update our fields array with the unique filters and our payload.
+    this.filters = [ ...unique, ...payloads ];
 
     for(let i = 0, c = listeners.length; i < c; i++) {
       let { update, id } = listeners[i];

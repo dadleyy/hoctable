@@ -2,7 +2,7 @@ const { CLASSES } = require("hoctable/hoc/search");
 
 module.exports = function(bag) {
 
-  return {
+  const dom = {
 
     get input() {
       return bag.dom.container.querySelector(`.${CLASSES.INPUT_CONTAINER} input`);
@@ -41,5 +41,8 @@ module.exports = function(bag) {
     }
 
   };
+
+
+  return dom;
 
 };

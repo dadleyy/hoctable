@@ -93,7 +93,7 @@ module.exports = function(config) {
   options.babelPreprocessor = {
     options: {
       presets: ["es2015", "react"],
-      plugins: ["transform-es2015-modules-amd"]
+      plugins: ["transform-es2015-modules-amd", "transform-object-rest-spread"]
     },
     filename: function (file) {
       return file.originalPath.replace(/\.jsx$/, ".js");

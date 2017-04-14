@@ -85,6 +85,19 @@ describe("hoc/MultiSelect test suite", function() {
         expect(dom.default.options.length).toBe(0);
       });
 
+      describe("having been unmounted before delegate finishes callback", function() {
+
+        beforeEach(function() {
+          ReactDOM.unmountComponentAtNode(bag.dom.container);
+          bag.callbacks.options.callback(bag.options);
+        });
+
+        it("should be okay", function() {
+          expect(bag.dom.container.children.length).toBe(0);
+        });
+
+      });
+
       describe("having been sent options through the callback function w/ none selected", function() {
 
         beforeEach(function() {

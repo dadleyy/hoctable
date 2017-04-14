@@ -72,7 +72,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
 
   class Menu extends React.Component<SingleSelectProps, any> {
     private options : Array<HTMLElement>;
-    private canceled : boolean;
+    private render_request : string;
 
     constructor(props) {
       super(props);
@@ -90,7 +90,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
         utils.dom.remove(next);
       }
 
-      this.canceled = true;
+      this.render_request = null;
     }
 
     transclude(list_el : HTMLElement) : void {
@@ -109,12 +109,12 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
         }
       };
 
-      function render(option_list : Array<any>) : void {
-        let { canceled } = this;
+      const render = (option_list : Array<any>) : void => {
+        let { render_request } = this;
         let { childNodes: children } = list_el;
 
         // If the component was unmounted during an attempt to load options do nothing
-        if(canceled) {
+        if(render_request !== current_request) {
           return;
         }
 
@@ -134,7 +134,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
           list_el.appendChild(body);
           options.push(body);
         }
-      }
+      };
 
       // If we did not previously have menu items, gracefully display a loading element.
       if(options.length === 0) {
@@ -143,6 +143,8 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
         list_el.appendChild(body);
         options.push(body);
       }
+
+      const current_request = this.render_request = utils.uuid();
 
       // Load in the delegate's options
       delegate.options(render.bind(this));

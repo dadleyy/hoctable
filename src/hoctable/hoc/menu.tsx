@@ -68,13 +68,13 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
         placement.right = window_width - (bounding.left + bounding.width);
       }
 
-      function close() : void {
+      const close = () : void => {
         Popups.close(popup);
         this.setState({ popup: null });
-      }
+      };
 
       // Open the popup component with all of the props that were given to us
-      let popup = Popups.open(<Popup {...this.props} close={close.bind(this)} />, placement);
+      let popup = Popups.open(<Popup {...this.props} close={close} />, placement);
 
       if(popup === -1) {
         throw new Error("unable to open popup, is service mounted?");

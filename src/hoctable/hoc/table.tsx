@@ -193,9 +193,10 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
   let HeaderCell = ColumnFactory(Column);
 
   class PagedTable extends React.Component<TableProps, any> {
-    private bodies     : Array<HTMLElement>;
-    private pagination : PaginationState;
-    private sorting    : ColumnDefinition | null;
+    private bodies         : Array<HTMLElement>;
+    private pagination     : PaginationState;
+    private sorting        : ColumnDefinition | null;
+    private render_request : string;
 
     constructor(props : TableProps) {
       super(props);
@@ -210,6 +211,10 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
         sorting    : props.sorting || null,
         pagination : props.pagination || { size: 10, current: 0, total: 0 }
       };
+    }
+
+    componentWillUnmount() : void {
+      this.render_request = null;
     }
 
     /* During the rendering of the table, it will attempt to assign this function to the table element's 'ref' react
@@ -229,6 +234,13 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
 
       const render = (data : DataResult) : void => {
         let { rows, total } = data;
+
+        const { render_request } = this;
+
+        // Prevent rendering if not latest.
+        if(render_request !== current_request) {
+          return;
+        }
 
         // Remove the previous pagination component.
         let pager = refs["pager"] as HTMLElement;
@@ -259,6 +271,8 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
         // Render the pagination component
         ReactDOM.render(<Pagination {...pagination_props} />, pager);
       };
+
+      const current_request = this.render_request = utils.uuid();
 
       // Start the data source loading
       delegate.rows(pagination, sorting, render);

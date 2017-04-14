@@ -148,6 +148,22 @@ describe("hoc/Table component test suite", function() {
 
     });
 
+    describe("having been unmounted before delegate finishes row data loading", function() {
+
+      beforeEach(render);
+
+      beforeEach(function() {
+        const rows = people.slice(0, 5);
+        ReactDOM.unmountComponentAtNode(bag.dom.container);
+        bag.callbacks.rows.callback({ rows, total: 5 });
+      });
+
+      it("should not try rendering the items", function() {
+        expect(bag.dom.container.children.length).toBe(0);
+      });
+
+    });
+
     describe("having been provided row data by the delegate w/ a single page of data on page 0", function() {
 
       beforeEach(function() {

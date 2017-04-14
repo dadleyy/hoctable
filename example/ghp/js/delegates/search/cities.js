@@ -23,8 +23,7 @@ class Delegate {
         return callback([{ empty: true }]);
       }
 
-      const options = [{ name: i18n("all_cities"), all: true }].concat(location_suggestions);
-      callback(options);
+      callback(location_suggestions);
     }
 
     function failed(error) {
@@ -42,8 +41,8 @@ class Delegate {
 
   translate(identifier, item) {
     switch(identifier) {
-      case "selection":
       case "option":
+      case "selection":
         return item.empty ? i18n("no_results") : item.name || i18n("unknown");
       case "placeholder":
         return i18n("search_cities");

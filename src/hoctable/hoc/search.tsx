@@ -93,6 +93,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
   class Search extends React.Component<SearchProps, any> {
     private popup_handle : any;
     private rendered_items : Array<RenderedItemMapping>;
+    private render_request : string;
 
     constructor(props) {
       super(props);
@@ -102,7 +103,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
 
     componentWillUnmount() : void {
       const { popup_handle, rendered_items } = this;
-
+      this.render_request = null;
       Popups.close(popup_handle);
     }
 
@@ -127,6 +128,14 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
 
       const render = (results : Array<any>) : void => {
         const placeholder = this.refs["placeholder"] as HTMLElement;
+
+        const { render_request } = this;
+
+        // Do nothing if the request id we aquired is no longer up to date.
+        if(render_request === null || render_request !== current_request) {
+          return;
+        }
+
         const { left, top } = placeholder.getBoundingClientRect();
         const popup_children : Array<React.ReactNode> = [ ];
 
@@ -149,6 +158,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
         this.popup_handle = Popups.open(popup_node, { left, top });
       };
 
+      const current_request = this.render_request = util.uuid();
       delegate.search(search_query, render);
     }
 

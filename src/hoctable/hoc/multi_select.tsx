@@ -104,11 +104,16 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
   class MultiSelect extends React.Component<MultiSelectProps, any> {
     private options        : Array<HTMLElement>;
     private search_timeout : number;
+    private render_request : string;
 
     constructor(props) {
       super(props);
       this.options = [];
       this.state = { };
+    }
+
+    componentWillUnmount() : void {
+      this.render_request = null;
     }
 
     transclude(list_el : HTMLElement) : void {
@@ -121,8 +126,15 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
 
       let signals = { selection: this.forceUpdate.bind(this) };
 
-      function render(option_list : Array<any>) : void {
+      const render = (option_list : Array<any>) : void  => {
         let { childNodes: children } = list_el;
+
+        const { render_request } = this;
+
+        // Prevent bad rendering.
+        if(render_request !== current_request) {
+          return;
+        }
 
         // Cleanup previously rendered options
         while(options.length) {
@@ -142,8 +154,9 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
           list_el.appendChild(body);
           options.push(body);
         }
-      }
+      };
 
+      const current_request = this.render_request = utils.uuid();
       let params : OptionsDataLoaderParams = { query: state.query };
       delegate.options(params, render);
     }
