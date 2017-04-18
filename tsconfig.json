@@ -13,6 +13,7 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "node_modules/@types/**/*.d.ts"
+    "node_modules/@types/react-dom/index.d.ts",
+    "node_modules/@types/react/index.d.ts"
   ]
 }
