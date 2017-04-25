@@ -107,6 +107,9 @@ module.exports = function(config) {
   };
 
   options.karmaTypescriptConfig = {
+    bundlerOptions: {
+      addNodeGlobals: false
+    },
     reports: {
       "html": {
         "directory": "./coverage/html",
