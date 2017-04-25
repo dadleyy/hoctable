@@ -119,16 +119,7 @@ module.exports = function(config) {
         "filename": "coverage.lcov"
       }
     },
-    compilerOptions: {
-      sourceMap         : true,
-      target            : "ES5",
-      module            : "amd",
-      noImplicitAny     : false,
-      noResolve         : true,
-      removeComments    : true,
-      concatenateOutput : false,
-      jsx               : "React"
-    },
+    tsconfig: "./tsconfig.json",
     transformPath: function(path) {
       return path.replace(/\.(ts|tsx)$/, ".js");
     }
