@@ -80,7 +80,7 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
       };
 
       // Open the popup component with all of the props that were given to us
-      let popup = Popups.open(<Popup {...this.props} close={close} redraw={redraw} />, placement);
+      let popup = Popups.open(<Popup {...this.props as object} close={close} redraw={redraw} />, placement);
 
       if(popup === -1) {
         throw new Error("unable to open popup, is service mounted?");
@@ -95,7 +95,7 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
       return (
         <div className={CLASSES.MENU}>
           <div className={CLASSES.MENU_BUTTON_CONTAINER} onClick={this.open} ref="button">
-            <Button {...this.props} />
+            <Button {...this.props as object} />
           </div>
         </div>
       );
