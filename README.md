@@ -6,8 +6,8 @@
 | | |
 | ---- | ---- |
 | [![travis](https://travis-ci.org/dadleyy/hoctable.svg?branch=master)](https://travis-ci.org/dadleyy/hoctable) | [![codecov](https://codecov.io/gh/dadleyy/hoctable/branch/master/graph/badge.svg)](https://codecov.io/gh/dadleyy/hoctable) |
-| [![release](https://img.shields.io/github/release/dadleyy/hoctable.svg)](https://github.com/dadleyy/hoctable) | [![npm version](https://badge.fury.io/js/hoctable.svg)](https://www.npmjs.com/package/hoctable) |
-| [![devDependencies Status](https://david-dm.org/dadleyy/hoctable/dev-status.svg)](https://david-dm.org/dadleyy/hoctable?type=dev) | [![dependencies Status](https://david-dm.org/dadleyy/hoctable/status.svg)](https://david-dm.org/dadleyy/hoctable) |
+| [![release](https://img.shields.io/github/release/dadleyy/hoctable.svg)](https://github.com/dadleyy/hoctable) | [![npm](https://badge.fury.io/js/hoctable.svg)](https://www.npmjs.com/package/hoctable) |
+| ![hound](https://img.shields.io/badge/protected_by-Hound-a873d1.svg) | ![green](https://img.shields.io/badge/protected_by-Greenkeeper-00c775.svg) |
 
 ----
 
