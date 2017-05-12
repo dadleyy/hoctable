@@ -26,6 +26,7 @@ export interface ColumnDefinition {
   name      : string;
   sortable? : boolean;
   style?    : any;
+  classes?  : Array<string>;
 }
 
 export interface ColumnFlags {

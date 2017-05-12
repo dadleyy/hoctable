@@ -1,7 +1,7 @@
 const { CLASSES: TABLE_CLASSES } = require("hoctable/hoc/table");
 const { CLASSES } = require("hoctable/hoc/grid");
-
-module.exports = function(bag) {
+ 
+function Dom(bag) {
 
   const dom = {
 
@@ -21,6 +21,14 @@ module.exports = function(bag) {
 
     },
 
+    get custom_class_column() {
+      return bag.dom.container.querySelectorAll(`.${Dom.classes.CUSTOM_COLUMN_CLASS}`);
+    },
+
+    get columns() {
+      return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_COLUMN_HEAD}`);
+    },
+
     get rows() {
       return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_ROW_CONTAINER}`);
     },
@@ -32,7 +40,7 @@ module.exports = function(bag) {
       },
 
       get columns() {
-        return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_COLUMN_HEAD}`);
+        return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_COLUMN_HEAD_CONTENT}`);
       }
 
     }
@@ -42,3 +50,9 @@ module.exports = function(bag) {
   return dom;
 
 };
+
+Dom.classes = {
+  CUSTOM_COLUMN_CLASS: "test-class"
+};
+
+module.exports = Dom;

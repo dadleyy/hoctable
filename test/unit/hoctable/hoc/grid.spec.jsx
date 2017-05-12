@@ -8,7 +8,7 @@ describe("hoc/Grid component test suite", function() {
 
   const TEST_COLUMNS = [
     {rel: "alpha", name: "alpha column", sortable: true},
-    {rel: "beta", name: "beta column"},
+    {rel: "beta", name: "beta column", classes: [Dom.classes.CUSTOM_COLUMN_CLASS]},
     {rel: "gamma", name: "gamma column"}
   ];
 
@@ -248,6 +248,15 @@ describe("hoc/Grid component test suite", function() {
         expect(dom.pagination.previous).not.toBe(null);
       });
 
+      it("renders the columns", function() {
+        const { columns } = dom;
+        expect(columns.length).toBe(3);
+      });
+
+      it("renders the custom classes on columns", function() {
+        const { custom_class_column: columns } = dom;
+        expect(columns.length).toBe(1);
+      });
 
       describe("when user clicks a sortable column", function() {
 

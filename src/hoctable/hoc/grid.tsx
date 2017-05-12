@@ -51,10 +51,12 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
     render() : React.ReactElement<any> {
       const { column, flags } = this.props;
       const { name, rel } = column;
+      const { classes: user_classes } = column;
+      const class_list = (user_classes || []).concat(CLASSES["GRID_COLUMN_HEAD"]);
 
-      const header_class = CLASSES["GRID_COLUMN_HEAD"];
-      const active_class = CLASSES["GRID_COLUMN_HEAD_ACTIVE"];
-      const class_name = flags && flags.active === true ? `${header_class} ${active_class}` : header_class;
+      if(flags && flags.active === true) {
+        class_list.push(CLASSES["GRID_COLUMN_HEAD_ACTIVE"]);
+      }
 
       let content = <div className={CLASSES["GRID_COLUMN_HEAD_CONTENT"]}><span>{name}</span></div>;
 
@@ -63,7 +65,7 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
         content = <Transclusion sort={this.sort} column={column} flags={flags} />;
       }
 
-      return <div className={class_name} onClick={this.sort.bind(this)}>{content}</div>;
+      return <div className={class_list.join(" ")} onClick={this.sort.bind(this)}>{content}</div>;
     }
 
   }
