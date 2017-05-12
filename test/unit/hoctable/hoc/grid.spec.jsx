@@ -27,6 +27,14 @@ describe("hoc/Grid component test suite", function() {
     );
   }
 
+  function Column({ column }) {
+    return (
+      <div data-rel="test-column-inner" className={Dom.classes.CUSTOM_COLUMN_TRANSCLUSION_CLASS}>
+        <p>{column.name}</p>
+      </div>
+    );
+  }
+
   class View extends React.Component {
 
     constructor(props) {
@@ -315,6 +323,21 @@ describe("hoc/Grid component test suite", function() {
 
     });
 
+  });
+
+  describe("custom row transclusion + default column", function() {
+
+    beforeEach(function() {
+      bag.Grid = GridFactory(Row, Column);
+      bag.delegate = new Delegate(bag);
+    });
+
+    beforeEach(render);
+
+    it("renders the transcluded content", function() {
+      const { columns } = dom.custom;
+      expect(columns.length).toBe(3);
+    });
 
   });
 

@@ -3,7 +3,13 @@ const { CLASSES } = require("hoctable/hoc/grid");
  
 function Dom(bag) {
 
+  function find(selector) {
+    return bag.dom.container.querySelectorAll(selector);
+  }
+
   const dom = {
+
+    find,
 
     pagination: {
 
@@ -22,25 +28,33 @@ function Dom(bag) {
     },
 
     get custom_class_column() {
-      return bag.dom.container.querySelectorAll(`.${Dom.classes.CUSTOM_COLUMN_CLASS}`);
+      return find(`.${Dom.classes.CUSTOM_COLUMN_CLASS}`);
     },
 
     get columns() {
-      return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_COLUMN_HEAD}`);
+      return find(`.${CLASSES.GRID_COLUMN_HEAD}`);
     },
 
     get rows() {
-      return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_ROW_CONTAINER}`);
+      return find(`.${CLASSES.GRID_ROW_CONTAINER}`);
+    },
+
+    custom: {
+
+      get columns() {
+        return find(`.${Dom.classes.CUSTOM_COLUMN_TRANSCLUSION_CLASS}`);
+      }
+
     },
 
     default: {
 
       get active_columns() {
-        return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_COLUMN_HEAD_ACTIVE}`);
+        return find(`.${CLASSES.GRID_COLUMN_HEAD_ACTIVE}`);
       },
 
       get columns() {
-        return bag.dom.container.querySelectorAll(`.${CLASSES.GRID_COLUMN_HEAD_CONTENT}`);
+        return find(`.${CLASSES.GRID_COLUMN_HEAD_CONTENT}`);
       }
 
     }
@@ -52,7 +66,8 @@ function Dom(bag) {
 };
 
 Dom.classes = {
-  CUSTOM_COLUMN_CLASS: "test-class"
+  CUSTOM_COLUMN_CLASS: "test-class",
+  CUSTOM_COLUMN_TRANSCLUSION_CLASS: "custom-column-transclusion"
 };
 
 module.exports = Dom;
