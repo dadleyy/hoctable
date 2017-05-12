@@ -28,7 +28,7 @@ function bottom(box : ClientRect) : number {
 }
 
 export function DefaultButton(props : any) : React.ReactElement<any> {
-  let { text } = props;
+  const { text } = props;
 
   return (<a className={CLASSES.MENU_DEFAULT_BUTTON}>{text}</a>);
 }
@@ -44,26 +44,26 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
     }
 
     componentWillUnmount() : void {
-      let { state } = this;
+      const { state } = this;
 
       Popups.close(state.popup);
     }
 
     open(trigger : React.MouseEvent<any>) : void {
-      let button = this.refs["button"] as HTMLElement;
-      let bounding  = button.getBoundingClientRect();
+      const button = this.refs["button"] as HTMLElement;
+      const bounding  = button.getBoundingClientRect();
 
       /* Get the current top of the window, this will need to be added to the position that
        * we use to place the popup, which will go below the button that was clicked.
        */
-      let { y: win_top } = Viewport.scroll();
-      let { width: window_width } = Viewport.dimensions();
+      const { y: win_top } = Viewport.scroll();
+      const { width: window_width } = Viewport.dimensions();
 
       // Calculate the top.
-      let top = bottom(bounding) + TARGET_TOP_BUFFER + win_top;
+      const top = bottom(bounding) + TARGET_TOP_BUFFER + win_top;
 
       // Create our placement object using the provided bounding box.
-      let placement : PopupPlacement = { top, left: bounding.left };
+      const placement : PopupPlacement = { top, left: bounding.left };
 
       // If we're on the right side of the screen, move the menu to be right aligned
       if(bounding.left > window_width * 0.5) {
@@ -80,7 +80,7 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
       };
 
       // Open the popup component with all of the props that were given to us
-      let popup = Popups.open(<Popup {...this.props as object} close={close} redraw={redraw} />, placement);
+      const popup = Popups.open(<Popup {...this.props as object} close={close} redraw={redraw} />, placement);
 
       if(popup === -1) {
         throw new Error("unable to open popup, is service mounted?");

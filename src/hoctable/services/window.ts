@@ -84,10 +84,10 @@ function on(event_name : string, handler : EventListener, context? : any) : stri
 }
 
 function off(id : string) : string | number {
-  let { listeners } = internal_state;
+  const { listeners } = internal_state;
 
   for(let i = 0, c = listeners.length; i < c; i++) {
-    let l = listeners[i];
+    const l = listeners[i];
 
     if(l.id !== id) {
       continue;
@@ -102,15 +102,15 @@ function off(id : string) : string | number {
 }
 
 function trigger(evt : string, fn? : EventListener) : EventListener {
-  let before = "function" === typeof fn ? fn : function() : void { };
+  const before = "function" === typeof fn ? fn : function() : void { };
 
   function handler(e : any) : void {
-    let { listeners } = internal_state;
+    const { listeners } = internal_state;
 
     before(e);
 
     for(let i = 0, c = listeners.length; i < c; i++) {
-      let { event_name, handler, context } = listeners[i];
+      const { event_name, handler, context } = listeners[i];
 
       if(evt === event_name) {
         handler.call(context, e);
@@ -122,23 +122,23 @@ function trigger(evt : string, fn? : EventListener) : EventListener {
 }
 
 function move(e : MouseEvent) : void {
-  let { mouse } = internal_state;
+  const { mouse } = internal_state;
   mouse.current = { x: e.clientX, y: e.clientY };
 }
 
 function down(e : MouseEvent) : void {
-  let { mouse } = internal_state;
+  const { mouse } = internal_state;
   mouse.start = { x: e.clientX, y: e.clientY };
 }
 
 function up(e : MouseEvent) : void {
-  let { mouse } = internal_state;
+  const { mouse } = internal_state;
   mouse.end = { x: e.clientX, y: e.clientY };
 }
 
 function click(e : MouseEvent) : void {
-  let { mouse } = internal_state;
-  let { start, end } = mouse;
+  const { mouse } = internal_state;
+  const { start, end } = mouse;
 
   // If the mouse moved during the click, do nothing.
   if(start.x !== end.x || start.y !== end.y) {
@@ -149,11 +149,11 @@ function click(e : MouseEvent) : void {
 }
 
 function unbind() : void {
-  let { listeners } = internal_state;
+  const { listeners } = internal_state;
   listeners.length = 0;
 
-  for(let key in internal_state.document_events) {
-    let listener = internal_state.document_events[key];
+  for(const key in internal_state.document_events) {
+    const listener = internal_state.document_events[key];
     document.removeEventListener(key, listener);
   }
 
@@ -168,14 +168,14 @@ internal_state.document_events["keyup"] = trigger("keyup");
 internal_state.document_events["keydown"] = trigger("keydown");
 
 for(let i = 0, c = ENTER_FULLSCREEN.length; i < c; i++) {
-  let enter_fn = ENTER_FULLSCREEN[i];
+  const enter_fn = ENTER_FULLSCREEN[i];
 
   if(typeof document.body[enter_fn] !== "function") {
     continue;
   }
 
-  let change_event = FULLSCREEN_CHANGE[i];
-  let error_event = FULLSCREEN_ERROR[i];
+  const change_event = FULLSCREEN_CHANGE[i];
+  const error_event = FULLSCREEN_ERROR[i];
 
   if(change_event && error_event) {
     internal_state.document_events[change_event] = trigger("fullscreenchange");
@@ -193,36 +193,36 @@ function bind() : void {
   internal_state.bound = true;
   internal_state.mouse = new MouseState();
 
-  for(let key in internal_state.document_events) {
-    let listener = internal_state.document_events[key];
+  for(const key in internal_state.document_events) {
+    const listener = internal_state.document_events[key];
     document.addEventListener(key, listener);
   }
 }
 
 function dimensions() : Dimensions {
-  let { innerWidth: width, innerHeight: height } = window;
+  const { innerWidth: width, innerHeight: height } = window;
 
   return { width, height };
 }
 
 function scroll() : Position {
-  let { scrollX: x, scrollY: y } = window;
+  const { scrollX: x, scrollY: y } = window;
 
   return { x, y };
 }
 
-let fullscreen = {
+const fullscreen = {
 
   open(el : Node) : boolean {
     let fn      = null;
-    let vendors = (el === null ? EXIT_FULLSCREEN : ENTER_FULLSCREEN).slice(0);
+    const vendors = (el === null ? EXIT_FULLSCREEN : ENTER_FULLSCREEN).slice(0);
 
     if(el === null) {
       el = document;
     }
 
     while(!fn && vendors.length) {
-      let name = vendors.shift();
+      const name = vendors.shift();
       fn = el[name];
     }
 
@@ -236,7 +236,7 @@ let fullscreen = {
 
   get current() : Node {
     let result  = null;
-    let vendors = FULLSCREEN_ELEMENT.slice(0);
+    const vendors = FULLSCREEN_ELEMENT.slice(0);
 
     while(!result && vendors.length) {
       result = document[vendors.shift()] || null;

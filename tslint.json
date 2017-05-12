@@ -1,5 +1,7 @@
 {
   "rules": {
+    "prefer-const": true,
+    "no-unused-variable": true,
     "no-reference": true,
     "no-console": [true, "log", "error"],
     "one-variable-per-declaration": [true, "ignore-for-loop"],

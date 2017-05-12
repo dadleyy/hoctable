@@ -34,7 +34,7 @@ export class ItemDelegate {
   }
 
   highlight(rendered_id : string) : void {
-    let { actions } = this;
+    const { actions } = this;
     actions.highlight(rendered_id);
   }
 
@@ -95,7 +95,7 @@ export class TransitionTimings {
   }
 
   enqueue(handler : TransitionInstruction, context : any, delay = DEBOUNCEMENT) : void {
-    let { current } = this;
+    const { current } = this;
 
     if(current !== null) {
       clearTimeout(current);
@@ -114,8 +114,8 @@ export class TransitionTimings {
   }
 
   interval(handler : TransitionInstruction, context : any, delay = DEBOUNCEMENT) : void {
-    let { interval_id } = this;
-    let exec = () : void => this.enqueue(handler, context, 0);
+    const { interval_id } = this;
+    const exec = () : void => this.enqueue(handler, context, 0);
 
     if(interval_id !== null) {
       this.stop();
@@ -125,7 +125,7 @@ export class TransitionTimings {
   }
 
   stop() : void {
-    let {interval_id} = this;
+    const {interval_id} = this;
     clearInterval(interval_id);
     this.interval_id = null;
   }
@@ -141,10 +141,10 @@ export function GridItemFactory(Transclusion : PreviewClass) : React.ComponentCl
     }
 
     render() : React.ReactElement<any> {
-      let { props } = this;
-      let { delegate, uuid } = props;
+      const { props } = this;
+      const { delegate, uuid } = props;
 
-      let events = {
+      const events = {
         onMouseOver() : void { delegate.highlight(uuid); },
         onMouseOut() : void { delegate.highlight(null); }
       };
@@ -163,16 +163,16 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
   // Used during intervals, this function cycles the currently "highlighted" item randomly.
   function cycle() : void {
-    let { renderer, state, uuid_pool, subscriptions } = this as Wall;
+    const { renderer, state, uuid_pool, subscriptions } = this as Wall;
 
     // Stop if we've lost our renderer or have been unmounted
     if(!renderer || !subscriptions["fullscreen:error"] || !subscriptions["fullscreen:change"]) {
       return;
     }
 
-    let { highlight: current } = renderer;
+    const { highlight: current } = renderer;
     let next      = current;
-    let max_tries = Math.max(uuid_pool.length, 300);
+    const max_tries = Math.max(uuid_pool.length, 300);
     let attempts  = 0;
 
     // If there are no rendered items, do nothing.
@@ -182,12 +182,12 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
     while(next === current && attempts < max_tries) {
       // Attempt to randomly load a new item id to highlight.
-      let rand = Math.floor(Math.random() * uuid_pool.length) % uuid_pool.length;
+      const rand = Math.floor(Math.random() * uuid_pool.length) % uuid_pool.length;
       next = uuid_pool[rand];
 
       // Get the rendered item and check location
-      let { container } = renderer.find(next) as RenderedItem;
-      let { top } = container.getBoundingClientRect();
+      const { container } = renderer.find(next) as RenderedItem;
+      const { top } = container.getBoundingClientRect();
 
       // If we're below the screen, foce skip.
       if(top >= Viewport.dimensions().height) {
@@ -218,7 +218,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     get size() : { width : number, height : number } {
-      let { viewports } = this;
+      const { viewports } = this;
 
       if(!viewports.list) {
         return { width: 0, height: 0 };
@@ -232,9 +232,9 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     set highlight(rendered_id : string | null) {
-      let { viewports, rendered, active } = this;
-      let { width: vw, height: vh } = Viewport.dimensions();
-      let source = this.find(rendered_id);
+      const { viewports, rendered, active } = this;
+      const { width: vw, height: vh } = Viewport.dimensions();
+      const source = this.find(rendered_id);
 
       // If the id sent in was null and there is no active highlight, do nothing.
       if(rendered_id === null && !active) {
@@ -245,10 +245,10 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
        * the container from the dom and clearing out the active reference.
        */
       if(rendered_id === null) {
-        let { container, uuid } = active;
+        const { container, uuid } = active;
 
         // Find the rendered grid item associated w/ the active highlight
-        let grid_item = this.find(uuid);
+        const grid_item = this.find(uuid);
 
         // Remove the modifier class from the related grid container
         if(grid_item) {
@@ -268,15 +268,15 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
         return;
       }
 
-      let { uuid, delegate, container: source_container } = source;
+      const { uuid, delegate, container: source_container } = source;
 
       // Add the active modifier class to the grid item for styling
       utils.dom.classes.add(source_container as HTMLElement, CLASSES["WALL_ACTIVE_MODIFIER"]);
 
-      let { width, height, top, left, right } = source_container.getBoundingClientRect();
+      const { width, height, top, left, right } = source_container.getBoundingClientRect();
       let destination = viewports.left;
-      let from_right  = left + width > vw * 0.5;
-      let from_bottom = top + height > vh * 0.5;
+      const from_right  = left + width > vw * 0.5;
+      const from_bottom = top + height > vh * 0.5;
 
       let style = {
         "position"  : "absolute",
@@ -301,7 +301,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       }
 
       // Create container & render into
-      let container = utils.dom.create("div", style, [CLASSES["WALL_HIGHLIGHT_ITEM"]]);
+      const container = utils.dom.create("div", style, [CLASSES["WALL_HIGHLIGHT_ITEM"]]);
       ReactDOM.render(<Card item={delegate.item} />, container);
 
       destination.appendChild(container);
@@ -316,12 +316,12 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
      * this function (mouseover mouseout).
      */
     add(delegate : ItemDelegate, style : any) : string {
-      let { rendered, viewports } = this;
-      let uuid = utils.uuid();
+      const { rendered, viewports } = this;
+      const uuid = utils.uuid();
 
       // Create the div to contain the item and the instance of the grid item itself
-      let container = utils.dom.create("div", style, [CLASSES["WALL_ITEM"]]);
-      let instance  = <GridItem delegate={delegate} uuid={uuid} />;
+      const container = utils.dom.create("div", style, [CLASSES["WALL_ITEM"]]);
+      const instance  = <GridItem delegate={delegate} uuid={uuid} />;
 
       // Render the "grid item" into the container we've just created
       ReactDOM.render(instance, container);
@@ -336,16 +336,16 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     seal() : void {
-      let { viewports } = this;
+      const { viewports } = this;
       this.clearfix = utils.dom.create("div", {clear: "both"}, [CLASSES["WALL_CLEARFIX"]]);
       viewports.list.appendChild(this.clearfix);
     }
 
     find(rendered_id : string) : RenderedItem | null {
-      let { rendered } = this;
+      const { rendered } = this;
 
       for(let i = 0, c = rendered.length; i < c; i++) {
-        let item = rendered[i];
+        const item = rendered[i];
         if(item.uuid === rendered_id) return item;
       }
 
@@ -353,7 +353,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     clear() : void {
-      let { viewports, rendered, clearfix } = this;
+      const { viewports, rendered, clearfix } = this;
 
       if(clearfix) {
         utils.dom.remove(clearfix);
@@ -362,7 +362,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       this.clearfix = null;
 
       while(rendered.length) {
-        let {container} = rendered.shift();
+        const {container} = rendered.shift();
         ReactDOM.unmountComponentAtNode(container);
         utils.dom.remove(container);
       }
@@ -389,7 +389,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
       const { delegate } = props;
 
-      let launch = () : void => {
+      const launch = () : void => {
         const { subscriptions, timings } = this;
 
         // If we've been unmounted, do nothing!
@@ -407,7 +407,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
        * this instance when we notice it has been closed (we think open but no current on fullscreen).
        */
       const fullscreen_change = (event : any, errored : boolean = false) : void => {
-        let { state, timings, subscriptions } = this;
+        const { state, timings, subscriptions } = this;
 
         if(state.fullscreen === true && Viewport.fullscreen.current) {
           return;
@@ -436,7 +436,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       };
 
       const fullscreen_error = (event : any) : void => {
-        let { opening } = this.state;
+        const { opening } = this.state;
 
         if(!opening) {
           return;
@@ -455,19 +455,19 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     get renderer() : Renderer {
-      let { renderers } = this;
-      let [ latest ] = renderers;
+      const { renderers } = this;
+      const [ latest ] = renderers;
 
       return latest;
     }
 
     componentWillUnmount() : void {
-      let { subscriptions, timings, renderer } = this;
+      const { subscriptions, timings, renderer } = this;
       renderer.clear();
       timings.stop();
 
-      for(let key in subscriptions) {
-        let id = subscriptions[key];
+      for(const key in subscriptions) {
+        const id = subscriptions[key];
         Viewport.off(id);
         delete subscriptions[key];
       }
@@ -529,17 +529,17 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
      * the positions for each and then rendering them onto the dom via it's active "renderer".
      */
     transclude(items : Array<any>) : void {
-      let { timings, props, renderer, state, uuid_pool, refs } = this;
-      let { delegate } = props;
-      let { width, height } = renderer.size;
-      let { fullscreen } = state;
+      const { timings, props, renderer, state, uuid_pool, refs } = this;
+      const { delegate } = props;
+      const { width, height } = renderer.size;
+      const { fullscreen } = state;
 
       // If there are no items, do nothing else
       if(items.length === 0) {
         return;
       }
 
-      let highlight = (rendered_id : string | null) => {
+      const highlight = (rendered_id : string | null) => {
         // If we're coming off an element, restart our cycle
         if(rendered_id === null) {
           timings.interval(cycle, this, CYCLE_INTERVAL);
@@ -553,25 +553,25 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       };
 
       // Prepare some information with which we will calculate positions
-      let columns    = Math.min(MAX_COLUMNS, items.length);
-      let aspect     = fullscreen ? width / (height || width) : 1.0;
-      let rows       = Math.round(columns * (1 / aspect));
-      let box_width  = Math.floor(width / columns);
-      let box_height = fullscreen ? Math.floor(height / rows) : box_width;
+      const columns    = Math.min(MAX_COLUMNS, items.length);
+      const aspect     = fullscreen ? width / (height || width) : 1.0;
+      const rows       = Math.round(columns * (1 / aspect));
+      const box_width  = Math.floor(width / columns);
+      const box_height = fullscreen ? Math.floor(height / rows) : box_width;
 
       for(let i = 0, c = items.length; i < c; i++) {
-        let item  = items[i];
+        const item  = items[i];
 
         // Position it
-        let style = {
+        const style = {
           "position" : "relative",
           "float"    : "left",
           "width"    : `${box_width}px`,
           "height"   : `${box_height}px`
         };
 
-        let item_delegate = new ItemDelegate(item, highlight);
-        let uuid = renderer.add(item_delegate, style);
+        const item_delegate = new ItemDelegate(item, highlight);
+        const uuid = renderer.add(item_delegate, style);
         uuid_pool.push(uuid);
       }
 
@@ -579,22 +579,22 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     render() : React.ReactElement<any> {
-      let { props, renderers, state, refs, uuid_pool } = this;
-      let { delegate } = props;
+      const { props, renderers, state, refs, uuid_pool } = this;
+      const { delegate } = props;
 
-      let transclude = this.transclude.bind(this);
+      const transclude = this.transclude.bind(this);
 
       let toggle = <a className={CLASSES["WALL_CONTROL_OUT"]} onClick={close}>exit</a>;
-      let styles = {};
+      const styles = {};
 
       /* Called as a react `ref` hook, this function will clear out the previous renderer instance (the class
        * responsible for actually rendering transclusions into the dom), and replace it with a new instance before
        * attempting to load in the delegate's items via the `items` hook.
        */
       function load(list_el : HTMLElement) : void {
-        let [ latest ]  = renderers;
-        let left = refs["left"] as HTMLElement;
-        let right = refs["right"] as HTMLElement;
+        const [ latest ]  = renderers;
+        const left = refs["left"] as HTMLElement;
+        const right = refs["right"] as HTMLElement;
 
         // If for some reason our reference element was not found, skip it.
         if(!list_el) {
@@ -607,7 +607,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
           renderers.shift();
         }
 
-        let renderer = new Renderer(list_el, left, right);
+        const renderer = new Renderer(list_el, left, right);
         renderers.push(renderer);
 
         // Finally load in the delegate's items.
@@ -618,9 +618,9 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
         Viewport.fullscreen.open(null);
       }
 
-      let open = () : void => {
-        let { refs: current_refs, state: current_state } = this;
-        let wall_element = current_refs["wall"];
+      const open = () : void => {
+        const { refs: current_refs, state: current_state } = this;
+        const wall_element = current_refs["wall"];
 
         if(!wall_element) {
           return;

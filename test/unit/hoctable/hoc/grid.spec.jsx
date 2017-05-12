@@ -1,15 +1,15 @@
-const { default: TableFactory, CLASSES } = require("hoctable/hoc/table");
+const { default: GridFactory, CLASSES } = require("hoctable/hoc/grid");
 const helpers = require("test_helpers");
 const people = require("fixtures/people");
 const Delegate = require("delegates/table");
-const Dom = require("dom/table");
+const Dom = require("dom/grid");
 
-describe("hoc/Table component test suite", function() {
+describe("hoc/Grid component test suite", function() {
 
   const TEST_COLUMNS = [
     {rel: "alpha", name: "alpha column", sortable: true},
-    {rel: "beta", name: "beta column"},
-    {rel: "gamma", name: "gamma column", sortable: false}
+    {rel: "beta", name: "beta column", classes: [Dom.classes.CUSTOM_COLUMN_CLASS]},
+    {rel: "gamma", name: "gamma column"}
   ];
 
   let bag = null;
@@ -17,22 +17,19 @@ describe("hoc/Table component test suite", function() {
 
   function Row({ row }) {
     if(row.empty) {
-      return (<tr data-rel="empty-test-row"><td>no results</td></tr>);
+      return (<div data-rel="empty-test-row"><span>no results</span></div>);
     }
 
     return (
-      <tr data-rel="test-row">
-        <td>{row.content}</td>
-      </tr>
+      <div data-rel="test-row">
+        <div>{row.content}</div>
+      </div>
     );
   }
 
-  function Column({ sort, column, flags }) {
-    bag.rendered_columns = bag.rendered_columns || [ ];
-    bag.rendered_columns.push({ sort, column, flags });
-
+  function Column({ column }) {
     return (
-      <div data-rel="test-column-inner">
+      <div data-rel="test-column-inner" className={Dom.classes.CUSTOM_COLUMN_TRANSCLUSION_CLASS}>
         <p>{column.name}</p>
       </div>
     );
@@ -46,7 +43,11 @@ describe("hoc/Table component test suite", function() {
     }
 
     render() {
-      return (<div><bag.Table sorting={bag.sorting} pagination={bag.pagination} delegate={bag.delegate} /></div>);
+      return (
+        <div>
+          <bag.Grid sorting={bag.sorting} pagination={bag.pagination} delegate={bag.delegate} />
+        </div>
+      );
     }
 
   }
@@ -73,33 +74,12 @@ describe("hoc/Table component test suite", function() {
   describe("custom row transclusion + default column", function() {
 
     beforeEach(function() {
-      bag.Table = TableFactory(Row);
+      bag.Grid = GridFactory(Row);
       bag.delegate = new Delegate(bag);
     });
 
     it("should not have rendered out the pagination quite yet", function() {
       expect(dom.pagination.container).toBe(null);
-    });
-
-    describe("having no default sorting and/or pagination provided", function() {
-
-      beforeEach(render);
-
-      it("should have rendered out the table header with column components", function() {
-        let { columns } = dom.default;
-        expect(columns.length).toBe(TEST_COLUMNS.length);
-      });
-
-      it("should have rendered out the colgroup with a <col> element per column", function() {
-        let { colgroup } = dom;
-        expect(colgroup.children.length).toBe(TEST_COLUMNS.length);
-      });
-
-      it("should have provided the delgate with a row data callback", function() {
-        expect(bag.callbacks.rows.pagination.current).toBe(0);
-        expect(bag.callbacks.rows.sorting).toBe(null);
-      });
-
     });
 
     describe("having a default sorting provided", function() {
@@ -192,14 +172,14 @@ describe("hoc/Table component test suite", function() {
         expect(dom.pagination.container).not.toBe(null);
       });
 
-      it("should have rendered the table rows using the tbody container", function() {
-        const { rows } = dom;
-        expect(rows.length).toBe(5);
-      });
-
       it("should not have rendered out any pagination actions", function() {
         expect(dom.pagination.next).toBe(null);
         expect(dom.pagination.previous).toBe(null);
+      });
+
+      it("should have rendered out all 5 rows using the row container", function() {
+        const { rows } = dom;
+        expect(rows.length).toBe(5);
       });
 
     });
@@ -276,6 +256,15 @@ describe("hoc/Table component test suite", function() {
         expect(dom.pagination.previous).not.toBe(null);
       });
 
+      it("renders the columns", function() {
+        const { columns } = dom;
+        expect(columns.length).toBe(3);
+      });
+
+      it("renders the custom classes on columns", function() {
+        const { custom_class_column: columns } = dom;
+        expect(columns.length).toBe(1);
+      });
 
       describe("when user clicks a sortable column", function() {
 
@@ -334,25 +323,18 @@ describe("hoc/Table component test suite", function() {
 
     });
 
-
   });
 
-  describe("custom row transclusion + custom column", function() {
+  describe("custom row transclusion + default column", function() {
 
     beforeEach(function() {
-      bag.Table = TableFactory(Row, Column);
+      bag.Grid = GridFactory(Row, Column);
       bag.delegate = new Delegate(bag);
-      bag.pagination = { current: 0, size: 5 };
     });
 
     beforeEach(render);
 
-    beforeEach(function() {
-      let rows = people.slice(0, 5);
-      bag.callbacks.rows.callback({ rows, total: 5 });
-    });
-
-    it("should have rendered an active table header", function() {
+    it("renders the transcluded content", function() {
       const { columns } = dom.custom;
       expect(columns.length).toBe(3);
     });

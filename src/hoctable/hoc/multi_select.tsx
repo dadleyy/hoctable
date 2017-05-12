@@ -52,9 +52,9 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
   class Item extends React.Component<MultiSelectItemProps, any> {
 
     render() : React.ReactElement<any> {
-      let { props } = this;
-      let { delegate, option, signals } = props;
-      let selected = delegate.isSelected(option);
+      const { props } = this;
+      const { delegate, option, signals } = props;
+      const selected = delegate.isSelected(option);
 
       const finished = (remain_open? : boolean) : void => {
         signals.selection(remain_open);
@@ -65,7 +65,7 @@ function ItemFactory(Inner : React.ComponentClass<MultiSelectItemProps>) : ItemT
       };
 
       if(Inner) {
-        let content = <Inner {...props} />;
+        const content = <Inner {...props} />;
 
         return (<div className={CLASSES["MULTISELECT_ITEM"]} onClick={select}>{content}</div>);
       }
@@ -118,8 +118,8 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
     }
 
     transclude(list_el : HTMLElement) : void {
-      let { options, state, props} = this;
-      let { delegate, close } = props;
+      const { options, state, props} = this;
+      const { delegate, close } = props;
 
       if(!list_el) {
         return;
@@ -132,7 +132,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
       const signals = { selection };
 
       const render = (option_list : Array<any>) : void  => {
-        let { childNodes: children } = list_el;
+        const { childNodes: children } = list_el;
 
         const { render_request } = this;
 
@@ -143,7 +143,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
 
         // Cleanup previously rendered options
         while(options.length) {
-          let [ next ] = options.splice(0, 1);
+          const [ next ] = options.splice(0, 1);
           ReactDOM.unmountComponentAtNode(next);
           utils.dom.remove(next);
         }
@@ -152,8 +152,8 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
          * by react during the `ref` callback.
          */
         for(let i = 0, c = option_list.length; i < c; i++) {
-          let option = option_list[i];
-          let body   = document.createElement("div");
+          const option = option_list[i];
+          const body   = document.createElement("div");
 
           ReactDOM.render(<ComposedItem delegate={delegate} option={option} signals={signals} />, body);
           list_el.appendChild(body);
@@ -162,7 +162,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
       };
 
       const current_request = this.render_request = utils.uuid();
-      let params : OptionsDataLoaderParams = { query: state.query };
+      const params : OptionsDataLoaderParams = { query: state.query };
       delegate.options(params, render);
     }
 
@@ -171,7 +171,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
       const { value: query } = target;
 
       const update = () : void => {
-        let { search_timeout } = this;
+        const { search_timeout } = this;
 
         if(search_timeout !== current_timeout) {
           return;
@@ -193,7 +193,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
       let search = null;
 
       if(Search !== null) {
-        let search_props = { value: state.query, delegate: props.delegate };
+        const search_props = { value: state.query, delegate: props.delegate };
         search = (<Search {...search_props} search={this.search.bind(this)}/>);
       }
 
