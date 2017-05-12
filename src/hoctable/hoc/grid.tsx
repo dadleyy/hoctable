@@ -21,12 +21,15 @@ import {
 
 export const CLASSES = {
   GRID                     : "hoctable__grid",
+  GRID_BODY                : "hoctable__grid-body",
   GRID_HEAD                : "hoctable__grid-head",
+  GRID_HEAD_ROW            : "hoctable__grid-head-row",
   GRID_CONTAINER           : "hoctable__grid-container",
   GRID_ROW_CONTAINER       : "hoctable__grid-row-container",
   GRID_COLUMN_HEAD         : "hoctable__grid-header-cell",
   GRID_COLUMN_HEAD_ACTIVE  : "hoctable__grid-header-cell--active",
-  GRID_COLUMN_HEAD_CONTENT : "hoctable__grid-header-cell-content"
+  GRID_COLUMN_HEAD_CONTENT : "hoctable__grid-header-cell-content",
+  PAGINATION_CONTAINER     : "hoctable__grid-pagination"
 };
 
 function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion {
@@ -143,7 +146,7 @@ function GridFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Comp
          */
         for(let i = 0, c = rows.length; i < c; i++) {
           const row  = rows[i];
-          const body = utils.dom.create("div", null, [CLASSES["GRID_ROW_CONTAINER"]]);
+          const body = utils.dom.create("article", null, [CLASSES["GRID_ROW_CONTAINER"]]);
 
           ReactDOM.render(<Row row={row} />, body);
           table.appendChild(body);
@@ -202,13 +205,15 @@ function GridFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Comp
       }
 
       return (
-        <div className={CLASSES["GRID"]}>
-          <div className={CLASSES["PAGINATION_CONTAINER"]} ref="pager"></div>
-          <div className={CLASSES["GRID_CONTAINER"]}>
-            <div className={CLASSES["GRID_HEAD"]}>{column_headers}</div>
-            <div className={CLASSES["GRID_GRID"]} ref={this.transclude.bind(this)} />
-          </div>
-        </div>
+        <main className={CLASSES["GRID"]}>
+          <nav className={CLASSES["PAGINATION_CONTAINER"]} ref="pager" />
+          <section className={CLASSES["GRID_CONTAINER"]}>
+            <section className={CLASSES["GRID_HEAD"]}>
+              <article className={CLASSES["GRID_HEAD_ROW"]}>{column_headers}</article>
+            </section>
+            <section className={CLASSES["GRID_BODY"]} ref={this.transclude.bind(this)} />
+          </section>
+        </main>
       );
     }
 
