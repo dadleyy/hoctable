@@ -24,10 +24,14 @@ module.exports = function(bag) {
 
     },
 
+    get rows() {
+      return bag.dom.container.querySelectorAll(`.${CLASSES.TABLE_TBODY}`);
+    },
+
     default: {
 
       get active_columns() {
-        return bag.dom.container.querySelectorAll(`.${CLASSES.TH_CLASS_ACTIVE}`);
+        return bag.dom.container.querySelectorAll(`.${CLASSES.TABLE_HEADER_CELL_ACTIVE}`);
       },
 
       get columns() {

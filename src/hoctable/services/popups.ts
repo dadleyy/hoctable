@@ -27,7 +27,7 @@ class SyncGroup {
   }
 
   add(identifier : string) : void {
-    let { timeout } = this;
+    const { timeout } = this;
 
     this.pool.push(identifier);
 
@@ -47,7 +47,7 @@ class SyncGroup {
    * in the same click event process.
    */
   release(identifier : string) : boolean {
-    let index = this.pool.indexOf(identifier);
+    const index = this.pool.indexOf(identifier);
 
     return index !== -1 ? !!this.pool.splice(index, 1) : false;
   }
@@ -67,10 +67,10 @@ class InteralState {
   }
 }
 
-let internal_state = new InteralState();
+const internal_state = new InteralState();
 
 function open(component : React.ReactElement<any>, placement : PopupPlacement) : PopupHandleReference {
-  let { root, popups, sync_group } = internal_state;
+  const { root, popups, sync_group } = internal_state;
 
   // Invalid open attempt - no mount point setup yet.
   if(!root) {
@@ -78,7 +78,7 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
   }
 
   // Create the html style properties that will be assigned to the container.
-  let style : React.CSSProperties = {
+  const style : React.CSSProperties = {
     top: `${placement.top}px`,
     right: `${placement.right}px`,
     position: "absolute"
@@ -90,8 +90,8 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
   }
 
   // Create the unique id for this popup and the container it will be rendered into.
-  let id = util.uuid();
-  let node = util.dom.create("div", style);
+  const id = util.uuid();
+  const node = util.dom.create("div", style);
 
   // Render the component into the container and add it to our popup root.
   ReactDOM.render(component, node);
@@ -105,16 +105,16 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
 }
 
 function close(popup_id : PopupHandleReference) : number {
-  let { popups: open_popups } = internal_state;
+  const { popups: open_popups } = internal_state;
 
   for(let i = 0, c = open_popups.length; i < c; i++) {
-    let { id, node } = open_popups[i];
+    const { id, node } = open_popups[i];
 
     if(id !== popup_id) {
       continue;
     }
 
-    let dom_node = ReactDOM.findDOMNode(node);
+    const dom_node = ReactDOM.findDOMNode(node);
     ReactDOM.unmountComponentAtNode(dom_node);
     dom_node.parentNode.removeChild(dom_node);
     open_popups.splice(i, 1);
@@ -126,13 +126,13 @@ function close(popup_id : PopupHandleReference) : number {
 }
 
 function closeOpen(trigger : Event) : number {
-  let { popups: open_popups, sync_group } = internal_state;
-  let { target } = trigger;
+  const { popups: open_popups, sync_group } = internal_state;
+  const { target } = trigger;
 
   // Iterate over our open popups closing those that are not associated with this event
   for(let i = 0, count = open_popups.length; i < count; i++) {
-    let { id, node } = open_popups[i];
-    let dom_node = ReactDOM.findDOMNode(node);
+    const { id, node } = open_popups[i];
+    const dom_node = ReactDOM.findDOMNode(node);
 
     // If this node is inside the target of the click - continue
     if(sync_group.release(id) || util.dom.contains(dom_node, target as Node)) {
@@ -147,7 +147,7 @@ function closeOpen(trigger : Event) : number {
 }
 
 function mount(target) : void {
-  let { subscriptions } = internal_state;
+  const { subscriptions } = internal_state;
   internal_state.root = target;
 
   for(let i = 0, c = subscriptions.length; i < c; i++) {
@@ -158,7 +158,7 @@ function mount(target) : void {
 }
 
 function unmount() : void {
-  let { popups: open_popups } = internal_state;
+  const { popups: open_popups } = internal_state;
 
   internal_state.root = null;
 

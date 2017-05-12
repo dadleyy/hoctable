@@ -1,6 +1,6 @@
 export function addClass(element : HTMLElement, class_name : string) : void {
-  let {className: current_value} = element;
-  let current_list = current_value.split(" ").filter(function(v) : boolean { return v.length >= 1; });
+  const {className: current_value} = element;
+  const current_list = current_value.split(" ").filter(function(v) : boolean { return v.length >= 1; });
 
   if(current_list.indexOf(class_name) !== -1) {
     return;
@@ -11,8 +11,8 @@ export function addClass(element : HTMLElement, class_name : string) : void {
 }
 
 export function removeClass(element : HTMLElement, class_name : string) : void {
-  let { className: attr } = element;
-  let current_list = attr.split(" ").filter(function(v) : boolean { return v.length >= 1 && v !== class_name; });
+  const { className: attr } = element;
+  const current_list = attr.split(" ").filter(function(v) : boolean { return v.length >= 1 && v !== class_name; });
   element.className = current_list.join(" ");
 }
 
@@ -34,8 +34,8 @@ function contains(target : Node, child : Node) : boolean {
 function stylize(node : HTMLElement, style : CSSStyleDeclaration) : HTMLElement {
   const apply = node.style.setProperty.bind(node.style);
 
-  for(let property in style) {
-    let value = style[property];
+  for(const property in style) {
+    const value = style[property];
     apply(property, value);
   }
 
@@ -43,7 +43,7 @@ function stylize(node : HTMLElement, style : CSSStyleDeclaration) : HTMLElement 
 }
 
 function create(tag : string, style? : any, classes? : Array<string>) : HTMLElement {
-  let element = document.createElement(tag);
+  const element = document.createElement(tag);
 
   element.setAttribute("util-dom", "true");
 
@@ -52,8 +52,8 @@ function create(tag : string, style? : any, classes? : Array<string>) : HTMLElem
   }
 
   for(let i = 0, l = classes || [], c = l.length; i < c; i++) {
-    let class_name = l[i];
-    element.classList.add(class_name);
+    const class_name = l[i];
+    addClass(element, class_name);
   }
 
   return element;
