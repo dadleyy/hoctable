@@ -9,7 +9,7 @@ describe("hoc/Table component test suite", function() {
   const TEST_COLUMNS = [
     {rel: "alpha", name: "alpha column", sortable: true},
     {rel: "beta", name: "beta column"},
-    {rel: "gamma", name: "gamma column"}
+    {rel: "gamma", name: "gamma column", sortable: false}
   ];
 
   let bag = null;
@@ -24,6 +24,17 @@ describe("hoc/Table component test suite", function() {
       <tr data-rel="test-row">
         <td>{row.content}</td>
       </tr>
+    );
+  }
+
+  function Column({ sort, column, flags }) {
+    bag.rendered_columns = bag.rendered_columns || [ ];
+    bag.rendered_columns.push({ sort, column, flags });
+
+    return (
+      <div data-rel="test-column-inner">
+        <p>{column.name}</p>
+      </div>
     );
   }
 
@@ -323,6 +334,28 @@ describe("hoc/Table component test suite", function() {
 
     });
 
+
+  });
+
+  describe("custom row transclusion + custom column", function() {
+
+    beforeEach(function() {
+      bag.Table = TableFactory(Row, Column);
+      bag.delegate = new Delegate(bag);
+      bag.pagination = { current: 0, size: 5 };
+    });
+
+    beforeEach(render);
+
+    beforeEach(function() {
+      let rows = people.slice(0, 5);
+      bag.callbacks.rows.callback({ rows, total: 5 });
+    });
+
+    it("should have rendered an active table header", function() {
+      const { columns } = dom.custom;
+      expect(columns.length).toBe(3);
+    });
 
   });
 

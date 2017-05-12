@@ -28,6 +28,14 @@ module.exports = function(bag) {
       return bag.dom.container.querySelectorAll(`.${CLASSES.TABLE_TBODY}`);
     },
 
+    custom: {
+
+      get columns() {
+        return bag.dom.container.querySelectorAll("[data-rel=test-column-inner]");
+      }
+
+    },
+
     default: {
 
       get active_columns() {
