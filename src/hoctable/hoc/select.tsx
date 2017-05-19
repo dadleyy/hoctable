@@ -38,10 +38,11 @@ export type ItemComponent         = React.StatelessComponent<SingleSelectItemPro
 export type ComposedSelect        = React.ComponentClass<SingleSelectProps>;
 
 export const CLASSES = {
-  SELECT         : "hoctable__select",
-  SELECT_OPTION  : "hoctable__select-option",
-  SELECT_LOADING : "hoctable__select-option--loading",
-  SELECT_BUTTON  : "hoctable__select-toggle"
+  SELECT                  : "hoctable__select",
+  SELECT_OPTION           : "hoctable__select-option",
+  SELECT_LOADING          : "hoctable__select-option--loading",
+  SELECT_OPTION_CONTAINER : "hoctable__select-option--container",
+  SELECT_BUTTON           : "hoctable__select-toggle"
 };
 
 export function DefaultButton({delegate}) : React.ReactElement<any> {
@@ -133,7 +134,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
         // Iterate over the items provided by the delegate, rendering them.
         for(let i = 0, c = option_list.length; i < c; i++) {
           const option = option_list[i];
-          const body   = document.createElement("div");
+          const body   = utils.dom.create("div", null, [CLASSES["SELECT_OPTION_CONTAINER"]]);
 
           ReactDOM.render(<Item delegate={delegate} option={option} signals={signals} />, body);
           list_el.appendChild(body);
