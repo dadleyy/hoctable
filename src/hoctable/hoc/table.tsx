@@ -61,20 +61,21 @@ export type ComposedTable      = React.ComponentClass<TableProps>;
 export type ComposedPager      = React.ComponentClass<PaginationProps>;
 
 export const CLASSES = {
-  PAGINATION               : "hoctable__pagination",
-  PAGINATION_EMPTY         : "hoctable__pagination--empty",
-  PAGINATION_CONTAINER     : "hoctable__table-pagination",
-  PAGINATION_CONTROLS      : "hoctable__pagination-controls",
-  PAGINATION_NEXT          : "hoctable__pagination-next",
-  PAGINATION_PREVIOUS      : "hoctable__pagination-previous",
-  PAGINATION_TOTAL         : "hoctable__pagination-total",
-  PAGINATION_INFO          : "hoctable__pagination-info",
-  TABLE                    : "hoctable__table",
-  TABLE_TBODY              : "hoctable__table-tbody",
-  TABLE_HEAD               : "hoctable__table-head",
-  TABLE_CONTAINER          : "hoctable__table-container",
-  TABLE_HEADER_CELL        : "hoctable__table-header-cell",
-  TABLE_HEADER_CELL_ACTIVE : "hoctable__table-header-cell--active",
+  PAGINATION                 : "hoctable__pagination",
+  PAGINATION_EMPTY           : "hoctable__pagination--empty",
+  PAGINATION_CONTAINER       : "hoctable__table-pagination",
+  PAGINATION_CONTROLS        : "hoctable__pagination-controls",
+  PAGINATION_NEXT            : "hoctable__pagination-next",
+  PAGINATION_PREVIOUS        : "hoctable__pagination-previous",
+  PAGINATION_TOTAL           : "hoctable__pagination-total",
+  PAGINATION_INFO            : "hoctable__pagination-info",
+  TABLE                      : "hoctable__table",
+  TABLE_TBODY                : "hoctable__table-tbody",
+  TABLE_HEAD                 : "hoctable__table-head",
+  TABLE_CONTAINER            : "hoctable__table-container",
+  TABLE_HEADER_CELL          : "hoctable__table-header-cell",
+  TABLE_HEADER_CELL_ACTIVE   : "hoctable__table-header-cell--active",
+  TABLE_HEADER_CELL_SORTABLE : "hoctable__table-header-cell--sortable"
 };
 
 // This component is used by the table to handle updating it's pagination references and subsequently re-rendering.
@@ -152,7 +153,7 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
       const { sort, column } = this.props;
       const update = this.forceUpdate.bind(this);
 
-      if(column.sortable === false) {
+      if(column.sortable !== true) {
         return;
       }
 
@@ -161,14 +162,17 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
 
     render() : React.ReactElement<any> {
       const { column, flags } = this.props;
-      const { name, rel } = column;
+      const { name, rel, sortable, classes: user_classes } = column;
 
-      let th_class = CLASSES["TABLE_HEADER_CELL"];
-      const active_class = CLASSES["TABLE_HEADER_CELL_ACTIVE"];
+      const class_list = (user_classes || []).concat(CLASSES["TABLE_HEADER_CELL"]);
 
       // If this column's sort relationship matched that of the table, add our table header active class to the ele
       if(flags && flags.active === true) {
-        th_class = [th_class, active_class].join(" ");
+        class_list.push(CLASSES["TABLE_HEADER_CELL_ACTIVE"]);
+      }
+
+      if(sortable === true) {
+        class_list.push(CLASSES["TABLE_HEADER_CELL_SORTABLE"]);
       }
 
       let content = <div className={CLASSES["TH_CELL"]}><span>{name}</span></div>;
@@ -178,7 +182,7 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
         content = <Transclusion sort={this.sort} column={column} flags={flags} />;
       }
 
-      return <th className={th_class} onClick={this.sort.bind(this)}>{content}</th>;
+      return <th className={class_list.join(" ")} onClick={this.sort.bind(this)}>{content}</th>;
     }
 
   }

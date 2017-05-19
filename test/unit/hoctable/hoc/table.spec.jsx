@@ -280,7 +280,22 @@ describe("hoc/Table component test suite", function() {
       describe("when user clicks a sortable column", function() {
 
         beforeEach(function() {
-          let [ first ] = dom.default.columns;
+          const { non_sortable_columns } = dom;
+          let [ first ] = non_sortable_columns;
+          first.click();
+        });
+
+        it("should NOT have called the rows function again w/ the new sorting info", function() {
+          expect(bag.callbacks.rows.sorting).toBe(null);
+        });
+
+      });
+
+      describe("when user clicks a sortable column", function() {
+
+        beforeEach(function() {
+          const { sortable_columns } = dom;
+          let [ first ] = sortable_columns;
           first.click();
         });
 
@@ -294,7 +309,8 @@ describe("hoc/Table component test suite", function() {
           beforeEach(function() {
             let rows = people.slice(0, 5);
             bag.callbacks.rows.callback({ rows, total: 15 });
-            let [ first ] = dom.default.columns;
+            const { sortable_columns } = dom;
+            let [ first ] = sortable_columns;
             first.click();
           });
 

@@ -20,16 +20,17 @@ import {
 } from "hoctable/hoc/table";
 
 export const CLASSES = {
-  GRID                     : "hoctable__grid",
-  GRID_BODY                : "hoctable__grid-body",
-  GRID_HEAD                : "hoctable__grid-head",
-  GRID_HEAD_ROW            : "hoctable__grid-head-row",
-  GRID_CONTAINER           : "hoctable__grid-container",
-  GRID_ROW_CONTAINER       : "hoctable__grid-row-container",
-  GRID_COLUMN_HEAD         : "hoctable__grid-header-cell",
-  GRID_COLUMN_HEAD_ACTIVE  : "hoctable__grid-header-cell--active",
-  GRID_COLUMN_HEAD_CONTENT : "hoctable__grid-header-cell-content",
-  PAGINATION_CONTAINER     : "hoctable__grid-pagination"
+  GRID                      : "hoctable__grid",
+  GRID_BODY                 : "hoctable__grid-body",
+  GRID_HEAD                 : "hoctable__grid-head",
+  GRID_HEAD_ROW             : "hoctable__grid-head-row",
+  GRID_CONTAINER            : "hoctable__grid-container",
+  GRID_ROW_CONTAINER        : "hoctable__grid-row-container",
+  GRID_COLUMN_HEAD          : "hoctable__grid-header-cell",
+  GRID_COLUMN_HEAD_SORTABLE : "hoctable__grid-header-cell--sortable",
+  GRID_COLUMN_HEAD_ACTIVE   : "hoctable__grid-header-cell--active",
+  GRID_COLUMN_HEAD_CONTENT  : "hoctable__grid-header-cell-content",
+  PAGINATION_CONTAINER      : "hoctable__grid-pagination"
 };
 
 function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion {
@@ -44,7 +45,7 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
       const { sort, column } = this.props;
       const update = this.forceUpdate.bind(this);
 
-      if(column.sortable === false) {
+      if(column.sortable !== true) {
         return;
       }
 
@@ -53,12 +54,15 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
 
     render() : React.ReactElement<any> {
       const { column, flags } = this.props;
-      const { name, rel } = column;
-      const { classes: user_classes } = column;
+      const { name, rel, sortable, classes: user_classes } = column;
       const class_list = (user_classes || []).concat(CLASSES["GRID_COLUMN_HEAD"]);
 
       if(flags && flags.active === true) {
         class_list.push(CLASSES["GRID_COLUMN_HEAD_ACTIVE"]);
+      }
+
+      if(sortable === true) {
+        class_list.push(CLASSES["GRID_COLUMN_HEAD_SORTABLE"]);
       }
 
       let content = <div className={CLASSES["GRID_COLUMN_HEAD_CONTENT"]}><span>{name}</span></div>;
