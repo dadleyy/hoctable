@@ -121,32 +121,42 @@ function trigger(evt : string, fn? : EventListener) : EventListener {
   return handler;
 }
 
-function move(e : MouseEvent) : void {
-  const { mouse } = internal_state;
-  mouse.current = { x: e.clientX, y: e.clientY };
-}
+const middleware = {
 
-function down(e : MouseEvent) : void {
-  const { mouse } = internal_state;
-  mouse.start = { x: e.clientX, y: e.clientY };
-}
+  move(e : MouseEvent) : void {
+    const { mouse } = internal_state;
+    mouse.current = { x: e.clientX, y: e.clientY };
+  },
 
-function up(e : MouseEvent) : void {
-  const { mouse } = internal_state;
-  mouse.end = { x: e.clientX, y: e.clientY };
-}
+  down(e : MouseEvent) : void {
+    const { mouse } = internal_state;
+    mouse.start = { x: e.clientX, y: e.clientY };
+  },
 
-function click(e : MouseEvent) : void {
-  const { mouse } = internal_state;
-  const { start, end } = mouse;
+  up(e : MouseEvent) : void {
+    const { mouse } = internal_state;
+    mouse.end = { x: e.clientX, y: e.clientY };
+  },
 
-  // If the mouse moved during the click, do nothing.
-  if(start.x !== end.x || start.y !== end.y) {
-    return;
+  click(e : MouseEvent) : void {
+    const { mouse } = internal_state;
+    const { start, end } = mouse;
+
+    // If the mouse moved during the click, do nothing.
+    if(start.x !== end.x || start.y !== end.y) {
+      return;
+    }
+
+    trigger("isoclick")(e);
+  },
+
+  keydown(e : KeyboardEvent) : void {
+    const { keyCode } = e;
+
+    if(keyCode === 27) trigger("escape")(e);
   }
 
-  trigger("isoclick")(e);
-}
+};
 
 function unbind() : void {
   const { listeners } = internal_state;
@@ -160,12 +170,14 @@ function unbind() : void {
   internal_state.bound = false;
 }
 
-internal_state.document_events["click"] = trigger("click", click);
-internal_state.document_events["mousedown"] = trigger("mousedown", down);
-internal_state.document_events["mousemove"] = trigger("mousemove", move);
-internal_state.document_events["mouseup"] = trigger("mouseup", up);
+internal_state.document_events["click"] = trigger("click", middleware.click);
+internal_state.document_events["mousedown"] = trigger("mousedown", middleware.down);
+internal_state.document_events["mousemove"] = trigger("mousemove", middleware.move);
+internal_state.document_events["mouseup"] = trigger("mouseup", middleware.up);
 internal_state.document_events["keyup"] = trigger("keyup");
-internal_state.document_events["keydown"] = trigger("keydown");
+internal_state.document_events["keydown"] = trigger("keydown", middleware.keydown);
+internal_state.document_events["touchstart"] = trigger("touchstart");
+internal_state.document_events["touch_end"] = trigger("touch_end");
 
 for(let i = 0, c = ENTER_FULLSCREEN.length; i < c; i++) {
   const enter_fn = ENTER_FULLSCREEN[i];
