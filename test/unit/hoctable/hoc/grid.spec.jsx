@@ -137,6 +137,11 @@ describe("hoc/Grid component test suite", function() {
         expect(dom.pagination.container).toBe(null);
       });
 
+      it("should have rendered out exactly one sortable column", function() {
+        const { sortable_columns } = dom;
+        expect(sortable_columns.length).toBe(1);
+      });
+
     });
 
     describe("having been unmounted before delegate finishes row data loading", function() {
@@ -266,10 +271,23 @@ describe("hoc/Grid component test suite", function() {
         expect(columns.length).toBe(1);
       });
 
+      describe("when user clicks a non-sortable column", function() {
+
+        beforeEach(function() {
+          const [ column ] = dom.non_sortable_columns;
+          column.click();
+        });
+
+        it("should have called the rows function again w/ the new sorting info", function() {
+          expect(bag.callbacks.rows.sorting).toBe(null);
+        });
+
+      });
+
       describe("when user clicks a sortable column", function() {
 
         beforeEach(function() {
-          let [ first ] = dom.default.columns;
+          let [ first ] = dom.sortable_columns;
           first.click();
         });
 

@@ -39,6 +39,14 @@ function Dom(bag) {
       return find(`.${CLASSES.GRID_ROW_CONTAINER}`);
     },
 
+    get non_sortable_columns() {
+      return find(`.${CLASSES.GRID_COLUMN_HEAD}:not(.${CLASSES.GRID_COLUMN_HEAD_SORTABLE})`);
+    },
+
+    get sortable_columns() {
+      return find(`.${CLASSES.GRID_COLUMN_HEAD_SORTABLE}`);
+    },
+
     custom: {
 
       get columns() {
