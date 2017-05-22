@@ -154,7 +154,11 @@ function mount(target) : void {
     Viewport.off(subscriptions[i]);
   }
 
-  util.replace(subscriptions, [Viewport.on("isoclick", closeOpen)]);
+  util.replace(subscriptions, [
+    Viewport.on("isoclick", closeOpen),
+    Viewport.on("touchstart", closeOpen),
+    Viewport.on("escape", closeOpen)
+  ]);
 }
 
 function unmount() : void {
