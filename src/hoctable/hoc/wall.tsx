@@ -1,6 +1,5 @@
 import utils from "hoctable/utils";
 import Viewport from "hoctable/services/window";
-import Popups from "hoctable/services/popups";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -163,16 +162,16 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
 
   // Used during intervals, this function cycles the currently "highlighted" item randomly.
   function cycle() : void {
-    const { renderer, state, uuid_pool, subscriptions } = this as Wall;
+    const { renderer, uuid_pool, subscriptions } = this as Wall;
 
     // Stop if we've lost our renderer or have been unmounted
     if(!renderer || !subscriptions["fullscreen:error"] || !subscriptions["fullscreen:change"]) {
       return;
     }
 
-    const { highlight: current } = renderer;
-    let next      = current;
+    const current = renderer.highlight;
     const max_tries = Math.max(uuid_pool.length, 300);
+    let next = current;
     let attempts  = 0;
 
     // If there are no rendered items, do nothing.
@@ -232,7 +231,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
     }
 
     set highlight(rendered_id : string | null) {
-      const { viewports, rendered, active } = this;
+      const { viewports, active } = this;
       const { width: vw, height: vh } = Viewport.dimensions();
       const source = this.find(rendered_id);
 
@@ -477,7 +476,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
      * responsible for opening the highlight view of the component.
      */
     highlight(rendered_id : string | null, user_event : boolean = false) : void {
-      const { state, timings, renderer, props, refs } = this;
+      const { state, timings, renderer, props } = this;
       const { delegate } = props;
       const source = rendered_id === null ? null : renderer.find(rendered_id);
       const { highlight: current } = renderer;
@@ -529,8 +528,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
      * the positions for each and then rendering them onto the dom via it's active "renderer".
      */
     transclude(items : Array<any>) : void {
-      const { timings, props, renderer, state, uuid_pool, refs } = this;
-      const { delegate } = props;
+      const { timings, renderer, state, uuid_pool } = this;
       const { width, height } = renderer.size;
       const { fullscreen } = state;
 

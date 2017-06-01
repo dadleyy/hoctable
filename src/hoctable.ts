@@ -21,6 +21,26 @@ import { PopupPlacement } from "./hoctable/services/popups";
 import Viewport from "./hoctable/services/window";
 import { Position, Dimensions } from "./hoctable/services/window";
 
+export {
+  Position,
+  Dimensions,
+  PopupPlacement,
+  WallProps,
+  WallItemProps,
+  WallDelegate,
+  MultiSelectProps,
+  MultiSelectSearchProps,
+  MultiSelectDelegate,
+  SearchDelegate,
+  SearchProps,
+  SearchItemProps,
+  SingleSelectProps,
+  ItemProps,
+  SingleSelectDelegate,
+  ColumnProps,
+  TableProps
+};
+
 import Grid from "./hoctable/hoc/grid";
 
 import utils from "./hoctable/utils";
@@ -37,4 +57,4 @@ const hoc = {
 
 const services = { Popups, Viewport };
 
-export { hoc, services };
+export { hoc, services, utils };

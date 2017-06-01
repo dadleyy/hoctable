@@ -125,6 +125,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
       const signals = { select };
 
       const previous_items = rendered_items.splice(0, rendered_items.length);
+      const current_request = this.render_request = util.uuid();
 
       const render = (results : Array<any>) : void => {
         const placeholder = this.refs["placeholder"] as HTMLElement;
@@ -158,7 +159,6 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
         this.popup_handle = Popups.open(popup_node, { left, top });
       };
 
-      const current_request = this.render_request = util.uuid();
       delegate.search(search_query, render);
     }
 

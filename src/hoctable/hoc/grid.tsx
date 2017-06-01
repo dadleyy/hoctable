@@ -123,6 +123,7 @@ function GridFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Comp
       }
 
       const pagination_props = { pagination, move: this.move.bind(this) };
+      const current_request = this.render_request = utils.uuid();
 
       const render = (data : DataResult) : void => {
         const { rows, total } = data;
@@ -163,8 +164,6 @@ function GridFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Comp
         // Render the pagination component
         ReactDOM.render(<Pagination {...pagination_props} />, pager);
       };
-
-      const current_request = this.render_request = utils.uuid();
 
       // Start the data source loading
       delegate.rows(pagination, sorting, render);

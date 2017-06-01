@@ -1,4 +1,3 @@
-import util from "hoctable/utils";
 import Popups from "hoctable/services/popups";
 import { PopupPlacement } from "hoctable/services/popups";
 import Viewport from "hoctable/services/window";
@@ -70,6 +69,8 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
         placement.right = window_width - (bounding.left + bounding.width);
       }
 
+      let popup = null;
+
       const close = () : void => {
         Popups.close(popup);
         this.setState({ popup: null });
@@ -80,7 +81,7 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
       };
 
       // Open the popup component with all of the props that were given to us
-      const popup = Popups.open(<Popup {...this.props as object} close={close} redraw={redraw} />, placement);
+      popup = Popups.open(<Popup {...this.props as object} close={close} redraw={redraw} />, placement);
 
       if(popup === -1) {
         throw new Error("unable to open popup, is service mounted?");
