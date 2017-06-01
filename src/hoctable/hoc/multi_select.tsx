@@ -119,7 +119,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
 
     transclude(list_el : HTMLElement) : void {
       const { options, state, props} = this;
-      const { delegate, close } = props;
+      const { delegate } = props;
 
       if(!list_el) {
         return;
@@ -130,10 +130,9 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
       };
 
       const signals = { selection };
+      const current_request = this.render_request = utils.uuid();
 
       const render = (option_list : Array<any>) : void  => {
-        const { childNodes: children } = list_el;
-
         const { render_request } = this;
 
         // Prevent bad rendering.
@@ -161,7 +160,6 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
         }
       };
 
-      const current_request = this.render_request = utils.uuid();
       const params : OptionsDataLoaderParams = { query: state.query };
       delegate.options(params, render);
     }
@@ -169,6 +167,8 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
     search(event : React.ChangeEvent<HTMLInputElement>) : void {
       const { target } = event;
       const { value: query } = target;
+
+      let current_timeout = null;
 
       const update = () : void => {
         const { search_timeout } = this;
@@ -184,7 +184,7 @@ function Factory(Item : ItemTransclusion, ButtonComponent = DefaultButton, Searc
         clearTimeout(this.search_timeout);
       }
 
-      const current_timeout = setTimeout(update, DEBOUNCE_TIME);
+      current_timeout = setTimeout(update, DEBOUNCE_TIME);
       this.search_timeout = current_timeout;
     }
 

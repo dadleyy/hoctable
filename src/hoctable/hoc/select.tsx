@@ -114,10 +114,10 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       };
 
       const signals = { selection };
+      const current_request = this.render_request = utils.uuid();
 
       const render = (option_list : Array<any>) : void => {
         const { render_request } = this;
-        const { childNodes: children } = list_el;
 
         // If the component was unmounted during an attempt to load options do nothing
         if(render_request !== current_request) {
@@ -149,8 +149,6 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
         list_el.appendChild(body);
         options.push(body);
       }
-
-      const current_request = this.render_request = utils.uuid();
 
       delegate.options(render.bind(this));
     }

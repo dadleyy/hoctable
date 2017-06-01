@@ -162,7 +162,7 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
 
     render() : React.ReactElement<any> {
       const { column, flags } = this.props;
-      const { name, rel, sortable, classes: user_classes } = column;
+      const { name, sortable, classes: user_classes } = column;
 
       const class_list = (user_classes || []).concat(CLASSES["TABLE_HEADER_CELL"]);
 
@@ -200,8 +200,6 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
 
   class PagedTable extends React.Component<TableProps, any> {
     private bodies         : Array<HTMLElement>;
-    private pagination     : PaginationState;
-    private sorting        : ColumnDefinition | null;
     private render_request : string;
 
     constructor(props : TableProps) {
@@ -237,6 +235,7 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
       }
 
       const pagination_props = { pagination, move: this.move.bind(this) };
+      const current_request = this.render_request = utils.uuid();
 
       const render = (data : DataResult) : void => {
         const { rows, total } = data;
@@ -278,8 +277,6 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
         ReactDOM.render(<Pagination {...pagination_props} />, pager);
       };
 
-      const current_request = this.render_request = utils.uuid();
-
       // Start the data source loading
       delegate.rows(pagination, sorting, render);
     }
@@ -306,7 +303,7 @@ function TableFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Com
     }
 
     render() : React.ReactElement<any> {
-      const { sorting, pagination } = this.state;
+      const { sorting } = this.state;
       const { delegate } = this.props;
       const head = { cols: [ ], cells: [ ] };
 
