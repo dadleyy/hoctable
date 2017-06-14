@@ -104,7 +104,7 @@
     "karma-phantomjs-launcher": "1.0.4",
     "karma-requirejs": "1.1.0",
     "karma-tslint": "1.0.1",
-    "karma-typescript": "3.0.0",
+    "karma-typescript": "3.0.4",
     "node-sass": "4.0.0",
     "pretty-bytes": "4.0.2",
     "pretty-bytes-cli": "2.0.0",
