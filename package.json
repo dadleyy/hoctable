@@ -118,7 +118,7 @@
     "rimraf": "2.6.1",
     "ts-loader": "2.2.0",
     "tslint": "5.4.0",
-    "typescript": "2.3.4",
+    "typescript": "2.4.1",
     "uglify-js": "3.0.20",
     "watch": "1.0.1",
     "webpack": "3.0.0",
