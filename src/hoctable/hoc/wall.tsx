@@ -277,7 +277,7 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
       const from_right  = left + width > vw * 0.5;
       const from_bottom = top + height > vh * 0.5;
 
-      let style = {
+      let style : React.CSSProperties = {
         "position"  : "absolute",
         "top"       : `${top + height}px`,
         "left"      : `${left + width}px`,
