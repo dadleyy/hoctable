@@ -59,6 +59,7 @@ function create(tag : string, style? : any, classes? : Array<string>) : HTMLElem
   return element;
 }
 
-const classes = { add: addClass, remove: removeClass };
-
-export default { create, remove, contains, classes, stylize };
+export default {
+  classes: { add: addClass, remove: removeClass },
+  create, remove, contains, stylize
+};
