@@ -140,7 +140,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
         const { left, top } = placeholder.getBoundingClientRect();
         const popup_children : Array<React.ReactNode> = [ ];
 
-        for(let i = 0, c = results.length; i < c; i++) {
+        for(let i = 0, x = results.length; i < x; i++) {
           const item_data = results[i];
           const uuid = util.uuid();
           const item_props = ItemComponent ? { option: item_data } : { option: item_data, delegate };

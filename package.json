@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A library of high order components build with typescript and react.",
   "homepage": "https://github.com/dadleyy/hoctable",
   "bugs": "https://github.com/dadleyy/hoctable/issues",
@@ -117,7 +117,7 @@
     "requirejs": "2.3.3",
     "rimraf": "2.6.1",
     "ts-loader": "2.2.2",
-    "tslint": "5.4.0",
+    "tslint": "5.5.0",
     "typescript": "2.4.1",
     "uglify-js": "3.0.24",
     "watch": "1.0.1",

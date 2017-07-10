@@ -110,10 +110,10 @@ function trigger(evt : string, fn? : EventListener) : EventListener {
     before(e);
 
     for(let i = 0, c = listeners.length; i < c; i++) {
-      const { event_name, handler, context } = listeners[i];
+      const { event_name, handler: listener_fn, context } = listeners[i];
 
       if(evt === event_name) {
-        handler.call(context, e);
+        listener_fn.call(context, e);
       }
     }
   }

@@ -244,10 +244,10 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
        * the container from the dom and clearing out the active reference.
        */
       if(rendered_id === null) {
-        const { container, uuid } = active;
+        const { container: active_container, uuid: active_uuid } = active;
 
         // Find the rendered grid item associated w/ the active highlight
-        const grid_item = this.find(uuid);
+        const grid_item = this.find(active_uuid);
 
         // Remove the modifier class from the related grid container
         if(grid_item) {
@@ -255,8 +255,8 @@ function WallFactory(Preview : PreviewClass, Card : CardClass) : ComposedWall {
         }
 
         // Unmount the highlight container & remove the div created for it
-        ReactDOM.unmountComponentAtNode(container);
-        utils.dom.remove(container);
+        ReactDOM.unmountComponentAtNode(active_container);
+        utils.dom.remove(active_container);
 
         this.active = null;
 
