@@ -88,7 +88,7 @@
     "babel-preset-react": "6.24.1",
     "babel-runtime": "6.23.0",
     "bluebird": "3.5.0",
-    "bulma": "0.4.3",
+    "bulma": "0.4.4",
     "codecov": "2.1.0",
     "dotenv": "4.0.0",
     "express": "5.0.0-alpha.5",
