@@ -1,6 +1,5 @@
-import MenuFactory from "hoctable/hoc/menu";
+import MenuFactory, { PopupCloseCallback } from "hoctable/hoc/menu";
 import { ItemProps, DefaultButton } from "hoctable/hoc/select";
-import { PopupCloseCallback } from "hoctable/hoc/menu";
 import utils from "hoctable/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
