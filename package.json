@@ -123,6 +123,6 @@
     "watch": "1.0.1",
     "webpack": "3.4.1",
     "webpack": "3.5.1",
-    "webpack-dev-server": "2.7.0"
+    "webpack-dev-server": "2.7.1"
   }
 }
