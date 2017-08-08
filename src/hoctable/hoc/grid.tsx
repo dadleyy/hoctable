@@ -3,15 +3,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {
   UpdateCallback,
-  PaginationState,
-  DataLoadedCallback,
-  PaginationProps,
-  ButtonProps,
   ColumnDefinition,
-  ColumnFlags,
   ColumnProps,
   DataResult,
-  TableDelegate,
   TableProps,
   RowTransclusion,
   ColumnTransclusion,
@@ -54,7 +48,7 @@ function ColumnFactory(Transclusion? : ColumnTransclusion) : ColumnTransclusion 
 
     render() : React.ReactElement<any> {
       const { column, flags } = this.props;
-      const { name, rel, sortable, classes: user_classes } = column;
+      const { name, sortable, classes: user_classes } = column;
       const class_list = (user_classes || []).concat(CLASSES["GRID_COLUMN_HEAD"]);
 
       if(flags && flags.active === true) {
@@ -86,8 +80,6 @@ function GridFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Comp
 
   class PagedGrid extends React.Component<TableProps, any> {
     private bodies         : Array<HTMLElement>;
-    private pagination     : PaginationState;
-    private sorting        : ColumnDefinition | null;
     private render_request : string;
 
     constructor(props : TableProps) {
@@ -191,7 +183,7 @@ function GridFactory(Row : RowTransclusion, Column? : ColumnTransclusion) : Comp
     }
 
     render() : React.ReactElement<any> {
-      const { sorting, pagination } = this.state;
+      const { sorting } = this.state;
       const { delegate } = this.props;
       const column_headers = [ ];
 

@@ -1,5 +1,4 @@
-import Popups from "hoctable/services/popups";
-import { PopupPlacement } from "hoctable/services/popups";
+import Popups, { PopupPlacement } from "hoctable/services/popups";
 import Viewport from "hoctable/services/window";
 import * as React from "react";
 

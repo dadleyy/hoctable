@@ -1,6 +1,5 @@
 import util from "hoctable/utils";
 import Popups from "hoctable/services/popups";
-import { PopupHandleReference, PopupPlacement } from "hoctable/services/popups";
 import * as React from "react";
 
 export type DataLoadCallback = (results : Array<any>) => void;
@@ -102,7 +101,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
     }
 
     componentWillUnmount() : void {
-      const { popup_handle, rendered_items } = this;
+      const { popup_handle } = this;
       this.render_request = null;
       Popups.close(popup_handle);
     }
@@ -123,8 +122,6 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
       };
 
       const signals = { select };
-
-      const previous_items = rendered_items.splice(0, rendered_items.length);
       const current_request = this.render_request = util.uuid();
 
       const render = (results : Array<any>) : void => {
