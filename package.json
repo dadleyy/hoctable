@@ -76,7 +76,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/react": "16.0.2",
-    "@types/react-dom": "15.5.2",
+    "@types/react-dom": "15.5.3",
     "babel-core": "6.25.0",
     "babel-loader": "7.1.1",
     "babel-plugin-external-helpers": "6.18.0",
