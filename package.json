@@ -116,7 +116,7 @@
     "request": "2.81.0",
     "requirejs": "2.3.5",
     "rimraf": "2.6.1",
-    "ts-loader": "2.3.5",
+    "ts-loader": "2.3.6",
     "tslint": "5.7.0",
     "typescript": "2.5.2",
     "uglify-js": "3.0.28",
