@@ -115,7 +115,7 @@
     "react-tools": "0.13.3",
     "request": "2.81.0",
     "requirejs": "2.3.5",
-    "rimraf": "2.6.1",
+    "rimraf": "2.6.2",
     "ts-loader": "2.3.7",
     "tslint": "5.7.0",
     "typescript": "2.5.2",
