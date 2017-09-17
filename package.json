@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A library of high order components build with typescript and react.",
   "homepage": "https://github.com/dadleyy/hoctable",
   "bugs": "https://github.com/dadleyy/hoctable/issues",
