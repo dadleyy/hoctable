@@ -1,6 +1,6 @@
 {
   "name": "hoctable",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A library of high order components build with typescript and react.",
   "homepage": "https://github.com/dadleyy/hoctable",
   "bugs": "https://github.com/dadleyy/hoctable/issues",
@@ -74,6 +74,10 @@
     "email": "dadleyy@gmail.com"
   },
   "license": "MIT",
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
   "devDependencies": {
     "@types/react": "16.0.5",
     "@types/react-dom": "15.5.4",
@@ -110,8 +114,6 @@
     "pretty-bytes-cli": "2.0.0",
     "pug": "2.0.0-rc.4",
     "pug-cli": "1.0.0-alpha6",
-    "react": "15.6.1",
-    "react-dom": "15.6.1",
     "react-tools": "0.13.3",
     "request": "2.81.0",
     "requirejs": "2.3.5",
