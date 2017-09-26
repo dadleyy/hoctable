@@ -4,11 +4,6 @@ class Delegate {
     this.bag = bag;
   }
 
-  text() {
-    const { bag } = this;
-    return bag.text;
-  }
-
   options(params, callback) {
     const { bag } = this;
     let { count } = bag.callbacks.options || { count: 0 };
@@ -21,7 +16,8 @@ class Delegate {
   }
 
   translate(identifier, item) {
-    return item ? item.text : "placeholder";
+    const { bag } = this;
+    return item ? item.text : bag.text;
   }
 
   toggle(item, callback) {

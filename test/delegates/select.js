@@ -4,7 +4,7 @@ class Delegate {
     this.bag = bag;
   }
 
-  text() {
+  translate() {
     const { bag } = this;
     return bag.selected_item ? bag.selected_item.name : bag.text;
   }

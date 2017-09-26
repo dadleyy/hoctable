@@ -54,8 +54,8 @@ require.config({
     "delegates"    : "/base/test/delegates",
     "dom"          : "/base/test/dom",
     "test_helpers" : "/base/test/helpers",
-    "react"        : "/base/node_modules/react/dist/react",
-    "react-dom"    : "/base/node_modules/react-dom/dist/react-dom",
+    "react"        : "/react/react.development",
+    "react-dom"    : "/react-dom/react-dom.development",
     "test"         : "/base/test"
   }
 });

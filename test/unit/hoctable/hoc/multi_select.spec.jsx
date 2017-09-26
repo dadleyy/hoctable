@@ -55,7 +55,7 @@ describe("hoc/MultiSelect test suite", function() {
         error = e;
       }
 
-      expect(error === null).toBe(false);
+      expect(error).toBe(null);
     });
 
     it("should render the delegate's text into it's button", function() {
@@ -194,7 +194,7 @@ describe("hoc/MultiSelect test suite", function() {
         error = e;
       }
 
-      expect(error === null).toBe(false);
+      expect(error).toBe(null);
     });
 
     it("should render the delegate's text into it's button", function() {
