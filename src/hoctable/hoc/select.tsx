@@ -44,12 +44,16 @@ export const CLASSES = {
   SELECT_BUTTON           : "hoctable__select-toggle"
 };
 
-export function DefaultButton({delegate}) : React.ReactElement<any> {
-  return (<a className={CLASSES["SELECT_BUTTON"]}>{delegate.text()}</a>);
+export function DefaultButton({ delegate } : { delegate : SingleSelectDelegate }) : React.ReactElement<any> {
+  const text = delegate ? delegate.translate("button_label") : null;
+
+  return (<a className={CLASSES["SELECT_BUTTON"]}>{text}</a>);
 }
 
-export function DefaultLoading() : React.ReactElement<any> {
-  return (<div className={CLASSES["SELECT_LOADING"]}><p>loading</p></div>);
+export function DefaultLoading({ delegate } : { delegate : SingleSelectDelegate }) : React.ReactElement<any> {
+  const text = delegate ? delegate.translate("loading") : null;
+
+  return (<div className={CLASSES["SELECT_LOADING"]}><p>{text}</p></div>);
 }
 
 function ItemFactory(Inner : ItemComponent) : ItemComponent {
@@ -144,7 +148,7 @@ function Factory(ItemType : ItemComponent, ButtonComponent = DefaultButton, Load
       // If we did not previously have menu items, gracefully display a loading element.
       if(options.length === 0) {
         const body = document.createElement("div");
-        ReactDOM.render(<Loading />, body);
+        ReactDOM.render(<Loading delegate={delegate} />, body);
         list_el.appendChild(body);
         options.push(body);
       }

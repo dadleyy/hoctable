@@ -58,16 +58,15 @@ describe("hoc/Select test suite", function() {
       bag.delegate = new Delegate(bag);
     });
 
-    it("should throw an exception when rendering without delegate", function() {
+    it("should not throw an exception when rendering without delegate", function() {
       let error = null;
-
       try {
         ReactDOM.render(<bag.Select />, bag.dom.container);
       } catch(e) {
         error = e;
       }
 
-      expect(error === null).toBe(false);
+      expect(error).toBe(null);
     });
 
     it("should render the delegate's text into it's button", function() {

@@ -54,16 +54,39 @@ class SyncGroup {
 
 }
 
+export type PopupEventHandler = (any) => void;
+
+export interface PopupEventListener {
+  event_name : string;
+  handler    : PopupEventHandler;
+}
+
 class InteralState {
-  root          : Node;
-  popups        : Array<PopupHandle>;
-  subscriptions : Array<string>;
-  sync_group    : SyncGroup;
+  root           : Node;
+  popups         : Array<PopupHandle>;
+  subscriptions  : Array<string>;
+  sync_group     : SyncGroup;
+  event_handlers : Array<PopupEventListener>;
 
   constructor() {
     this.popups = [];
     this.subscriptions = [];
     this.sync_group = new SyncGroup();
+    this.event_handlers = [];
+  }
+
+  publish(event_name : string, context : any) : void {
+    const { event_handlers } = this;
+
+    for(let i = 0, c = event_handlers.length; i < c; i++) {
+      const { handler, event_name: name } = event_handlers[i];
+
+      if(name !== event_name) {
+        continue;
+      }
+
+      handler(context);
+    }
   }
 }
 
@@ -74,6 +97,8 @@ function open(component : React.ReactElement<any>, placement : PopupPlacement) :
 
   // Invalid open attempt - no mount point setup yet.
   if(!root) {
+    internal_state.publish("error", new Error("popup service is not mounted"));
+
     return -1;
   }
 
@@ -171,4 +196,8 @@ function unmount() : void {
   }
 }
 
-export default { open, close, mount, unmount };
+function on(event_name : string, handler : PopupEventHandler) : void {
+  internal_state.event_handlers.push({ event_name, handler });
+}
+
+export default { open, close, mount, unmount, on };

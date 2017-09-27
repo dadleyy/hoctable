@@ -84,22 +84,6 @@ describe("hoc/Wall test suite", function() {
     ReactDOM.render(<bag.Wall delegate={bag.delegate} />, bag.dom.container);
   }
 
-  describe("without valid delegate", function() {
-
-    beforeEach(function() {
-      bag.delegate = null;
-    });
-
-    it("should throw an exception w/o a delegate", function() {
-      let err = null;
-      try {
-        render();
-      } catch(e) { err = e; }
-      expect(err).not.toBe(null);
-    });
-
-  });
-
   describe("rendering the wall component", function() {
 
     beforeEach(render);

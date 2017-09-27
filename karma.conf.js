@@ -25,8 +25,8 @@ module.exports = function(config) {
 
   let files = [
     "./node_modules/babel-polyfill/dist/polyfill.js",
-    {pattern: "./node_modules/react/dist/react.js", included: false},
-    {pattern: "./node_modules/react-dom/dist/react-dom.js", included: false},
+    {pattern: "./node_modules/react/umd/react.development.js", included: false},
+    {pattern: "./node_modules/react-dom/umd/react-dom.development.js", included: false},
 
     {pattern: "./test/data/**/*.js", included: false},
     {pattern: "./test/delegates/**/*.js", included: false},
@@ -76,7 +76,12 @@ module.exports = function(config) {
     {"framework:jasmine-ajax": ["factory", jasmineAjax]}
   ];
 
-  let options = { preprocessors, browsers, plugins, frameworks, files, reporters };
+  let proxies = {
+    "/react/": "/base/node_modules/react/umd/",
+    "/react-dom/": "/base/node_modules/react-dom/umd/"
+  };
+
+  let options = { preprocessors, browsers, plugins, frameworks, files, reporters, proxies };
 
   options.customLaunchers = {
     "Phantom_Desktop": {

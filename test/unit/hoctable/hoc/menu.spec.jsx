@@ -76,16 +76,10 @@ describe("hoc/ActionMenu test suite", function() {
     beforeEach(render);
 
     it("should throw an exception if popup manager was not mounted", function(done) {
-      let onerror = window.onerror;
-
-      function errored(e) {
+      Popups.on("error", function(e) {
         expect(e).not.toBe(undefined);
-        window.onerror = onerror;
         done();
-        return false;
-      }
-
-      window.onerror = errored;
+      });
       dom.default.button.click();
     });
 

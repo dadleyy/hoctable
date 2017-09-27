@@ -82,10 +82,6 @@ function Factory<P>(Popup : React.ComponentClass<any>, Button = DefaultButton) :
       // Open the popup component with all of the props that were given to us
       popup = Popups.open(<Popup {...this.props as object} close={close} redraw={redraw} />, placement);
 
-      if(popup === -1) {
-        throw new Error("unable to open popup, is service mounted?");
-      }
-
       // Update our state with the popup id so we may close it on unmount
       this.setState({ popup });
     }
