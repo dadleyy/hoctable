@@ -102,7 +102,7 @@
     "karma": "1.7.1",
     "karma-babel-preprocessor": "7.0.0",
     "karma-chrome-launcher": "2.2.0",
-    "karma-jasmine": "1.1.0",
+    "karma-jasmine": "1.1.1",
     "karma-mocha-reporter": "2.2.5",
     "karma-narrow-reporter": "2.0.1",
     "karma-phantomjs-launcher": "1.0.4",
