@@ -124,6 +124,6 @@
     "uglify-js": "3.2.1",
     "watch": "1.0.1",
     "webpack": "3.10.0",
-    "webpack-dev-server": "2.9.5"
+    "webpack-dev-server": "2.9.6"
   }
 }
