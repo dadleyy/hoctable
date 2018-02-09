@@ -107,7 +107,7 @@
     "karma-narrow-reporter": "2.0.1",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-requirejs": "1.1.0",
-    "karma-tslint": "1.0.2",
+    "karma-tslint": "1.1.0",
     "karma-typescript": "3.0.12",
     "node-sass": "4.7.2",
     "pretty-bytes": "4.0.2",
