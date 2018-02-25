@@ -180,8 +180,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
         const timer = setTimeout(update, DEBOUNCE_TIME);
 
         if(selected_item) {
-          state.timer = timer;
-          state.value = new_value;
+          this.setState({ timer, value: new_value });
 
           return delegate.select(null, done);
         }
@@ -195,7 +194,7 @@ function Factory(ItemComponent? : React.ComponentClass<SearchItemProps>) : React
         clearTimeout(current_state.timer);
 
         // Clear out the value in the input element.
-        current_state.value = "";
+        this.setState({ value: "" });
 
         return delegate.select(null, done);
       };

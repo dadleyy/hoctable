@@ -9,34 +9,34 @@ class Products extends React.Component {
 
   constructor(props) {
     super(props)
-    let {store} = props;
+    let { store } = props;
 
     function update() {
-      this.setState({updated: Date.now()});
+      this.setState({ updated: Date.now() });
     }
 
-    this.subscriptions = {store: store.subscribe(update.bind(this))};
+    this.subscriptions = { store: store.subscribe(update.bind(this)) };
   }
 
   componentWillUnmount() {
-    let {subscriptions} = this;
+    let { subscriptions } = this;
     subscriptions.store();
   }
 
   clearFilters() {
-    let {store} = this.props;
+    let { store } = this.props;
     store.dispatch({type: "CLEAR_FILTERS"});
     this.forceUpdate();
   }
 
   render() {
-    let {props} = this;
-    let {store, table: table_delegate} = props;
+    let { props } = this;
+    let { store, table: table_delegate } = props;
 
     // create the table that we will be rendering
-    let table     = <ProductTable delegate={table_delegate} store={store} />;
-    let controls  = [];
-    let {filters} = store.getState();
+    let table = <ProductTable delegate={table_delegate} store={store} />;
+    let controls = [];
+    let { filters } = store.getState();
 
     // loop over the filters that have been added, creating a new filter component that will
     // render out all of the necessary dropdowns, etc...

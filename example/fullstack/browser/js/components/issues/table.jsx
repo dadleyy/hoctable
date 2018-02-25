@@ -1,4 +1,4 @@
-import {hoc} from "hoctable";
+import { Table as TableFactory } from "hoctable";
 import i18n from "../../services/i18n";
 import Thumb from "./user_thumb";
 import Labels from "./label_list";
@@ -50,5 +50,4 @@ class Row extends React.Component {
 
 }
 
-export default hoc.Table(Row);
-
+export default TableFactory(Row);

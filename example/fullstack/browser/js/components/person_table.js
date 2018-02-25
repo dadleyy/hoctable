@@ -1,4 +1,4 @@
-import {hoc} from "hoctable";
+import { Table as TableFactory } from "hoctable";
 import Row from "./person_row";
 
-export default hoc.Table(Row);
+export default TableFactory(Row);

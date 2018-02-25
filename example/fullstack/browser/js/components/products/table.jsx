@@ -1,4 +1,4 @@
-import {hoc} from "hoctable";
+import { Table as TableFactory } from "hoctable";
 import * as React from "react";
 
 class Row extends React.Component {
@@ -33,4 +33,4 @@ class Row extends React.Component {
 }
 
 
-export default hoc.Table(Row);
+export default TableFactory(Row);

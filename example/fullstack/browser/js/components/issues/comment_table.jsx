@@ -1,4 +1,4 @@
-import {services, hoc} from "hoctable";
+import { services, Table as TableFactory } from "hoctable";
 import i18n from "../../services/i18n";
 import linkify from "../../services/github/linkify";
 import Thumb from "./user_thumb";
@@ -54,5 +54,5 @@ class Row extends React.Component {
 
 }
 
-export default hoc.Table(Row);
+export default TableFactory(Row);
 

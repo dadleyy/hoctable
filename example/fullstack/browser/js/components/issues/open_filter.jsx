@@ -1,4 +1,3 @@
-import {hoc} from "hoctable";
-import * as React from "react";
+import { Select } from "hoctable";
 
-export default hoc.Select();
+export default Select();

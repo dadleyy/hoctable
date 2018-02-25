@@ -55,11 +55,11 @@ function pass(current_state) {
 }
 
 function Index() {
-  let reducer        = Redux.combineReducers({filters, properties: pass});
-  let initial_filter = {id: 1, property: null};
+  let reducer = Redux.combineReducers({ filters, properties: pass });
+  let initial_filter = { id: 1, property: null };
 
   function warm(__, {results: properties}) {
-    let store  = Redux.createStore(reducer, {properties, filters: [initial_filter]});
+    let store = Redux.createStore(reducer, { properties, filters: [initial_filter] });
     let delegate = new ProductDelegate(store);
     return Q.resolve(<Products table={delegate} store={store} />);
   }

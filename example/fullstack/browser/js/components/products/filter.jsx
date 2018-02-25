@@ -1,4 +1,4 @@
-import {hoc} from "hoctable";
+import { MultiSelect as MultiSelectFactory, Select as SelectFactory } from "hoctable";
 
 import PropertyDelegate from "../../services/delegates/property_menu";
 import OperatorDelegate from "../../services/delegates/operator_menu";
@@ -9,8 +9,8 @@ import i18n from "../../services/i18n";
 import * as React from "react";
 
 // compose a menu using the default transclusion
-const SingleSelect = hoc.Select();
-const MultiSelect  = hoc.MultiSelect();
+const SingleSelect = SelectFactory();
+const MultiSelect = MultiSelectFactory();
 
 const {
   HAS_VALUE    : { id: HAS_VALUE }, 
@@ -44,11 +44,11 @@ function control(content, key) {
   return (<div className="float-left" style={style} key={key}>{content}</div>);
 }
 
-function Filter({ filter, store }) {
+export default function Filter({ filter, store }) {
   let property_delegate = new PropertyDelegate(store, filter);
 
   // start this control group out with a single select that will control the property associated w/ this filter
-  let controls = [ control(<SingleSelect delegate={property_delegate} />, "property") ];
+  let controls = [control(<SingleSelect delegate={property_delegate} />, "property")];
 
   let { property, operator, value } = filter;
 
@@ -91,5 +91,3 @@ function Filter({ filter, store }) {
 
   return (<div className="control-group">{controls}</div>);
 }
-
-export default Filter;
