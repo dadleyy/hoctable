@@ -109,7 +109,7 @@
     "karma-requirejs": "1.1.0",
     "karma-tslint": "1.1.0",
     "karma-typescript": "3.0.12",
-    "node-sass": "4.7.2",
+    "node-sass": "4.8.1",
     "pretty-bytes": "4.0.2",
     "pretty-bytes-cli": "2.0.0",
     "pug": "2.0.1",
